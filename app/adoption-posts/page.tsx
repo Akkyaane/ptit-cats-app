@@ -1,33 +1,5 @@
-import AdoptionPost from "@/components/AdoptionPost";
-
-interface Cat {
-  name: string;
-  sex: "Male" | "Female";
-  birthdate: string;
-  isDewormed: boolean;
-  isVaccinated: boolean;
-  isSterilizedOrCastrated: boolean;
-  isIdentified: boolean;
-  isDogFriendly: boolean;
-  isCatFriendly: boolean;
-  isChildFriendly: boolean;
-  livingEnvironmentType: "Apartment" | "House" | "Other";
-  keyPoints: string[];
-}
-
-interface AdoptionPost {
-  id: number;
-  documentId: string;
-  title: string;
-  slogan: string;
-  shortDescription: string;
-  longDescription: string;
-  photos: any;
-  isDuo: boolean;
-  price: number;
-  cats: Cat[];
-  showDetails: boolean;
-}
+import { IAdoptionPost } from "@/interfaces/IAdoptionPost";
+import AdoptionPost from "@/components/adoptionPost/AdoptionPost";
 
 async function getAdoptionPosts() {
   const res = await fetch("http://localhost:1337/api/adoption-posts?populate=*", {
@@ -55,10 +27,10 @@ export default async function DisplayAdoptionPosts() {
         <p>Aucun chat n'est disponible pour le moment.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((post: AdoptionPost) => (
+          {posts.map((post: IAdoptionPost) => (
             <AdoptionPost
               key={post.id}
-              documentId={post.documentId}
+              id={post.id}
               title={post.title}
               slogan={post.slogan}
               shortDescription={post.shortDescription}
