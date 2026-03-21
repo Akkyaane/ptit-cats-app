@@ -4,12 +4,15 @@ import { revalidatePath } from "next/cache";
 
 export default async function createAdoptionPost() {
   async function postAdoptionPost(formData: FormData) {
-
     const data = {
       data: {
         title: formData.get("title"),
-        content: formData.get("content"),
-      },
+        slogan: formData.get("slogan"),
+        shortDescription: formData.get("shortDescription"),
+        content: formData.get("longDescription"),
+        isDuo: formData.get("isDuo") === "on",
+        price: formData.get("price"),
+      }
     };
     const res = await fetch(`http://localhost:1337/api/adoption-posts`, {
       method: "POST",

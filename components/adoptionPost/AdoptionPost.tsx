@@ -27,7 +27,9 @@ export default function AdoptionPost({
       ))}
       {cats.map((cat, index) => (
         <div key={index} className="mt-6">
-          {showDetails && <h3 className="text-xl font-semibold text-black">{cat.name}</h3>}
+          {showDetails && (
+            <h3 className="text-xl font-semibold text-black">{cat.name}</h3>
+          )}
           <p className="text-gray-900 mt-2">
             Sexe : {cat.sex === "Male" ? "Mâle" : "Femelle"}
           </p>
@@ -35,7 +37,7 @@ export default function AdoptionPost({
             Date de naissance :{" "}
             {cat.birthDate ? (
               <>
-                {cat.birthDate}{" "}
+                {new Date(cat.birthDate).toLocaleDateString("fr-FR")}{" "}
                 {calculateAge(new Date(cat.birthDate))}
               </>
             ) : (
@@ -43,37 +45,30 @@ export default function AdoptionPost({
             )}
           </p>
           {showDetails && (
+            <>
               <p className="text-gray-900 mt-2">
                 {cat.isDewormed ? "Déparasité" : "Non déparasité"}
               </p>
-            ) && (
               <p className="text-gray-900 mt-2">
                 {cat.isVaccinated ? "Vacciné" : "Non vacciné"}
               </p>
-            ) && (
               <p className="text-gray-900 mt-2">
                 {cat.isSterilizedOrCastrated
                   ? "Stérilisé ou castré"
                   : "Non stérilisé ou castré"}
               </p>
-            ) && (
               <p className="text-gray-900 mt-2">
-                {cat.isIdentified ? "Non identifié" : "Identifié"}
+                {cat.isIdentified ? "Identifié" : "Non identifié"}
               </p>
-            ) && (
               <p className="text-gray-900 mt-2">
-                Ententes avec les chiens : {cat.isDogFriendly ? "Oui" : "Non"}
+                Ententes avec les chiens : {cat.dogAffinity === "Yes" ? "Oui" : cat.dogAffinity === "No" ? "Non" : "Inconnu"}
               </p>
-            ) && (
               <p className="text-gray-900 mt-2">
-                Ententes avec les chats : {cat.isCatFriendly ? "Oui" : "Non"}
+                Ententes avec les chats : {cat.catAffinity === "Yes" ? "Oui" : cat.catAffinity === "No" ? "Non" : "Inconnu"}
               </p>
-            ) && (
               <p className="text-gray-900 mt-2">
-                Ententes avec les enfants :{" "}
-                {cat.isChildFriendly ? "Oui" : "Non"}
+                Ententes avec les enfants : {cat.childAffinity === "Yes" ? "Oui" : cat.childAffinity === "No" ? "Non" : "Inconnu"}
               </p>
-            ) && (
               <p className="text-gray-900 mt-2">
                 Type de lieu de vie :{" "}
                 {cat.livingEnvironmentType === "Apartment"
@@ -82,17 +77,18 @@ export default function AdoptionPost({
                     ? "Maison"
                     : "Autre"}
               </p>
-            ) &&
-            cat.keyPoints.length > 0 && (
-              <div>
-                <p className="text-gray-900 mt-2">Points clés : </p>
-                {cat.keyPoints.map((keyPoint, index) => (
-                  <p className="text-gray-900 mt-2" key={index}>
-                    {keyPoint}
-                  </p>
-                ))}
-              </div>
-            )}
+              {cat.keyPoints.length > 0 && (
+                <div>
+                  <p className="text-gray-900 mt-2">Points clés : </p>
+                  {cat.keyPoints.map((keyPoint, index) => (
+                    <p className="text-gray-900 mt-2" key={index}>
+                      {keyPoint}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
         </div>
       ))}
       <p className="font-semibold mt-4 text-black">{price} €</p>

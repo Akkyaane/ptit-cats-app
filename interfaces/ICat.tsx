@@ -7,9 +7,9 @@ export interface ICat {
   isVaccinated: boolean;
   isSterilizedOrCastrated: boolean;
   isIdentified: boolean;
-  isDogFriendly?: boolean;
-  isCatFriendly?: boolean;
-  isChildFriendly?: boolean;
+  dogAffinity: "Yes" | "No" | "Unknown";
+  catAffinity: "Yes" | "No" | "Unknown";
+  childAffinity: "Yes" | "No" | "Unknown";
   livingEnvironmentType: "Apartment" | "House" | "Other";
   keyPoints: string[];
 }
