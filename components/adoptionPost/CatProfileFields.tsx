@@ -7,10 +7,14 @@ export default function CatProfileFields() {
         <input type="text" name="name" id="name" required style={{ border: '1px solid #000', padding: '8px', backgroundColor: '#fff', color: '#000', width: '100%' }} />
       </div>
       <div style={{ marginBottom: '10px' }}>
+        <label htmlFor="birthDate" style={{ color: '#000', display: 'block', marginBottom: '5px' }}>Date de naissance</label>
+        <input type="date" name="birthDate" id="birthDate" style={{ border: '1px solid #000', padding: '8px', backgroundColor: '#fff', color: '#000', width: '100%' }} />
+      </div>
+      <div style={{ marginBottom: '10px' }}>
         <label htmlFor="sex" style={{ color: '#000', display: 'block', marginBottom: '5px' }}>Sexe</label>
         <select name="sex" id="sex" required style={{ border: '1px solid #000', padding: '8px', backgroundColor: '#fff', color: '#000', width: '100%' }}>
-          <option value="male">Mâle</option>
-          <option value="female">Femelle</option>
+          <option value="Male">Mâle</option>
+          <option value="Female">Femelle</option>
         </select>
       </div>
       <div style={{ marginBottom: '10px' }}>
@@ -27,7 +31,6 @@ export default function CatProfileFields() {
           type="checkbox"
           name="isSterilizedOrCastrated"
           id="isSterilizedOrCastrated"
-          required
           style={{ border: '1px solid #000', backgroundColor: '#fff' }}
         />
       </div>
@@ -37,22 +40,22 @@ export default function CatProfileFields() {
       </div>
       <div style={{ marginBottom: '10px' }}>
         <label style={{ color: '#000', display: 'block', marginBottom: '5px' }}>Ententes avec les chiens</label>
-        <select name="isDogFriendly" id="isDogFriendly" required style={{ border: '1px solid #000', padding: '8px', backgroundColor: '#fff', color: '#000', width: '100%', marginBottom: '5px' }}>
-          <option value="yes">Oui</option>
-          <option value="no">Non</option>
-          <option value="unknown">Inconnu</option>
+        <select name="dogAffinity" id="dogAffinity" required style={{ border: '1px solid #000', padding: '8px', backgroundColor: '#fff', color: '#000', width: '100%', marginBottom: '5px' }}>
+          <option value="Yes">Oui</option>
+          <option value="No">Non</option>
+          <option value="Unknown">Inconnu</option>
         </select>
         <label style={{ color: '#000', display: 'block', marginBottom: '5px' }}>Ententes avec les chats</label>
-        <select name="isCatFriendly" id="isCatFriendly" required style={{ border: '1px solid #000', padding: '8px', backgroundColor: '#fff', color: '#000', width: '100%', marginBottom: '5px' }}>
-          <option value="yes">Oui</option>
-          <option value="no">Non</option>
-          <option value="unknown">Inconnu</option>
+        <select name="catAffinity" id="catAffinity" required style={{ border: '1px solid #000', padding: '8px', backgroundColor: '#fff', color: '#000', width: '100%', marginBottom: '5px' }}>
+          <option value="Yes">Oui</option>
+          <option value="No">Non</option>
+          <option value="Unknown">Inconnu</option>
         </select>
         <label style={{ color: '#000', display: 'block', marginBottom: '5px' }}>Ententes avec les enfants</label>
-        <select name="isChildFriendly" id="isChildFriendly" required style={{ border: '1px solid #000', padding: '8px', backgroundColor: '#fff', color: '#000', width: '100%' }}>
-          <option value="yes">Oui</option>
-          <option value="no">Non</option>
-          <option value="unknown">Inconnu</option>
+        <select name="childAffinity" id="childAffinity" required style={{ border: '1px solid #000', padding: '8px', backgroundColor: '#fff', color: '#000', width: '100%' }}>
+          <option value="Yes">Oui</option>
+          <option value="No">Non</option>
+          <option value="Unknown">Inconnu</option>
         </select>
       </div>
       <div style={{ marginBottom: '10px' }}>
@@ -63,18 +66,18 @@ export default function CatProfileFields() {
           required
           style={{ border: '1px solid #000', padding: '8px', backgroundColor: '#fff', color: '#000', width: '100%' }}
         >
-          <option value="apartment">Appartement</option>
-          <option value="house">Maison</option>
-          <option value="other">Autre</option>
+          <option value="Apartment">Appartement</option>
+          <option value="House">Maison</option>
+          <option value="Other">Autre</option>
         </select>
       </div>
       <div style={{ marginBottom: '10px' }}>
         <label htmlFor="keyPoints" style={{ color: '#000', display: 'block', marginBottom: '5px' }}>Points clés</label>
-        <select name="keyPoints" id="keyPoints" required style={{ border: '1px solid #000', padding: '8px', backgroundColor: '#fff', color: '#000', width: '100%' }}>
-          <option value="1">Enfants respectueux</option>
-          <option value="2">Foyer sans enfant en bas âge</option>
-          <option value="3">Foyer avec un chat</option>
-          <option value="4">Extérieur sécurisé</option>
+        <select name="keyPoints" id="keyPoints" multiple required style={{ border: '1px solid #000', padding: '8px', backgroundColor: '#fff', color: '#000', width: '100%', height: '100px' }}>
+          <option value="Enfants respectueux">Enfants respectueux</option>
+          <option value="Foyer sans enfant en bas âge">Foyer sans enfant en bas âge</option>
+          <option value="Foyer avec un chat">Foyer avec un chat</option>
+          <option value="Extérieur sécurisé">Extérieur sécurisé</option>
         </select>
       </div>
     </fieldset>

@@ -1,15 +1,16 @@
 "use client";
 import { useState } from 'react';
 import CatProfileFields from "@/components/adoptionPost/CatProfileFields";
+import postAdoptionPost from "@/app/adoption-posts/create/action";
 
-export default function AdoptionPostForm(action: any) {
+export default function AdoptionPostForm() {
   const [catList, setCatList] = useState([0]);
 
   const addCat = () => 
     setCatList([...catList, catList.length]);
 
   return (
-    <form action={action} className="max-w-2xl mx-auto p-8 bg-white border border-gray-200 rounded-none shadow-none">
+    <form action={postAdoptionPost} className="max-w-2xl mx-auto p-8 bg-white border border-gray-200 rounded-none shadow-none">
       <div className="mb-6">
         <label htmlFor="title" className="block text-sm font-medium text-gray-900 mb-2">Titre</label>
         <input type="text" name="title" id="title" required className="w-full px-3 py-2 border border-gray-300 rounded-none focus:outline-none focus:border-gray-500 bg-white text-gray-900" />
@@ -32,7 +33,7 @@ export default function AdoptionPostForm(action: any) {
       </div>
       <div className="mb-6">
         <label htmlFor="isDuo" className="flex items-center text-sm font-medium text-gray-900">
-          <input type="checkbox" name="isDuo" id="isDuo" required className="mr-2 h-4 w-4 text-gray-900 focus:ring-gray-500 border-gray-300 rounded-none" />
+          <input type="checkbox" name="isDuo" id="isDuo" className="mr-2 h-4 w-4 text-gray-900 focus:ring-gray-500 border-gray-300 rounded-none" />
           Duo
         </label>
       </div>
