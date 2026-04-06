@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 export default function displayIndex() {
   return (
     <div>
-      <header className="bg-[url('/background.jpg')] bg-center">
+      <header className="bg-[url('/assets/img/background-1.jpg')] bg-center">
         <div className="max-w-[1200px] mx-auto">
           <Navbar />
           <section className="flex flex-col items-start justify-center gap-6 py-24 px-4 md:py-32 md:max-w-xl lg:py-48 lg:max-w-2xl">
@@ -33,13 +33,15 @@ export default function displayIndex() {
           </section>
         </div>
       </header>
-      <main>
+      <main className="flex flex-col items-center justify-center">
         {/* Section à travailler */}
         <section className="max-w-[1200px] mx-auto px-4 py-8 flex flex-col gap-8">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--color-quaternary)]">
-            Nos dernières annonces d'adoption
-          </h2>
-
+          <div className="flex flex-col items-center justify-center">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--color-quaternary)] mb-4">
+              Nos dernières annonces d'adoption
+            </h2>
+            <div className="w-16 h-1 bg-[var(--color-tertiary)] rounded-full mx-auto"></div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="flex flex-col rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100">
               <div className="relative">
@@ -48,17 +50,25 @@ export default function displayIndex() {
                   alt=""
                   className="w-full"
                 />
-                <div className="absolute top-3 left-3 flex gap-2">
+                <div className="absolute top-3 left-3 flex gap-2 flex-wrap justify-start max-w-[50%]">
                   <span className="bg-[var(--color-quaternary)] px-3 py-1 rounded-xl text-xs font-bold shadow-sm">
-                    1 an & 3 ans
+                    13 ans | 1 an
                   </span>
                   <span className="bg-[var(--color-quaternary)] px-3 py-1 rounded-xl text-xs font-bold shadow-sm">
-                    Mâle & Femelle
+                    M | F
                   </span>
                 </div>
-                <span className="absolute top-3 right-3 bg-[var(--color-primary)] px-3 py-1 rounded-xl text-xs font-bold">
-                  Duo
-                </span>
+                <div className="absolute top-3 right-3 flex gap-2 flex-wrap justify-end max-w-[50%]">
+                  <span className="bg-[var(--color-primary)] px-3 py-1 rounded-xl text-xs font-bold">
+                    Atypique
+                  </span>
+                  <span className="bg-[var(--color-primary)] px-3 py-1 rounded-xl text-xs font-bold">
+                    Duo
+                  </span>
+                  <span className="bg-[var(--color-primary)] px-3 py-1 rounded-xl text-xs font-bold">
+                    Senior
+                  </span>
+                </div>
               </div>
               <div></div>
               <div className="flex flex-col gap-2 p-4 md:p-5 flex-grow text-[var(--color-quaternary)]">
@@ -66,13 +76,16 @@ export default function displayIndex() {
                   <h3 className="text-lg md:text-xl font-bold">
                     Minou et Coco
                   </h3>
-                  <p className="text-xs md:text-sm text-[var(--color-primary)] opacity-70">
-                    Deux petits coquins cherchent leur foyer
-                  </p>
                   <p className="text-sm md:text-base flex-grow">
                     Deux chatons adorables, pleins de vie et de tendresse,
                     cherchent une famille aimante pour les accueillir.
                   </p>
+                  <ul className="flex flex-row gap-2 text-xs md:text-sm text-[var(--color-primary)] opacity-70">
+                    <li>✓ Vaccinés</li>
+                    <li>✓ Castrés</li>
+                    <li>✓ Déparasités</li>
+                    <li>✓ Identifiés</li>
+                  </ul>
                 </div>
                 <div className="flex items-center justify-between pt-3 border-t border-[var(--color-quaternary)]/15">
                   <span className="text-lg md:text-xl font-bold text-[var(--color-primary)]">
@@ -80,7 +93,7 @@ export default function displayIndex() {
                   </span>
                   <a
                     href="/adoption-posts/view/1"
-                    className="px-4 py-2 text-sm bg-[var(--color-quaternary)] text-[var(--color-secondary)] font-bold rounded-xl backdrop-blur-sm border border-2 border-[var(--color-quaternary)] hover:bg-[var(--color-quaternary)]/10 hover:text-[var(--color-quaternary)] transition-colors duration-200"
+                    className="px-4 py-2 text-sm bg-[var(--color-quaternary)] text-[var(--color-secondary)] font-bold rounded-xl backdrop-blur-sm border border-2 border-[var(--color-quaternary)] hover:bg-[var(--color-secondary)] hover:text-[var(--color-quaternary)] transition-colors duration-200"
                   >
                     Voir plus
                   </a>
@@ -96,25 +109,28 @@ export default function displayIndex() {
                   alt=""
                   className="w-full"
                 />
-                <div className="absolute top-3 left-3 flex gap-2">
+                <div className="absolute top-3 left-3 flex gap-2 flex-wrap justify-start max-w-[50%]">
                   <span className="bg-[var(--color-quaternary)] px-3 py-1 rounded-xl text-xs font-bold shadow-sm">
                     2 ans
                   </span>
                   <span className="bg-[var(--color-quaternary)] px-3 py-1 rounded-xl text-xs font-bold shadow-sm">
-                    Mâle
+                    M
                   </span>
                 </div>
               </div>
               <div className="flex flex-col gap-2 p-4 md:p-5 flex-grow text-[var(--color-quaternary)]">
                 <div className="flex flex-col gap-1">
                   <h3 className="text-lg md:text-xl font-bold">Tigrou</h3>
-                  <p className="text-xs md:text-sm text-[var(--color-primary)] opacity-70">
-                    Chat calin et affectueux
-                  </p>
                   <p className="text-sm md:text-base flex-grow">
                     Tigrou est un chat très affectueux qui adore les câlins. Il
                     est parfait pour une famille avec enfants.
                   </p>
+                  <ul className="flex flex-row gap-2 text-xs md:text-sm text-[var(--color-primary)] opacity-70">
+                    <li>✓ Vaccinés</li>
+                    <li>✓ Castrés</li>
+                    <li>✓ Déparasités</li>
+                    <li>✓ Identifiés</li>
+                  </ul>
                 </div>
                 <div className="flex items-center justify-between pt-3 border-t border-[var(--color-quaternary)]/15">
                   <span className="text-lg md:text-xl font-bold text-[var(--color-primary)]">
@@ -122,7 +138,7 @@ export default function displayIndex() {
                   </span>
                   <a
                     href="/adoption-posts/view/2"
-                    className="px-4 py-2 text-sm bg-[var(--color-quaternary)] text-[var(--color-secondary)] font-bold rounded-xl backdrop-blur-sm border border-2 border-[var(--color-quaternary)] hover:bg-[var(--color-quaternary)]/10 hover:text-[var(--color-quaternary)] transition-colors duration-200"
+                    className="px-4 py-2 text-sm bg-[var(--color-quaternary)] text-[var(--color-secondary)] font-bold rounded-xl backdrop-blur-sm border border-2 border-[var(--color-quaternary)] hover:bg-[var(--color-secondary)] hover:text-[var(--color-quaternary)] transition-colors duration-200"
                   >
                     Voir plus
                   </a>
@@ -138,28 +154,36 @@ export default function displayIndex() {
                   alt=""
                   className="w-full"
                 />
-                <div className="absolute top-3 left-3 flex gap-2">
+                <div className="absolute top-3 left-3 flex gap-2 flex-wrap justify-start max-w-[50%]">
                   <span className="bg-[var(--color-quaternary)] px-3 py-1 rounded-xl text-xs font-bold shadow-sm">
-                    3 ans
+                    1 mois | 3 ans
                   </span>
                   <span className="bg-[var(--color-quaternary)] px-3 py-1 rounded-xl text-xs font-bold shadow-sm">
-                    Mâles
+                    M | F
                   </span>
                 </div>
-                <span className="absolute top-3 right-3 bg-[var(--color-primary)] px-3 py-1 rounded-xl text-xs font-bold">
-                  Duo
-                </span>
+                <div className="absolute top-3 right-3 flex gap-2 flex-wrap justify-end max-w-[50%]">
+                  <span className="bg-[var(--color-primary)] px-3 py-1 rounded-xl text-xs font-bold">
+                    Chaton
+                  </span>
+                  <span className="bg-[var(--color-primary)] px-3 py-1 rounded-xl text-xs font-bold">
+                    Duo
+                  </span>
+                </div>
               </div>
               <div className="flex flex-col gap-2 p-4 md:p-5 flex-grow text-[var(--color-quaternary)]">
                 <div className="flex flex-col gap-1">
                   <h3 className="text-lg md:text-xl font-bold">Max et Luna</h3>
-                  <p className="text-xs md:text-sm text-[var(--color-primary)] opacity-70">
-                    Inséparables, ils cherchent leur maison
-                  </p>
                   <p className="text-sm md:text-base flex-grow">
                     Max et Luna sont inséparables. Ces deux chats adorables
                     rêvent d'une maison chaleureuse où vivre ensemble.
                   </p>
+                  <ul className="flex flex-row gap-2 text-xs md:text-sm text-[var(--color-primary)] opacity-70">
+                    <li>✓ Vaccinés</li>
+                    <li>✓ Castrés</li>
+                    <li>✓ Déparasités</li>
+                    <li>✓ Identifiés</li>
+                  </ul>
                 </div>
                 <div className="flex items-center justify-between pt-3 border-t border-[var(--color-quaternary)]/15">
                   <span className="text-lg md:text-xl font-bold text-[var(--color-primary)]">
@@ -167,7 +191,7 @@ export default function displayIndex() {
                   </span>
                   <a
                     href="/adoption-posts/view/3"
-                    className="px-4 py-2 text-sm bg-[var(--color-quaternary)] text-[var(--color-secondary)] font-bold rounded-xl backdrop-blur-sm border border-2 border-[var(--color-quaternary)] hover:bg-[var(--color-quaternary)]/10 hover:text-[var(--color-quaternary)] transition-colors duration-200"
+                    className="px-4 py-2 text-sm bg-[var(--color-quaternary)] text-[var(--color-secondary)] font-bold rounded-xl backdrop-blur-sm border border-2 border-[var(--color-quaternary)] hover:bg-[var(--color-secondary)] hover:text-[var(--color-quaternary)] transition-colors duration-200"
                   >
                     Voir plus
                   </a>
@@ -178,29 +202,29 @@ export default function displayIndex() {
           <div className="flex justify-center">
             <a
               href="/adoption-posts"
-              className="px-6 py-4 text-sm bg-[var(--color-primary)] text-[var(--color-secondary)] font-bold rounded-xl backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 hover:text-[var(--color-primary)] transition-colors duration-200"
+              className="px-6 py-4 text-sm bg-[var(--color-primary)] text-[var(--color-secondary)] font-bold rounded-xl backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-secondary)] hover:text-[var(--color-primary)] transition-colors duration-200"
             >
               Voir toutes les annonces
             </a>
           </div>
         </section>
 
-        <section className="text-[var(--color-quaternary)] max-w-[1200px] mx-auto px-4 py-12 md:py-16 lg:py-20">
+        <section className="text-[var(--color-quaternary)] max-w-[1200px] mx-auto px-4 py-8">
           <div className="text-center mb-8 md:mb-12">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
-              Sans Croquettes Fixes, qu'est-ce que c'est ?
+              Qui sommes-nous ?
             </h2>
-            <div className="w-16 h-1 bg-[var(--color-primary)] mx-auto rounded-full"></div>
+            <div className="w-16 h-1 bg-[var(--color-tertiary)] mx-auto rounded-full"></div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6 z-10">
               <div className="space-y-4">
                 <p className="text-base md:text-lg leading-relaxed">
                   Sans Croquettes Fixes est une association basée à Lyon,
                   engagée dans une grande partie de la région
-                  Auvergne-Rhône-Alpes et au-delà. Elle a pour mission de venir
-                  en aide aux animaux en détresse, tout en soutenant les
+                  Auvergne-Rhône-Alpes et parfois au-delà. Notre mission est de
+                  venir en aide aux animaux en détresse, tout en soutenant les
                   personnes qui en prennent soin au quotidien.
                 </p>
                 <p className="text-base md:text-lg leading-relaxed">
@@ -210,106 +234,63 @@ export default function displayIndex() {
                   campagnes de stérilisation, ainsi que la distribution gratuite
                   de croquettes.
                 </p>
-                <p className="text-base md:text-lg leading-relaxed">
-                  À travers ces initiatives, nous œuvrons chaque jour pour
-                  améliorer les conditions de vie des animaux et renforcer le
-                  lien solidaire entre humains et compagnons à quatre pattes.
-                </p>
+                <div className="border-l-4 border-[var(--color-primary)] bg-[var(--color-primary)]/5 px-6 py-4 rounded-r-xl">
+                  <p className="text-base md:text-lg font-semibold text-[var(--color-quaternary)]">
+                    Nous sommes une asso 100 % bénévole : ici, chaque don sert
+                    directement à soigner et protéger les animaux les plus
+                    fragiles. Ce sont vos dons qui nous permettent de changer
+                    leur quotidien.
+                  </p>
+                </div>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <a
                   href="/a-propos"
-                  className="px-6 py-3 font-semibold rounded-xl bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary)]/90 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-center"
+                  className="px-6 py-4 text-sm bg-[var(--color-quaternary)] text-[var(--color-secondary)] font-bold rounded-xl backdrop-blur-sm border border-2 border-[var(--color-quaternary)] hover:bg-[var(--color-secondary)] hover:text-[var(--color-quaternary)] transition-colors duration-200"
                 >
                   En savoir plus
                 </a>
                 <a
                   href="/faire-un-don"
-                  className="px-6 py-3 font-semibold rounded-xl border-2 border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white transition-all duration-200 text-center"
+                  className="px-6 py-4 text-sm bg-[var(--color-primary)] text-[var(--color-secondary)] font-bold rounded-xl backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-secondary)] hover:text-[var(--color-primary)] transition-colors duration-200"
                 >
                   Nous soutenir
                 </a>
               </div>
             </div>
-
-            <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-[var(--color-primary)]/10 via-[var(--color-secondary)]/5 to-[var(--color-quaternary)]/10 rounded-3xl flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-6xl md:text-7xl mb-4">🐱</div>
-                  <div className="text-lg md:text-xl font-bold text-[var(--color-quaternary)] mb-2">
-                    Notre mission
-                  </div>
-                  <div className="text-sm md:text-base text-gray-600">
-                    Aider les animaux en détresse
-                  </div>
-                </div>
-              </div>
-
-              <div className="absolute -top-4 -right-4 w-8 h-8 bg-[var(--color-primary)] rounded-full flex items-center justify-center">
-                <span className="text-white text-sm">♥</span>
-              </div>
-              <div className="absolute -bottom-4 -left-4 w-8 h-8 bg-[var(--color-quaternary)] rounded-full flex items-center justify-center">
-                <span className="text-white text-sm">🏠</span>
-              </div>
+            <div className="overflow-hidden -mr-8 relative">
+              <img
+                src="assets/img/background-2.jpg"
+                alt=""
+                className="md:h-[600px] object-cover rounded-xl"
+              />
+              <div
+                className="absolute inset-0 rounded-xl"
+                style={{
+                  background: `
+           linear-gradient(to right, white, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 70%, white),
+           linear-gradient(to bottom, white, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 70%, white)
+         `,
+                }}
+              ></div>
             </div>
           </div>
         </section>
-        <section className="bg-gray-50 text-[var(--color-quaternary)] max-w-[1200px] mx-auto px-4 py-12 md:py-16 lg:py-20">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <div className="flex flex-col gap-6">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">
-                Comment vous remercier ?
-              </h2>
-              <p className="text-base md:text-lg leading-relaxed">
-                Grâce à votre aide, notre association a pu apporter une aide
-                significative à des milliers d'animaux et leurs humains.
-              </p>
-              <ul className="space-y-3">
-                <li className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-[var(--color-primary)] rounded-full"></div>
-                  <span className="font-semibold">10 ans d'engagement</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-[var(--color-primary)] rounded-full"></div>
-                  <span className="font-semibold">
-                    Plus de 5.6K animaux sauvés
-                  </span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-[var(--color-primary)] rounded-full"></div>
-                  <span className="font-semibold">
-                    Plus de 18K tonnes de croquettes distribuées
-                  </span>
-                </li>
-              </ul>
-            </div>
-            <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-quaternary)] rounded-2xl flex items-center justify-center">
-                <div className="text-white text-center">
-                  <div className="text-4xl md:text-5xl font-bold mb-2">
-                    5.6K+
-                  </div>
-                  <div className="text-lg md:text-xl">Animaux sauvés</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section className="text-[var(--color-quaternary)] max-w-[1200px] mx-auto px-4 py-12 md:py-16 lg:py-20">
+        <section className="text-[var(--color-quaternary)] max-w-[1200px] mx-auto px-4 py-8">
           <div className="text-center mb-8 md:mb-12">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
               Nos derniers articles
             </h2>
-            <p className="text-base md:text-lg text-gray-600">
-              Découvrez notre blog pour plus d'actualités
-            </p>
+            <div className="w-16 h-1 bg-[var(--color-tertiary)] mx-auto rounded-full"></div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            <article className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100">
-              <div className="aspect-video bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
-                <span className="text-white text-sm">Image d'article</span>
-              </div>
+            <article className="rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100">
+              <img
+                src="assets/articles/article-1.jpg"
+                alt="Article 1"
+                className="w-full sm: h-1/2 md:h-4/10 object-cover"
+              />
               <div className="p-5 md:p-6">
                 <h3 className="text-lg md:text-xl font-bold mb-3 leading-tight">
                   <a
@@ -338,9 +319,11 @@ export default function displayIndex() {
               </div>
             </article>
             <article className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100">
-              <div className="aspect-video bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
-                <span className="text-white text-sm">Image d'article</span>
-              </div>
+              <img
+                src="assets/articles/article-2.jpg"
+                alt="Article 2"
+                className="w-full h-4/10 object-cover"
+              />
               <div className="p-5 md:p-6">
                 <h3 className="text-lg md:text-xl font-bold mb-3 leading-tight">
                   <a
@@ -368,9 +351,11 @@ export default function displayIndex() {
               </div>
             </article>
             <article className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100">
-              <div className="aspect-video bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center">
-                <span className="text-white text-sm">Image d'article</span>
-              </div>
+              <img
+                src="assets/articles/article-3.jpg"
+                alt="Article 3"
+                className="w-full h-4/10 object-cover"
+              />
               <div className="p-5 md:p-6">
                 <h3 className="text-lg md:text-xl font-bold mb-3 leading-tight">
                   <a
@@ -396,6 +381,43 @@ export default function displayIndex() {
                 </a>
               </div>
             </article>
+          </div>
+        </section>
+        <section className="bg-[var(--color-tertiary)]/10 rounded-xl w-[calc(1400px)] text-[var(--color-quaternary)]">
+          <div className="max-w-[1200px] mx-auto px-4 py-8">
+            <div className="flex flex-col items-center justify-center gap-6">
+              <div>
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
+                  Comment vous remercier ?
+                </h2>
+                <div className="w-16 h-1 bg-[var(--color-primary)] mx-auto rounded-full"></div>
+              </div>
+              <p className="text-base md:text-lg leading-relaxed">
+                Grâce à votre aide, notre association a pu apporter une aide
+                significative à des milliers d'animaux et leurs humains et
+                continue de le faire chaque jour.
+              </p>
+              <ul className="flex gap-24">
+                <li className="flex flex-col items-center gap-3">
+                  <span className="text-8xl text-[var(--color-primary)]">
+                    10
+                  </span>{" "}
+                  ans d'engagement
+                </li>
+                <li className="flex flex-col items-center gap-3">
+                  <span className="text-8xl text-[var(--color-primary)]">
+                    5.6K
+                  </span>{" "}
+                  animaux sauvés
+                </li>
+                <li className="flex flex-col items-center gap-3">
+                  <span className="text-8xl text-[var(--color-primary)]">
+                    +18K
+                  </span>{" "}
+                  tonnes de croquettes distribuées
+                </li>
+              </ul>
+            </div>
           </div>
         </section>
       </main>

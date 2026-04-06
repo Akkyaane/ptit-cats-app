@@ -8,7 +8,7 @@ export default function Navbar() {
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-2 md:gap-3">
           <img
-            src="/logo.png"
+            src="/assets/img/logo.png"
             alt="Logo"
             className="size-10 md:size-12 border-2 border-[var(--color-secondary)] rounded-full hover:scale-110 transition-transform duration-300"
           />
