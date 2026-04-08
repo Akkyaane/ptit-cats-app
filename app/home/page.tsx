@@ -285,14 +285,14 @@ export default function displayIndex() {
             <div className="w-16 h-1 bg-[var(--color-tertiary)] mx-auto rounded-full"></div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            <article className="rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100">
+            <article>
               <img
                 src="assets/articles/article-1.jpg"
                 alt="Article 1"
-                className="w-full sm: h-1/2 md:h-4/10 object-cover"
+                className="w-full aspect-3/2 object-cover"
               />
-              <div className="p-5 md:p-6">
-                <h3 className="text-lg md:text-xl font-bold mb-3 leading-tight">
+              <div className="p-5 flex flex-col gap-2">
+                <h3 className="text-lg md:text-xl font-bold leading-tight">
                   <a
                     href=""
                     className="text-[var(--color-quaternary)] hover:text-[var(--color-primary)] transition-colors"
@@ -301,10 +301,10 @@ export default function displayIndex() {
                     Croquettes Fixes
                   </a>
                 </h3>
-                <span className="text-sm text-gray-500 mb-3 block">
+                <span className="text-sm text-[var(--color-quaternary)]/40">
                   25 juillet 2025
                 </span>
-                <p className="text-sm md:text-base text-gray-700 mb-4 leading-relaxed">
+                <p className="font-sans text-sm leading-6">
                   À l'abri des regards, certains chats errants n'ont plus aucune
                   solution : trop âgés, malades ou trop craintifs pour être
                   adoptés. C'est pour eux que l'association Sans Croquettes
@@ -312,20 +312,20 @@ export default function displayIndex() {
                 </p>
                 <a
                   href=""
-                  className="text-[var(--color-primary)] hover:text-[var(--color-primary)]/90 font-semibold text-sm"
+                  className="text-[var(--color-primary)] hover:underline font-bold"
                 >
                   Lire la suite →
                 </a>
               </div>
             </article>
-            <article className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100">
+            <article>
               <img
                 src="assets/articles/article-2.jpg"
                 alt="Article 2"
-                className="w-full h-4/10 object-cover"
+                className="w-full aspect-3/2 object-cover"
               />
-              <div className="p-5 md:p-6">
-                <h3 className="text-lg md:text-xl font-bold mb-3 leading-tight">
+              <div className="p-5 flex flex-col gap-2">
+                <h3 className="text-lg md:text-xl font-bold leading-tight">
                   <a
                     href=""
                     className="text-[var(--color-quaternary)] hover:text-[var(--color-primary)] transition-colors"
@@ -334,30 +334,30 @@ export default function displayIndex() {
                     pendant l'été
                   </a>
                 </h3>
-                <span className="text-sm text-gray-500 mb-3 block">
+                <span className="text-sm text-[var(--color-quaternary)]/40">
                   25 juillet 2025
                 </span>
-                <p className="text-sm md:text-base text-gray-700 mb-4 leading-relaxed">
+                <p className="font-sans text-sm leading-6">
                   Même en plein cœur de l'été, l'association Sans Croquettes
                   Fixes ne baisse pas les bras. Chaque semaine, ses bénévoles
                   poursuivent leurs distributions de nourriture...
                 </p>
                 <a
                   href=""
-                  className="text-[var(--color-primary)] hover:text-[var(--color-primary)]/90 font-semibold text-sm"
+                  className="text-[var(--color-primary)] hover:underline font-bold"
                 >
                   Lire la suite →
                 </a>
               </div>
             </article>
-            <article className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100">
+            <article>
               <img
                 src="assets/articles/article-3.jpg"
                 alt="Article 3"
-                className="w-full h-4/10 object-cover"
+                className="w-full aspect-3/2 object-cover"
               />
-              <div className="p-5 md:p-6">
-                <h3 className="text-lg md:text-xl font-bold mb-3 leading-tight">
+              <div className="p-5 flex flex-col gap-2">
+                <h3 className="text-lg md:text-xl font-bold leading-tight">
                   <a
                     href=""
                     className="text-[var(--color-quaternary)] hover:text-[var(--color-primary)] transition-colors"
@@ -365,22 +365,30 @@ export default function displayIndex() {
                     Comment protéger son chat du soleil ?
                   </a>
                 </h3>
-                <span className="text-sm text-gray-500 mb-3 block">
+                <span className="text-sm text-[var(--color-quaternary)]/40">
                   25 juillet 2025
                 </span>
-                <p className="text-sm md:text-base text-gray-700 mb-4 leading-relaxed">
+                <p className="font-sans text-sm leading-6">
                   Lorsque les températures montent, votre chat aussi peut
                   souffrir du soleil. Contrairement à une idée reçue, son pelage
                   ne le protège pas toujours totalement...
                 </p>
                 <a
                   href=""
-                  className="text-[var(--color-primary)] hover:text-[var(--color-primary)]/90 font-semibold text-sm"
+                  className="text-[var(--color-primary)] hover:underline font-bold"
                 >
                   Lire la suite →
                 </a>
               </div>
             </article>
+          </div>
+          <div className="flex justify-center">
+            <a
+              href="/adoption-posts"
+              className="px-6 py-4 text-sm bg-[var(--color-primary)] text-[var(--color-secondary)] font-bold rounded-xl backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-secondary)] hover:text-[var(--color-primary)] transition-colors duration-200"
+            >
+              Voir tous les articles
+            </a>
           </div>
         </section>
         <section className="bg-[var(--color-tertiary)]/10 rounded-xl w-[calc(1400px)] text-[var(--color-quaternary)]">
