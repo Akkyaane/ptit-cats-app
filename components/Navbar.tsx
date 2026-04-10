@@ -11,6 +11,16 @@ export default function Navbar() {
     return match ? decodeURIComponent(match[1]) : null;
   });
   const pathname = usePathname();
+  const [volunteerId] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    const match = document.cookie.match(/(?:^|;\s*)volunteer_id=([^;]*)/);
+    return match ? decodeURIComponent(match[1]) : null;
+  });
+  const [userRole] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    const match = document.cookie.match(/(?:^|;\s*)user_role=([^;]*)/);
+    return match ? decodeURIComponent(match[1]) : null;
+  });
 
   return (
     <nav className="border-b border-[var(--color-secondary)]/25 p-4">
@@ -84,8 +94,25 @@ export default function Navbar() {
               Faire un don
             </a>
           </li>
+          {userRole === "Admin" && (
+            <li>
+              <a
+                href="/admin"
+                className="px-3 lg:px-4 py-2 font-bold rounded-xl bg-[var(--color-quaternary)] backdrop-blur-sm border border-2 border-[var(--color-quaternary)] hover:bg-[var(--color-quaternary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
+              >
+                Admin
+              </a>
+            </li>
+          )}
           <li>
-            {adoptantId ? (
+            {volunteerId ? (
+              <a
+                href={`/volunteer/view/${volunteerId}`}
+                className="px-3 lg:px-4 py-2 font-bold rounded-xl bg-[var(--color-primary)] backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
+              >
+                Mon profil
+              </a>
+            ) : adoptantId ? (
               <a
                 href={`/adoptant/view/${adoptantId}`}
                 className="px-3 lg:px-4 py-2 font-bold rounded-xl bg-[var(--color-primary)] backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
@@ -192,8 +219,27 @@ export default function Navbar() {
               Faire un don
             </a>
           </li>
+          {userRole === "Admin" && (
+            <li>
+              <a
+                href="/admin"
+                className="block w-full text-center px-4 py-3 font-bold rounded-xl bg-[var(--color-quaternary)] backdrop-blur-sm border border-2 border-[var(--color-quaternary)] hover:bg-[var(--color-quaternary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Admin
+              </a>
+            </li>
+          )}
           <li>
-            {adoptantId ? (
+            {volunteerId ? (
+              <a
+                href={`/volunteer/view/${volunteerId}`}
+                className="block w-full text-center px-4 py-3 font-bold rounded-xl bg-[var(--color-primary)] backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Mon profil
+              </a>
+            ) : adoptantId ? (
               <a
                 href={`/adoptant/view/${adoptantId}`}
                 className="block w-full text-center px-4 py-3 font-bold rounded-xl bg-[var(--color-primary)] backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"

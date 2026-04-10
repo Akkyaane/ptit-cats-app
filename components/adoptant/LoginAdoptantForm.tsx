@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { loginAdoptant } from "@/app/login/action";
+import { loginUser } from "@/app/login/action";
 
 export default function LoginAdoptantForm() {
   const [error, setError] = useState<string | null>(null);
@@ -13,7 +13,7 @@ export default function LoginAdoptantForm() {
   async function handleSubmit(formData: FormData) {
     setError(null);
     setLoading(true);
-    const result = await loginAdoptant(formData);
+    const result = await loginUser(formData);
     setLoading(false);
 
     if (result.error) {
