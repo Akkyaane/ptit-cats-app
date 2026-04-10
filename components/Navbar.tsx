@@ -4,11 +4,16 @@ import { useState } from "react";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [adoptantId] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    const match = document.cookie.match(/(?:^|;\s*)adoptant_id=([^;]*)/);
+    return match ? decodeURIComponent(match[1]) : null;
+  });
 
   return (
     <nav className="border-b border-[var(--color-secondary)]/25 p-4">
       <div className="flex flex-row items-center justify-between">
-        <div className="flex flex-row items-center gap-2 md:gap-3">
+        <a href="/home" className="flex flex-row items-center gap-2 md:gap-3">
           <img
             src="/assets/img/logo.png"
             alt="Logo"
@@ -17,7 +22,7 @@ export default function Navbar() {
           <span className="text-lg md:text-xl font-bold tracking-tight">
             Sans Croquettes Fixes
           </span>
-        </div>
+        </a>
         <ul className="hidden lg:flex flex-row gap-4">
           <li>
             <a
@@ -68,12 +73,21 @@ export default function Navbar() {
             </a>
           </li>
           <li>
-            <a
-              href="/login"
-              className="px-3 lg:px-4 py-2 font-bold rounded-xl bg-[var(--color-primary)] backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
-            >
-              Se connecter / S'inscrire
-            </a>
+            {adoptantId ? (
+              <a
+                href={`/adoptant/view/${adoptantId}`}
+                className="px-3 lg:px-4 py-2 font-bold rounded-xl bg-[var(--color-primary)] backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
+              >
+                Mon profil
+              </a>
+            ) : (
+              <a
+                href="/login"
+                className="px-3 lg:px-4 py-2 font-bold rounded-xl bg-[var(--color-primary)] backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
+              >
+                Se connecter / S&apos;inscrire
+              </a>
+            )}
           </li>
         </ul>
         <button
@@ -167,13 +181,23 @@ export default function Navbar() {
             </a>
           </li>
           <li>
-            <a
-              href="/login"
-              className="block w-full text-center px-4 py-3 font-bold rounded-xl bg-[var(--color-primary)] backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Se connecter / S'inscrire
-            </a>
+            {adoptantId ? (
+              <a
+                href={`/adoptant/view/${adoptantId}`}
+                className="block w-full text-center px-4 py-3 font-bold rounded-xl bg-[var(--color-primary)] backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Mon profil
+              </a>
+            ) : (
+              <a
+                href="/login"
+                className="block w-full text-center px-4 py-3 font-bold rounded-xl bg-[var(--color-primary)] backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Se connecter / S&apos;inscrire
+              </a>
+            )}
           </li>
         </ul>
       </div>
