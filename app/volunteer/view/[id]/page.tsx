@@ -1,5 +1,6 @@
 import { getBenevoleById } from "@/app/volunteer/update/action";
 import Navbar from "@/components/Navbar";
+import DeleteVolunteerButton from "@/components/volunteer/DeleteVolunteerButton";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -68,6 +69,7 @@ export default async function BenevoleProfilePage({
             >
               Modifier ce profil
             </Link>
+            <DeleteVolunteerButton documentId={benevole.documentId} />
             <Link
               href="/volunteer/update"
               className="text-center font-bold text-[var(--color-primary)] hover:underline text-sm"
