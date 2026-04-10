@@ -1,15 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import { createBenevole } from "@/app/user/create/action";
+import { updateBenevole } from "@/app/volunteer/update/action";
 
-export default function CreateUserForm() {
+type Benevole = {
+  id: number;
+  documentId: string;
+  name: string;
+  firstName: string;
+  email: string;
+  role: "Admin" | "Référent" | "Responsable-adoption";
+};
+
+export default function UpdateVolunteerForm({ benevole }: { benevole: Benevole }) {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
   async function handleSubmit(formData: FormData) {
     setError(null);
-    const result = await createBenevole(formData);
+    const result = await updateBenevole(benevole.documentId, formData);
 
     if (result.error) {
       setError(result.error);
@@ -19,40 +28,29 @@ export default function CreateUserForm() {
   }
 
   if (success) {
-    return <p>Bénévole créé avec succès !</p>;
+    return <p>Bénévole mis à jour avec succès !</p>;
   }
 
   return (
     <form action={handleSubmit}>
       <div>
         <label htmlFor="name">Nom</label>
-        <input id="name" name="name" type="text" required />
+        <input id="name" name="name" type="text" defaultValue={benevole.name} required />
       </div>
 
       <div>
         <label htmlFor="firstName">Prénom</label>
-        <input id="firstName" name="firstName" type="text" required />
+        <input id="firstName" name="firstName" type="text" defaultValue={benevole.firstName} required />
       </div>
 
       <div>
         <label htmlFor="email">Email</label>
-        <input id="email" name="email" type="email" required />
-      </div>
-
-      <div>
-        <label htmlFor="password">Mot de passe provisoire</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="new-password"
-          required
-        />
+        <input id="email" name="email" type="email" defaultValue={benevole.email} required />
       </div>
 
       <div>
         <label htmlFor="role">Rôle</label>
-        <select id="role" name="role" required>
+        <select id="role" name="role" defaultValue={benevole.role} required>
           <option value="">-- Choisir un rôle --</option>
           <option value="Admin">Admin</option>
           <option value="Référent">Référent</option>
@@ -62,7 +60,7 @@ export default function CreateUserForm() {
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      <button type="submit">Créer le bénévole</button>
+      <button type="submit">Mettre à jour</button>
     </form>
   );
 }

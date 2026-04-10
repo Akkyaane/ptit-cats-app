@@ -1,4 +1,4 @@
-import { getAllBenevoles } from "@/app/user/update/action";
+import { getAllBenevoles } from "@/app/volunteer/update/action";
 import Link from "next/link";
 
 type Benevole = {
@@ -10,7 +10,7 @@ type Benevole = {
   role: "Admin" | "Référent" | "Responsable-adoption";
 };
 
-export default async function BenevoleListPage() {
+export default async function VolunteerListPage() {
   const benevoles: Benevole[] = await getAllBenevoles();
 
   return (
@@ -21,7 +21,7 @@ export default async function BenevoleListPage() {
         {benevoles.map((b: Benevole) => (
           <li key={b.id}>
             {b.firstName} {b.name} - {b.role}
-            <Link href={`/user/view/${b.documentId}`}> Voir le profil</Link>
+            <Link href={`/volunteer/view/${b.documentId}`}> Voir le profil</Link>
           </li>
         ))}
       </ul>

@@ -1,5 +1,5 @@
-import { getBenevoleById } from "@/app/user/update/action";
-import UpdateUserForm from "@/components/user/UpdateUserForm";
+import { getBenevoleById } from "@/app/volunteer/update/action";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 type Benevole = {
@@ -11,7 +11,7 @@ type Benevole = {
   role: "Admin" | "Référent" | "Responsable-adoption";
 };
 
-export default async function UpdateUserPage({
+export default async function BenevoleProfilePage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -23,8 +23,10 @@ export default async function UpdateUserPage({
 
   return (
     <div>
-      <h1>Modifier le bénévole</h1>
-      <UpdateUserForm benevole={benevole} />
+      <h1>Profil de {benevole.firstName} {benevole.name}</h1>
+      <p>Email : {benevole.email}</p>
+      <p>Rôle : {benevole.role}</p>
+      <Link href={`/volunteer/update/${benevole.documentId}`}>Modifier</Link>
     </div>
   );
 }
