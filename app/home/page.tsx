@@ -1,10 +1,29 @@
 "use client";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import { useRef } from "react";
+import { useInView } from "framer-motion";
+import CountUp from "react-countup";
 
 export default function displayIndex() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <div>
-      <header className="bg-[url('/assets/img/background-1.jpg')] bg-center">
+      <button
+        onClick={scrollToTop}
+        className="fixed bottom-6 right-6 z-50 size-12 rounded-xl cursor-pointer bg-[var(--color-primary)] text-[var(--color-secondary)] border border-2 border-[var(--color-primary)] hover:bg-[var(--color-secondary)] hover:text-[var(--color-primary)] transition-colors duration-200 text-2xl font-bold"
+      >
+        ↑
+      </button>
+      <header className="bg-[url('/assets/img/background-1.jpg')] bg-center bg-no-repeat">
         <div className="max-w-[1200px] mx-auto">
           <Navbar />
           <section className="flex flex-col items-start justify-center gap-6 py-24 px-4 md:py-32 md:max-w-xl lg:py-48 lg:max-w-2xl">
@@ -221,8 +240,8 @@ export default function displayIndex() {
             <div className="flex flex-col gap-6 z-10">
               <div className="space-y-4">
                 <p className="text-base md:text-lg leading-relaxed">
-                  Sans Croquettes Fixes est une association basée à Lyon,
-                  engagée dans une grande partie de la région
+                  Sans Croquettes Fixes est une association à but non lucratif
+                  basée à Lyon, engagée dans une grande partie de la région
                   Auvergne-Rhône-Alpes et parfois au-delà. Notre mission est de
                   venir en aide aux animaux en détresse, tout en soutenant les
                   personnes qui en prennent soin au quotidien.
@@ -233,6 +252,13 @@ export default function displayIndex() {
                   prise en charge de chats sans solution, l'organisation de
                   campagnes de stérilisation, ainsi que la distribution gratuite
                   de croquettes.
+                </p>
+                <p className="text-base md:text-lg leading-relaxed">
+                  N'hésitez pas à nous soutenir en faisant un don, en devenant
+                  bénévole ou un foyer d'accueil pour nos compagnons à quatre
+                  pattes. Chaque geste compte pour nous aider à poursuivre notre
+                  mission et à offrir une vie meilleure aux animaux dans le
+                  besoin.
                 </p>
                 <div className="border-l-4 border-[var(--color-primary)] bg-[var(--color-primary)]/5 px-6 py-4 rounded-r-xl">
                   <p className="text-base md:text-lg font-semibold text-[var(--color-quaternary)]">
@@ -391,6 +417,43 @@ export default function displayIndex() {
             </a>
           </div>
         </section>
+        <section className="text-[var(--color-quaternary)] max-w-[1200px] mx-auto px-4 py-16">
+          <div className="grid md:grid-cols-[0.95fr_1.05fr] items-center">
+            <img
+              src="assets/img/background-4.jpg"
+              alt="Les félins de l'ombre"
+              className="hidden md:block object-cover rounded-tl-xl rounded-bl-xl md:h-[500px]"
+            />
+            <div className="bg-[var(--color-quaternary)] px-6 py-12 md:px-16 md:py-32 rounded-xl text-[var(--color-secondary)] flex flex-col gap-10 items-center justify-center">
+              <div>
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-center">
+                  Les félins de l'ombre
+                </h2>
+                <div className="w-16 h-1 bg-[var(--color-tertiary)] mx-auto rounded-full"></div>
+              </div>
+              <p className="md:text-2xl leading-8 md:leading-10 text-center md:text-left">
+                En 2025, à l’occasion de nos 10 ans, nous nous lançons dans une
+                toute nouvelle aventure :{" "}
+                <span className="font-bold text-[var(--color-tertiary)]">
+                  Les félins de l’ombre
+                </span>
+                . Ce projet prend la forme d’un lieu de vie pour les chats trop
+                souvent oubliés, qui n’ont malheureusement pas la possibilité
+                d’être adoptés, mais qui ne sont pas en mesure de vivre en
+                totale liberté. Pour plus d’informations sur le projet, nous
+                vous invitons à vous rendre directement sur le page de notre
+                levée de fonds en cliquant{" "}
+                <a
+                  href="https://www.helloasso.com/associations/sans-croquettes-fixes/collectes/aidez-nous-a-batir-un-lieu-pour-des-chats-oublies"
+                  className="text-[var(--color-tertiary)] hover:underline font-bold"
+                >
+                  ici
+                </a>
+                .
+              </p>
+            </div>
+          </div>
+        </section>
         <section className="bg-[var(--color-tertiary)]/10 rounded-xl w-[calc(1400px)] text-[var(--color-quaternary)]">
           <div className="max-w-[1200px] mx-auto px-4 py-8">
             <div className="flex flex-col items-center justify-center gap-6">
@@ -407,20 +470,23 @@ export default function displayIndex() {
               </p>
               <ul className="flex gap-24">
                 <li className="flex flex-col items-center gap-3">
-                  <span className="text-8xl text-[var(--color-primary)]">
-                    10
+                  <span
+                    ref={ref}
+                    className="text-8xl text-[var(--color-primary)]"
+                  >
+                    {isInView ? <CountUp end={10} duration={2} /> : 0}
                   </span>{" "}
                   ans d'engagement
                 </li>
                 <li className="flex flex-col items-center gap-3">
                   <span className="text-8xl text-[var(--color-primary)]">
-                    5.6K
+                    +{isInView ? <CountUp end={5} duration={2} /> : 0}K
                   </span>{" "}
                   animaux sauvés
                 </li>
                 <li className="flex flex-col items-center gap-3">
                   <span className="text-8xl text-[var(--color-primary)]">
-                    +18K
+                    +{isInView ? <CountUp end={18} duration={2} /> : 0}K
                   </span>{" "}
                   tonnes de croquettes distribuées
                 </li>
@@ -429,73 +495,7 @@ export default function displayIndex() {
           </div>
         </section>
       </main>
-      <footer className="bg-[var(--color-quaternary)] text-white py-8 md:py-12">
-        <div className="max-w-[1200px] mx-auto px-4">
-          <div className="text-center mb-6">
-            <p className="text-sm md:text-base">
-              &copy; 2026 Sans Croquettes Fixes © 2022 - Litl' Pal Theme
-            </p>
-          </div>
-          <ul className="flex flex-wrap justify-center gap-4 md:gap-6 text-sm md:text-base">
-            <li>
-              <a
-                href="/adoption-posts"
-                className="hover:text-[var(--color-primary)] transition-colors"
-              >
-                À l'adoption
-              </a>
-            </li>
-            <li>
-              <a
-                href="/kibble-distribution"
-                className="hover:text-[var(--color-primary)] transition-colors"
-              >
-                Distribution de croquettes
-              </a>
-            </li>
-            <li>
-              <a
-                href="/about"
-                className="hover:text-[var(--color-primary)] transition-colors"
-              >
-                À propos
-              </a>
-            </li>
-            <li>
-              <a
-                href="/blog"
-                className="hover:text-[var(--color-primary)] transition-colors"
-              >
-                Blog
-              </a>
-            </li>
-            <li>
-              <a
-                href="/contact"
-                className="hover:text-[var(--color-primary)] transition-colors"
-              >
-                Contact
-              </a>
-            </li>
-            <li>
-              <a
-                href="/legal"
-                className="hover:text-[var(--color-primary)] transition-colors"
-              >
-                Mentions légales
-              </a>
-            </li>
-            <li>
-              <a
-                href="/donation"
-                className="hover:text-[var(--color-primary)] transition-colors"
-              >
-                Faire un don
-              </a>
-            </li>
-          </ul>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
