@@ -463,7 +463,7 @@ export default function Home() {
           <div>
             <div className="scf-hero-eyebrow">
               <span className="line" />
-              <span className="label">Calico Soft Sanctuary</span>
+              <span className="label">SansCroquettesFixes Sanctuary</span>
             </div>
             <h1 className="scf-h1">
               Le réconfort<br />à portée<br />de patte.
@@ -565,7 +565,7 @@ export default function Home() {
             <a href="#">Facebook</a>
             <a href="#">Contact</a>
           </div>
-          <p className="copy">© 2026 Refuge Calico Soft. Tous droits réservés.</p>
+          <p className="copy">© 2026 Refuge SansCroquettesFixes. Tous droits réservés.</p>
         </footer>
       </div>
     </>
