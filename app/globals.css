@@ -16,6 +16,11 @@
   --color-quaternary: var(--color-quaternary);
 }
 
+::selection {
+  background-color: rgb(236, 211, 255);
+  color: black;
+}
+
 body {
   background: var(--color-secondary);
   color: var(--color-secondary);

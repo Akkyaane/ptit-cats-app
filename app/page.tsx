@@ -17,12 +17,6 @@ export default function displayIndex() {
 
   return (
     <div>
-      <button
-        onClick={scrollToTop}
-        className="fixed bottom-6 right-6 z-50 size-12 rounded-xl cursor-pointer bg-[var(--color-primary)] text-[var(--color-secondary)] border border-2 border-[var(--color-primary)] hover:bg-[var(--color-secondary)] hover:text-[var(--color-primary)] transition-colors duration-200 text-2xl font-bold"
-      >
-        ↑
-      </button>
       <header className="bg-[url('/assets/img/background-1.jpg')] bg-center bg-no-repeat">
         <div className="max-w-[1200px] mx-auto">
           <Navbar />
@@ -49,6 +43,12 @@ export default function displayIndex() {
                 Trouver mon compagnon idéal
               </a>
             </div>
+            <button
+              onClick={scrollToTop}
+              className="fixed bottom-6 right-6 z-50 size-12 rounded-xl cursor-pointer bg-[var(--color-primary)] text-[var(--color-secondary)] border border-2 border-[var(--color-primary)] hover:bg-[var(--color-secondary)] hover:text-[var(--color-primary)] transition-colors duration-200 text-2xl font-bold"
+            >
+              ↑
+            </button>
           </section>
         </div>
       </header>
@@ -260,14 +260,12 @@ export default function displayIndex() {
                   mission et à offrir une vie meilleure aux animaux dans le
                   besoin.
                 </p>
-                <div className="border-l-4 border-[var(--color-primary)] bg-[var(--color-primary)]/5 px-6 py-4 rounded-r-xl">
-                  <p className="text-base md:text-lg font-semibold text-[var(--color-quaternary)]">
-                    Nous sommes une asso 100 % bénévole : ici, chaque don sert
-                    directement à soigner et protéger les animaux les plus
-                    fragiles. Ce sont vos dons qui nous permettent de changer
-                    leur quotidien.
-                  </p>
-                </div>
+                <p className="border-l-4 border-[var(--color-primary)] bg-[var(--color-primary)]/5 px-6 py-4 rounded-r-xl md:text-lg font-semibold text-[var(--color-quaternary)]">
+                  Nous sommes une asso 100 % bénévole : ici, chaque don sert
+                  directement à soigner et protéger les animaux les plus
+                  fragiles. Ce sont vos dons qui nous permettent de changer leur
+                  quotidien.
+                </p>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 pt-4">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -9,11 +10,12 @@ export default function Navbar() {
     const match = document.cookie.match(/(?:^|;\s*)adoptant_id=([^;]*)/);
     return match ? decodeURIComponent(match[1]) : null;
   });
+  const pathname = usePathname();
 
   return (
     <nav className="border-b border-[var(--color-secondary)]/25 p-4">
       <div className="flex flex-row items-center justify-between">
-        <a href="/home" className="flex flex-row items-center gap-2 md:gap-3">
+        <a href="/" className="flex flex-row items-center gap-2 md:gap-3">
           <img
             src="/assets/img/logo.png"
             alt="Logo"
@@ -24,7 +26,15 @@ export default function Navbar() {
           </span>
         </a>
         <ul className="hidden lg:flex flex-row gap-4">
-          <li>
+          <li className={pathname === "/" ? "hidden" : "block"}>
+            <a
+              href="/"
+              className="hover:text-[var(--color-quaternary)] transition-colors duration-300"
+            >
+              Accueil
+            </a>
+          </li>
+          <li className={pathname === "/adoption-posts" ? "hidden" : "block"}>
             <a
               href="/adoption-posts"
               className="hover:text-[var(--color-quaternary)] transition-colors duration-300"
@@ -32,7 +42,9 @@ export default function Navbar() {
               À l'adoption
             </a>
           </li>
-          <li>
+          <li
+            className={pathname === "/kibble-distribution" ? "hidden" : "block"}
+          >
             <a
               href="/kibble-distribution"
               className="hover:text-[var(--color-quaternary)] transition-colors duration-300"
@@ -40,7 +52,7 @@ export default function Navbar() {
               Distribution de croquettes
             </a>
           </li>
-          <li>
+          <li className={pathname === "/about" ? "hidden" : "block"}>
             <a
               href="/about"
               className="hover:text-[var(--color-quaternary)] transition-colors duration-300"
@@ -48,7 +60,7 @@ export default function Navbar() {
               À propos
             </a>
           </li>
-          <li>
+          <li className={pathname === "/blog" ? "hidden" : "block"}>
             <a
               href="/blog"
               className="hover:text-[var(--color-quaternary)] transition-colors duration-300"
@@ -56,7 +68,7 @@ export default function Navbar() {
               Blog
             </a>
           </li>
-          <li>
+          <li className={pathname === "/contact" ? "hidden" : "block"}>
             <a
               href="/contact"
               className="hover:text-[var(--color-quaternary)] transition-colors duration-300"
@@ -64,7 +76,7 @@ export default function Navbar() {
               Contact
             </a>
           </li>
-          <li>
+          <li className={pathname === "/donation" ? "hidden" : "block"}>
             <a
               href="/donation"
               className="px-3 lg:px-4 py-2 font-bold rounded-xl bg-[var(--color-quaternary)] backdrop-blur-sm border border-2 border-[var(--color-quaternary)] hover:bg-[var(--color-quaternary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"

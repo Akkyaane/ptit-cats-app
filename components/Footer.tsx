@@ -1,10 +1,23 @@
+"use client";
+import { usePathname } from "next/navigation";
+
 export default function Navbar() {
+  const pathname = usePathname();
+
   return (
     <footer className="bg-[var(--color-quaternary)] py-10 md:py-14">
       <div className="max-w-[1200px] mx-auto px-4">
         <div className="flex flex-col justify-content items-center gap-8">
           <ul className="flex gap-6">
-            <li>
+            <li className={pathname === "/" ? "hidden" : "block"}>
+              <a
+                href="/"
+                className="hover:text-[var(--color-tertiary)] transition-colors"
+              >
+                Accueil
+              </a>
+            </li>
+            <li className={pathname === "/adoption-posts" ? "hidden" : "block"}>
               <a
                 href="/adoption-posts"
                 className="hover:text-[var(--color-tertiary)] transition-colors"
@@ -12,7 +25,7 @@ export default function Navbar() {
                 À l'adoption
               </a>
             </li>
-            <li>
+            <li className={pathname === "/kibble-distribution" ? "hidden" : "block"}>
               <a
                 href="/kibble-distribution"
                 className="hover:text-[var(--color-tertiary)] transition-colors"
@@ -20,7 +33,7 @@ export default function Navbar() {
                 Distribution de croquettes
               </a>
             </li>
-            <li>
+            <li className={pathname === "/about" ? "hidden" : "block"}>
               <a
                 href="/about"
                 className="hover:text-[var(--color-tertiary)] transition-colors"
@@ -28,7 +41,7 @@ export default function Navbar() {
                 À propos
               </a>
             </li>
-            <li>
+            <li className={pathname === "/blog" ? "hidden" : "block"}>
               <a
                 href="/blog"
                 className="hover:text-[var(--color-tertiary)] transition-colors"
@@ -36,7 +49,7 @@ export default function Navbar() {
                 Blog
               </a>
             </li>
-            <li>
+            <li className={pathname === "/contact" ? "hidden" : "block"}>
               <a
                 href="/contact"
                 className="hover:text-[var(--color-tertiary)] transition-colors"
@@ -44,7 +57,7 @@ export default function Navbar() {
                 Contact
               </a>
             </li>
-            <li>
+            <li className={pathname === "/legal" ? "hidden" : "block"}>
               <a
                 href="/legal"
                 className="hover:text-[var(--color-tertiary)] transition-colors"
@@ -52,7 +65,7 @@ export default function Navbar() {
                 Mentions légales
               </a>
             </li>
-            <li>
+            <li className={pathname === "/donation" ? "hidden" : "block"}>
               <a
                 href="/donation"
                 className="hover:text-[var(--color-tertiary)] transition-colors"
