@@ -1,8 +1,10 @@
 import { getBenevoleById } from "@/app/volunteer/update/action";
 import Navbar from "@/components/Navbar";
 import DeleteVolunteerButton from "@/components/volunteer/DeleteVolunteerButton";
+import LogoutButton from "@/components/adoptant/LogoutButton";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { cookies } from "next/headers";
+import { notFound, redirect } from "next/navigation";
 
 type Benevole = {
   id: number;
@@ -24,10 +26,20 @@ export default async function BenevoleProfilePage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const cookieStore = await cookies();
+  const loggedVolunteerId = cookieStore.get("volunteer_id")?.value ?? null;
+  const loggedAdoptantId = cookieStore.get("adoptant_id")?.value ?? null;
+
+  if (!loggedVolunteerId && !loggedAdoptantId) {
+    redirect("/");
+  }
+
   const { id } = await params;
   const benevole: Benevole = await getBenevoleById(id);
 
   if (!benevole) return notFound();
+
+  const isOwnProfile = loggedVolunteerId === benevole.documentId;
 
   return (
     <div className="min-h-screen bg-[var(--color-secondary)]">
@@ -70,6 +82,7 @@ export default async function BenevoleProfilePage({
               Modifier ce profil
             </Link>
             <DeleteVolunteerButton documentId={benevole.documentId} />
+            {isOwnProfile && <LogoutButton />}
             <Link
               href="/volunteer/update"
               className="text-center font-bold text-[var(--color-primary)] hover:underline text-sm"
