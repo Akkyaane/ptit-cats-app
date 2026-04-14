@@ -19,7 +19,7 @@ export default function LoginAdoptantForm() {
     if (result.error) {
       setError(result.error);
     } else if (result.success) {
-      router.push("/home");
+      router.push("/");
     }
   }
 
