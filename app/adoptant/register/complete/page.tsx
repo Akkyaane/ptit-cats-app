@@ -36,7 +36,7 @@ export default async function RegisterCompletePage({
                 Oui, compléter mon profil
               </Link>
               <Link
-                href="/home"
+                href="/"
                 className="w-full px-6 py-3 font-bold rounded-xl border-2 border-[var(--color-tertiary)] text-[var(--color-quaternary)]/70 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors duration-200 text-center"
               >
                 Non, continuer
