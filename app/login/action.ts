@@ -112,3 +112,15 @@ export async function loginUser(formData: FormData) {
 
 /** @deprecated Utiliser loginUser à la place */
 export const loginAdoptant = loginUser;
+
+export async function logoutUser() {
+  "use server";
+  const { cookies } = await import("next/headers");
+  const { redirect } = await import("next/navigation");
+  const cookieStore = await cookies();
+  cookieStore.delete("jwt");
+  cookieStore.delete("adoptant_id");
+  cookieStore.delete("volunteer_id");
+  cookieStore.delete("user_role");
+  redirect("/");
+}
