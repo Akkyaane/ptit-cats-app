@@ -11,7 +11,6 @@ export async function loginUser(formData: FormData) {
   }
 
   try {
-    // 1. Vérifier si c'est un bénévole (table custom, mot de passe non hashé)
     const volunteerRes = await fetch(
       `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/volunteers?filters[email][$eq]=${encodeURIComponent(email)}`,
       {
@@ -47,7 +46,6 @@ export async function loginUser(formData: FormData) {
       }
     }
 
-    // 2. Sinon, authentification Strapi pour les adoptants
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/auth/local`,
       {
@@ -110,7 +108,6 @@ export async function loginUser(formData: FormData) {
   }
 }
 
-/** @deprecated Utiliser loginUser à la place */
 export const loginAdoptant = loginUser;
 
 export async function logoutUser() {
