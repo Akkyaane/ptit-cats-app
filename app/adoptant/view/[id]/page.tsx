@@ -1,20 +1,34 @@
 import { getAdoptantById } from "@/app/adoptant/update/action";
 import Navbar from "@/components/Navbar";
+import ToastSuccess from "@/components/adoptant/ToastSuccess";
+import LogoutButton from "@/components/adoptant/LogoutButton";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { cookies } from "next/headers";
+import { notFound, redirect } from "next/navigation";
 
 export default async function AdoptantProfilePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ updated?: string }>;
 }) {
+  const cookieStore = await cookies();
+  if (!cookieStore.get("adoptant_id")) {
+    redirect("/");
+  }
+
   const { id } = await params;
+  const { updated } = await searchParams;
   const adoptant = await getAdoptantById(id);
 
   if (!adoptant) return notFound();
 
   return (
     <div className="min-h-screen bg-[var(--color-secondary)]">
+      {updated === "true" && (
+        <ToastSuccess message="Profil mis à jour avec succès !" />
+      )}
       <header className="bg-[var(--color-tertiary)]">
         <div className="max-w-[1200px] mx-auto">
           <Navbar />
@@ -58,6 +72,7 @@ export default async function AdoptantProfilePage({
             >
               Modifier mon profil
             </Link>
+            <LogoutButton />
           </div>
         </div>
       </main>

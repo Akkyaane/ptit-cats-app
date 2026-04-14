@@ -60,3 +60,19 @@ export async function updateBenevole(documentId: string, formData: FormData) {
 
   return { success: true };
 }
+
+export async function deleteBenevole(documentId: string) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/volunteers/${documentId}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${process.env.STRAPI_ADMIN_TOKEN}`,
+      },
+    }
+  );
+
+  if (!response.ok) return { error: "Erreur lors de la suppression" };
+
+  return { success: true };
+}

@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export async function loginAdoptant(formData: FormData) {
+export async function loginUser(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
 
@@ -11,6 +11,41 @@ export async function loginAdoptant(formData: FormData) {
   }
 
   try {
+    const volunteerRes = await fetch(
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/volunteers?filters[email][$eq]=${encodeURIComponent(email)}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.STRAPI_ADMIN_TOKEN}`,
+        },
+      }
+    );
+
+    if (volunteerRes.ok) {
+      const volunteerJson = await volunteerRes.json();
+      if (volunteerJson.data?.length > 0) {
+        const volunteer = volunteerJson.data[0];
+        if (volunteer.password !== password) {
+          return { error: "Email ou mot de passe incorrect." };
+        }
+
+        const cookieStore = await cookies();
+        cookieStore.set("volunteer_id", volunteer.documentId, {
+          httpOnly: false,
+          sameSite: "lax",
+          path: "/",
+          maxAge: 60 * 60 * 24 * 7,
+        });
+        cookieStore.set("user_role", volunteer.role, {
+          httpOnly: false,
+          sameSite: "lax",
+          path: "/",
+          maxAge: 60 * 60 * 24 * 7,
+        });
+
+        return { success: true, role: volunteer.role, volunteerId: volunteer.documentId };
+      }
+    }
+
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/auth/local`,
       {
@@ -58,6 +93,12 @@ export async function loginAdoptant(formData: FormData) {
         path: "/",
         maxAge: 60 * 60 * 24 * 7,
       });
+      cookieStore.set("user_role", "adoptant", {
+        httpOnly: false,
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+      });
     }
 
     return { success: true, documentId };
@@ -65,4 +106,18 @@ export async function loginAdoptant(formData: FormData) {
     console.error("Login error:", err);
     return { error: "Erreur serveur, veuillez réessayer." };
   }
+}
+
+export const loginAdoptant = loginUser;
+
+export async function logoutUser() {
+  "use server";
+  const { cookies } = await import("next/headers");
+  const { redirect } = await import("next/navigation");
+  const cookieStore = await cookies();
+  cookieStore.delete("jwt");
+  cookieStore.delete("adoptant_id");
+  cookieStore.delete("volunteer_id");
+  cookieStore.delete("user_role");
+  redirect("/");
 }

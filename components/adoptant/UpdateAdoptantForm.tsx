@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { updateAdoptant } from "@/app/adoptant/update/action";
 import { IAdoptant } from "@/interfaces/IAdoptant";
 
 export default function UpdateAdoptantForm({ adoptant }: { adoptant: IAdoptant }) {
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+  const router = useRouter();
 
   async function handleSubmit(formData: FormData) {
     setError(null);
@@ -15,16 +16,8 @@ export default function UpdateAdoptantForm({ adoptant }: { adoptant: IAdoptant }
     if (result.error) {
       setError(result.error);
     } else {
-      setSuccess(true);
+      router.push(`/adoptant/view/${adoptant.documentId}?updated=true`);
     }
-  }
-
-  if (success) {
-    return (
-      <p className="text-center font-bold text-[var(--color-quaternary)] bg-[var(--color-tertiary)]/20 px-4 py-3 rounded-xl">
-        Profil mis à jour avec succès !
-      </p>
-    );
   }
 
   return (

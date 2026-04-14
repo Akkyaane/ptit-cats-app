@@ -1,58 +1,102 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { createBenevole } from "@/app/volunteer/create/action";
 
 export default function CreateVolunteerForm() {
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const router = useRouter();
 
   async function handleSubmit(formData: FormData) {
     setError(null);
+    setLoading(true);
     const result = await createBenevole(formData);
+    setLoading(false);
 
     if (result.error) {
       setError(result.error);
     } else {
       setSuccess(true);
+      setTimeout(() => router.push("/volunteer/update"), 1500);
     }
   }
 
   if (success) {
-    return <p>Bénévole créé avec succès !</p>;
+    return (
+      <p className="text-sm font-bold text-green-600 bg-green-50 px-4 py-3 rounded-xl text-center">
+        Bénévole créé avec succès ! Redirection...
+      </p>
+    );
   }
 
   return (
-    <form action={handleSubmit}>
-      <div>
-        <label htmlFor="name">Nom</label>
-        <input id="name" name="name" type="text" required />
+    <form action={handleSubmit} className="flex flex-col gap-5">
+      <div className="flex flex-col gap-1">
+        <label htmlFor="name" className="text-sm font-bold text-[var(--color-quaternary)]">
+          Nom
+        </label>
+        <input
+          id="name"
+          name="name"
+          type="text"
+          required
+          className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-tertiary)] text-[var(--color-quaternary)] focus:outline-none focus:border-[var(--color-primary)] transition-colors duration-200"
+        />
       </div>
 
-      <div>
-        <label htmlFor="firstName">Prénom</label>
-        <input id="firstName" name="firstName" type="text" required />
+      <div className="flex flex-col gap-1">
+        <label htmlFor="firstName" className="text-sm font-bold text-[var(--color-quaternary)]">
+          Prénom
+        </label>
+        <input
+          id="firstName"
+          name="firstName"
+          type="text"
+          required
+          className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-tertiary)] text-[var(--color-quaternary)] focus:outline-none focus:border-[var(--color-primary)] transition-colors duration-200"
+        />
       </div>
 
-      <div>
-        <label htmlFor="email">Email</label>
-        <input id="email" name="email" type="email" required />
+      <div className="flex flex-col gap-1">
+        <label htmlFor="email" className="text-sm font-bold text-[var(--color-quaternary)]">
+          Email
+        </label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-tertiary)] text-[var(--color-quaternary)] focus:outline-none focus:border-[var(--color-primary)] transition-colors duration-200"
+        />
       </div>
 
-      <div>
-        <label htmlFor="password">Mot de passe provisoire</label>
+      <div className="flex flex-col gap-1">
+        <label htmlFor="password" className="text-sm font-bold text-[var(--color-quaternary)]">
+          Mot de passe provisoire
+        </label>
         <input
           id="password"
           name="password"
           type="password"
           autoComplete="new-password"
           required
+          className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-tertiary)] text-[var(--color-quaternary)] focus:outline-none focus:border-[var(--color-primary)] transition-colors duration-200"
         />
       </div>
 
-      <div>
-        <label htmlFor="role">Rôle</label>
-        <select id="role" name="role" required>
+      <div className="flex flex-col gap-1">
+        <label htmlFor="role" className="text-sm font-bold text-[var(--color-quaternary)]">
+          Rôle
+        </label>
+        <select
+          id="role"
+          name="role"
+          required
+          className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-tertiary)] text-[var(--color-quaternary)] focus:outline-none focus:border-[var(--color-primary)] transition-colors duration-200 bg-white"
+        >
           <option value="">-- Choisir un rôle --</option>
           <option value="Admin">Admin</option>
           <option value="Référent">Référent</option>
@@ -60,9 +104,19 @@ export default function CreateVolunteerForm() {
         </select>
       </div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && (
+        <p className="text-sm font-bold text-[var(--color-primary)] bg-[var(--color-primary)]/10 px-4 py-3 rounded-xl">
+          {error}
+        </p>
+      )}
 
-      <button type="submit">Créer le bénévole</button>
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full px-6 py-3 font-bold rounded-xl bg-[var(--color-primary)] border-2 border-[var(--color-primary)] text-white hover:bg-[var(--color-primary)]/10 hover:text-[var(--color-primary)] transition-colors duration-200 disabled:opacity-60"
+      >
+        {loading ? "Création..." : "Créer le bénévole"}
+      </button>
     </form>
   );
 }

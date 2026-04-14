@@ -19,7 +19,7 @@ export default function AdoptantProfileForm({
     if (result.error) {
       setError(result.error);
     } else {
-      router.push("/home");
+      router.push("/");
     }
   }
 
