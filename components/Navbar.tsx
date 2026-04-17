@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import Button from "./ui/Button";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -22,10 +23,28 @@ export default function Navbar() {
     return match ? decodeURIComponent(match[1]) : null;
   });
 
+  const links = [
+    { href: "/", label: "Accueil" },
+    { href: "/adoption-posts", label: "À l'adoption" },
+    { href: "/kibble-distribution", label: "Distribution de croquettes" },
+    { href: "/about", label: "À propos" },
+    { href: "/blog", label: "Blog" },
+    { href: "/contact", label: "Contact" },
+    { href: "/donation", label: "Faire un don" },
+    { href: "/login", label: "Se connecter / S'inscrire" },
+    ...(userRole === "Admin" ? [{ href: "/admin", label: "Admin" }] : []),
+    ...(volunteerId
+      ? [{ href: `/volunteer/view/${volunteerId}`, label: "Mon profil" }]
+      : []),
+    ...(adoptantId
+      ? [{ href: `/adoptant/view/${adoptantId}`, label: "Mon profil" }]
+      : []),
+  ];
+
   return (
-    <nav className="border-b border-[var(--color-secondary)]/25 p-4">
+    <nav className="p-4">
       <div className="flex flex-row items-center justify-between">
-        <a href="/" className="flex flex-row items-center gap-2 md:gap-3">
+        <a href="/" className="flex flex-row items-center gap-3">
           <img
             src="/assets/img/logo.png"
             alt="Logo"
@@ -35,99 +54,32 @@ export default function Navbar() {
             Sans Croquettes Fixes
           </span>
         </a>
-        <ul className="hidden lg:flex flex-row gap-4">
-          <li className={pathname === "/" ? "hidden" : "block"}>
-            <a
-              href="/"
-              className="hover:text-[var(--color-quaternary)] transition-colors duration-300"
-            >
-              Accueil
-            </a>
-          </li>
-          <li className={pathname === "/adoption-posts" ? "hidden" : "block"}>
-            <a
-              href="/adoption-posts"
-              className="hover:text-[var(--color-quaternary)] transition-colors duration-300"
-            >
-              À l'adoption
-            </a>
-          </li>
-          <li
-            className={pathname === "/kibble-distribution" ? "hidden" : "block"}
-          >
-            <a
-              href="/kibble-distribution"
-              className="hover:text-[var(--color-quaternary)] transition-colors duration-300"
-            >
-              Distribution de croquettes
-            </a>
-          </li>
-          <li className={pathname === "/about" ? "hidden" : "block"}>
-            <a
-              href="/about"
-              className="hover:text-[var(--color-quaternary)] transition-colors duration-300"
-            >
-              À propos
-            </a>
-          </li>
-          <li className={pathname === "/blog" ? "hidden" : "block"}>
-            <a
-              href="/blog"
-              className="hover:text-[var(--color-quaternary)] transition-colors duration-300"
-            >
-              Blog
-            </a>
-          </li>
-          <li className={pathname === "/contact" ? "hidden" : "block"}>
-            <a
-              href="/contact"
-              className="hover:text-[var(--color-quaternary)] transition-colors duration-300"
-            >
-              Contact
-            </a>
-          </li>
-          <li className={pathname === "/donation" ? "hidden" : "block"}>
-            <a
-              href="/donation"
-              className="px-3 lg:px-4 py-2 font-bold rounded-xl bg-[var(--color-quaternary)] backdrop-blur-sm border border-2 border-[var(--color-quaternary)] hover:bg-[var(--color-quaternary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
-            >
-              Faire un don
-            </a>
-          </li>
-          {userRole === "Admin" && (
-            <li>
-              <a
-                href="/admin"
-                className="px-3 lg:px-4 py-2 font-bold rounded-xl bg-[var(--color-quaternary)] backdrop-blur-sm border border-2 border-[var(--color-quaternary)] hover:bg-[var(--color-quaternary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
-              >
-                Admin
-              </a>
-            </li>
+        <ul className="hidden lg:flex flex-row gap-3">
+          {links.map((link) =>
+            pathname === link.href ? null : (
+              <li key={link.href}>
+                {link.href === "/donation" ? (
+                  <Button href={link.href} variant="secondary" size="sm">
+                    {link.label}
+                  </Button>
+                ) : link.href === "/login" ||
+                  userRole === "Admin" ||
+                  volunteerId ||
+                  adoptantId ? (
+                  <Button href={link.href} variant="primary" size="sm">
+                    {link.label}
+                  </Button>
+                ) : (
+                  <a
+                    href={link.href}
+                    className="hover:text-[var(--color-quaternary)] transition-colors duration-200 lg:text-lg"
+                  >
+                    {link.label}
+                  </a>
+                )}
+              </li>
+            ),
           )}
-          <li>
-            {volunteerId ? (
-              <a
-                href={`/volunteer/view/${volunteerId}`}
-                className="px-3 lg:px-4 py-2 font-bold rounded-xl bg-[var(--color-primary)] backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
-              >
-                Mon profil
-              </a>
-            ) : adoptantId ? (
-              <a
-                href={`/adoptant/view/${adoptantId}`}
-                className="px-3 lg:px-4 py-2 font-bold rounded-xl bg-[var(--color-primary)] backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
-              >
-                Mon profil
-              </a>
-            ) : (
-              <a
-                href="/login"
-                className="px-3 lg:px-4 py-2 font-bold rounded-xl bg-[var(--color-primary)] backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
-              >
-                Se connecter / S&apos;inscrire
-              </a>
-            )}
-          </li>
         </ul>
         <button
           className="lg:hidden p-2 hover:bg-white/15 rounded-xl transition-colors duration-200"
@@ -164,99 +116,41 @@ export default function Navbar() {
             : "max-h-0 opacity-0"
         }`}
       >
-        <ul className="flex flex-col gap-4">
-          <li>
-            <a
-              href="/adoption-posts"
-              className="block py-2 hover:text-[var(--color-quaternary)] transition-colors duration-300"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              À l'adoption
-            </a>
-          </li>
-          <li>
-            <a
-              href="/kibble-distribution"
-              className="block py-2 hover:text-[var(--color-quaternary)] transition-colors duration-300"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Distribution de croquettes
-            </a>
-          </li>
-          <li>
-            <a
-              href="/about"
-              className="block py-2 hover:text-[var(--color-quaternary)] transition-colors duration-300"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              À propos
-            </a>
-          </li>
-          <li>
-            <a
-              href="/blog"
-              className="block py-2 hover:text-[var(--color-quaternary)] transition-colors duration-300"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Blog
-            </a>
-          </li>
-          <li>
-            <a
-              href="/contact"
-              className="block py-2 hover:text-[var(--color-quaternary)] transition-colors duration-300"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Contact
-            </a>
-          </li>
-          <li className="pt-2">
-            <a
-              href="/donation"
-              className="block w-full text-center px-4 py-3 font-bold rounded-xl bg-[var(--color-quaternary)] backdrop-blur-sm border border-2 border-[var(--color-quaternary)] hover:bg-[var(--color-quaternary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Faire un don
-            </a>
-          </li>
-          {userRole === "Admin" && (
-            <li>
-              <a
-                href="/admin"
-                className="block w-full text-center px-4 py-3 font-bold rounded-xl bg-[var(--color-quaternary)] backdrop-blur-sm border border-2 border-[var(--color-quaternary)] hover:bg-[var(--color-quaternary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Admin
-              </a>
-            </li>
+        <ul className="flex flex-col gap-3">
+          {links.map((link) =>
+            pathname === link.href ? null : (
+              <li key={link.href}>
+                {link.href === "/donation" ? (
+                  <a
+                    href={link.href}
+                    className="block w-full text-center px-4 py-3 font-bold rounded-xl hover:bg-transparent bg-[var(--color-quaternary)] backdrop-blur-sm border border-2 border-[var(--color-quaternary)] hover:text-[var(--color-quaternary)] transition-colors duration-200"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {link.label}
+                  </a>
+                ) : link.href === "/login" ||
+                  userRole === "Admin" ||
+                  volunteerId ||
+                  adoptantId ? (
+                  <a
+                    href={link.href}
+                    className="block w-full text-center px-4 py-3 font-bold rounded-xl hover:bg-transparent bg-[var(--color-primary)] backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors duration-200"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {link.label}
+                  </a>
+                ) : (
+                  <a
+                    href={link.href}
+                    className="block py-3 hover:text-[var(--color-quaternary)] transition-colors duration-200 text-lg"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {link.label}
+                  </a>
+                )}
+              </li>
+            ),
           )}
-          <li>
-            {volunteerId ? (
-              <a
-                href={`/volunteer/view/${volunteerId}`}
-                className="block w-full text-center px-4 py-3 font-bold rounded-xl bg-[var(--color-primary)] backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Mon profil
-              </a>
-            ) : adoptantId ? (
-              <a
-                href={`/adoptant/view/${adoptantId}`}
-                className="block w-full text-center px-4 py-3 font-bold rounded-xl bg-[var(--color-primary)] backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Mon profil
-              </a>
-            ) : (
-              <a
-                href="/login"
-                className="block w-full text-center px-4 py-3 font-bold rounded-xl bg-[var(--color-primary)] backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)]/15 hover:border-[var(--color-secondary)] transition-colors duration-200"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Se connecter / S&apos;inscrire
-              </a>
-            )}
-          </li>
         </ul>
       </div>
     </nav>

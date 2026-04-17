@@ -26,3 +26,8 @@ body {
   color: var(--color-secondary);
   font-family: var(--font-patrick-hand);
 }
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}

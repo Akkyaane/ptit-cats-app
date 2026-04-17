@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import { useRef } from "react";
 import { useInView } from "framer-motion";
 import CountUp from "react-countup";
+import Button from "@/components/ui/Button";
 
 export default function displayIndex() {
   const ref = useRef(null);
@@ -17,44 +18,44 @@ export default function displayIndex() {
 
   return (
     <div>
-      <header className="bg-[url('/assets/img/background-1.jpg')] bg-center bg-no-repeat">
-        <div className="max-w-[1200px] mx-auto">
+      <header className="bg-[url('/assets/img/background-1.jpg')] bg-center">
+        <div className="container">
           <Navbar />
-          <section className="flex flex-col items-start justify-center gap-6 py-24 px-4 md:py-32 md:max-w-xl lg:py-48 lg:max-w-2xl">
+          <section className="flex flex-col items-start justify-center gap-6 px-4 py-24 md:py-32 max-w-xl md:max-w-2xl lg:py-48 lg:max-w-3xl">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
               Chaque animal porte une histoire. <br /> Et si vous écriviez la
               suite avec lui ?
             </h1>
-            <p className="text-xl md:text-2xl text-[var(--color-secondary)]/80 leading-relaxed max-w-xl">
+            <p className="text-lg md:text-xl lg:text-2xl text-[var(--color-secondary)]/90 leading-relaxed max-w-sm md:max-w-md lg:max-w-lg">
               Découvrez nos compagnons à quatre pattes qui attendent de
               rencontrer leur humain pour la vie.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-              <a
-                href="/adoption-posts"
-                className="px-6 py-4 font-bold rounded-xl bg-[var(--color-quaternary)] backdrop-blur-sm border border-2 border-[var(--color-quaternary)] hover:bg-[var(--color-quaternary)]/10 hover:border-white transition-colors duration-200 text-center"
-              >
+            <div className="flex flex-row gap-6">
+              <Button href="/adoption-posts" variant="secondary" size="lg">
                 Découvrir nos compagnons
-              </a>
-              <a
-                href="/pet-matchmaker"
-                className="px-6 py-4 font-bold rounded-xl bg-[var(--color-primary)] backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 hover:border-white transition-colors duration-200 text-center"
-              >
+              </Button>
+              <Button href="/pet-matchmaker" variant="primary" size="lg">
                 Trouver mon compagnon idéal
-              </a>
+              </Button>
             </div>
             <button
               onClick={scrollToTop}
-              className="fixed bottom-6 right-6 z-50 size-12 rounded-xl cursor-pointer bg-[var(--color-primary)] text-[var(--color-secondary)] border border-2 border-[var(--color-primary)] hover:bg-[var(--color-secondary)] hover:text-[var(--color-primary)] transition-colors duration-200 text-2xl font-bold"
+              className="fixed bottom-6 right-6 z-50 size-12 rounded-xl cursor-pointer bg-[var(--color-primary)] fill-[var(--color-secondary)] border border-2 border-[var(--color-primary)] hover:bg-[var(--color-secondary)] hover:fill-[var(--color-primary)] transition-colors duration-200 flex items-center justify-center"
             >
-              ↑
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                className="w-[20px] h-[20px] md:w-[30px] md:h-[30px]"
+              >
+                <path d="M12 3C12.2652 3 12.5196 3.10536 12.7071 3.29289L19.7071 10.2929C20.0976 10.6834 20.0976 11.3166 19.7071 11.7071C19.3166 12.0976 18.6834 12.0976 18.2929 11.7071L13 6.41421V20C13 20.5523 12.5523 21 12 21C11.4477 21 11 20.5523 11 20V6.41421L5.70711 11.7071C5.31658 12.0976 4.68342 12.0976 4.29289 11.7071C3.90237 11.3166 3.90237 10.6834 4.29289 10.2929L11.2929 3.29289C11.4804 3.10536 11.7348 3 12 3Z" />
+              </svg>
             </button>
           </section>
         </div>
       </header>
       <main className="flex flex-col items-center justify-center">
         {/* Section à travailler */}
-        <section className="max-w-[1200px] mx-auto px-4 py-8 flex flex-col gap-8">
+        <section className="container px-4 py-8 flex flex-col gap-8">
           <div className="flex flex-col items-center justify-center">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--color-quaternary)] mb-4">
               Nos dernières annonces d'adoption
@@ -228,7 +229,7 @@ export default function displayIndex() {
           </div>
         </section>
 
-        <section className="text-[var(--color-quaternary)] max-w-[1200px] mx-auto px-4 py-8">
+        <section className="text-[var(--color-quaternary)] container px-4 py-8">
           <div className="text-center mb-8 md:mb-12">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
               Qui sommes-nous ?
@@ -270,13 +271,13 @@ export default function displayIndex() {
 
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <a
-                  href="/a-propos"
+                  href="/about"
                   className="px-6 py-4 text-sm bg-[var(--color-quaternary)] text-[var(--color-secondary)] font-bold rounded-xl backdrop-blur-sm border border-2 border-[var(--color-quaternary)] hover:bg-[var(--color-secondary)] hover:text-[var(--color-quaternary)] transition-colors duration-200"
                 >
                   En savoir plus
                 </a>
                 <a
-                  href="/faire-un-don"
+                  href="/donation"
                   className="px-6 py-4 text-sm bg-[var(--color-primary)] text-[var(--color-secondary)] font-bold rounded-xl backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:bg-[var(--color-secondary)] hover:text-[var(--color-primary)] transition-colors duration-200"
                 >
                   Nous soutenir
@@ -301,7 +302,7 @@ export default function displayIndex() {
             </div>
           </div>
         </section>
-        <section className="text-[var(--color-quaternary)] max-w-[1200px] mx-auto px-4 py-8">
+        <section className="text-[var(--color-quaternary)] container px-4 py-8">
           <div className="text-center mb-8 md:mb-12">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
               Nos derniers articles
@@ -415,7 +416,7 @@ export default function displayIndex() {
             </a>
           </div>
         </section>
-        <section className="text-[var(--color-quaternary)] max-w-[1200px] mx-auto px-4 py-16">
+        <section className="text-[var(--color-quaternary)] container px-4 py-16">
           <div className="grid md:grid-cols-[0.95fr_1.05fr] items-center">
             <img
               src="assets/img/background-4.jpg"
@@ -453,7 +454,7 @@ export default function displayIndex() {
           </div>
         </section>
         <section className="bg-[var(--color-tertiary)]/10 rounded-xl w-[calc(1400px)] text-[var(--color-quaternary)]">
-          <div className="max-w-[1200px] mx-auto px-4 py-8">
+          <div className="container px-4 py-8">
             <div className="flex flex-col items-center justify-center gap-6">
               <div>
                 <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
