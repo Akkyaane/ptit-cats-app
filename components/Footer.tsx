@@ -3,80 +3,34 @@ import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const links = [
+    { href: "/", label: "Accueil" },
+    { href: "/adoption-posts", label: "À l'adoption" },
+    { href: "/kibble-distribution", label: "Distribution de croquettes" },
+    { href: "/about", label: "À propos" },
+    { href: "/blog", label: "Blog" },
+    { href: "/contact", label: "Contact" },
+    { href: "/legal-notice", label: "Mentions légales" },
+    { href: "/donation", label: "Faire un don" },
+  ];
 
   return (
     <footer className="bg-[var(--color-quaternary)] py-10 md:py-14">
       <div className="max-w-[1200px] mx-auto px-4">
         <div className="flex flex-col justify-content items-center gap-8">
-          <ul className="flex gap-6">
-            <li className={pathname === "/" ? "hidden" : "block"}>
-              <a
-                href="/"
-                className="hover:text-[var(--color-tertiary)] transition-colors"
-              >
-                Accueil
-              </a>
-            </li>
-            <li className={pathname === "/adoption-posts" ? "hidden" : "block"}>
-              <a
-                href="/adoption-posts"
-                className="hover:text-[var(--color-tertiary)] transition-colors"
-              >
-                À l'adoption
-              </a>
-            </li>
-            <li
-              className={
-                pathname === "/kibble-distribution" ? "hidden" : "block"
-              }
-            >
-              <a
-                href="/kibble-distribution"
-                className="hover:text-[var(--color-tertiary)] transition-colors"
-              >
-                Distribution de croquettes
-              </a>
-            </li>
-            <li className={pathname === "/about" ? "hidden" : "block"}>
-              <a
-                href="/about"
-                className="hover:text-[var(--color-tertiary)] transition-colors"
-              >
-                À propos
-              </a>
-            </li>
-            <li className={pathname === "/blog" ? "hidden" : "block"}>
-              <a
-                href="/blog"
-                className="hover:text-[var(--color-tertiary)] transition-colors"
-              >
-                Blog
-              </a>
-            </li>
-            <li className={pathname === "/contact" ? "hidden" : "block"}>
-              <a
-                href="/contact"
-                className="hover:text-[var(--color-tertiary)] transition-colors"
-              >
-                Contact
-              </a>
-            </li>
-            <li className={pathname === "/legal-notice" ? "hidden" : "block"}>
-              <a
-                href="/legal-notice"
-                className="hover:text-[var(--color-tertiary)] transition-colors"
-              >
-                Mentions légales
-              </a>
-            </li>
-            <li className={pathname === "/donation" ? "hidden" : "block"}>
-              <a
-                href="/donation"
-                className="hover:text-[var(--color-tertiary)] transition-colors"
-              >
-                Faire un don
-              </a>
-            </li>
+          <ul className="grid grid-cols-2 gap-3 text-center md:flex md:gap-6">
+            {links.map((link) =>
+              pathname === link.href ? null : (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    className="hover:text-[var(--color-tertiary)] transition-colors duration-200 lg:text-lg"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ),
+            )}
           </ul>
           <div className="flex gap-4 border-b border-[var(--color-tertiary)] pb-4 w-1/2 justify-center">
             <a

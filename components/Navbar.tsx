@@ -6,23 +6,18 @@ import Button from "./ui/Button";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [adoptantId] = useState<string | null>(() => {
+  const cookies = ["adoptant_id", "volunteer_id", "user_role"];
+  const getCookie = (name: string): string | null => {
     if (typeof window === "undefined") return null;
-    const match = document.cookie.match(/(?:^|;\s*)adoptant_id=([^;]*)/);
+    const match = document.cookie.match(
+      new RegExp(`(?:^|;\\s*)${name}=([^;]*)`),
+    );
     return match ? decodeURIComponent(match[1]) : null;
-  });
+  };
+  const [adoptantId, volunteerId, userRole] = cookies.map(getCookie);
+  const userType = volunteerId ? "volunteer" : adoptantId ? "adoptant" : null;
+  const userId = volunteerId ?? adoptantId;
   const pathname = usePathname();
-  const [volunteerId] = useState<string | null>(() => {
-    if (typeof window === "undefined") return null;
-    const match = document.cookie.match(/(?:^|;\s*)volunteer_id=([^;]*)/);
-    return match ? decodeURIComponent(match[1]) : null;
-  });
-  const [userRole] = useState<string | null>(() => {
-    if (typeof window === "undefined") return null;
-    const match = document.cookie.match(/(?:^|;\s*)user_role=([^;]*)/);
-    return match ? decodeURIComponent(match[1]) : null;
-  });
-
   const links = [
     { href: "/", label: "Accueil" },
     { href: "/adoption-posts", label: "À l'adoption" },
@@ -33,16 +28,13 @@ export default function Navbar() {
     { href: "/donation", label: "Faire un don" },
     { href: "/login", label: "Se connecter / S'inscrire" },
     ...(userRole === "Admin" ? [{ href: "/admin", label: "Admin" }] : []),
-    ...(volunteerId
-      ? [{ href: `/volunteer/view/${volunteerId}`, label: "Mon profil" }]
-      : []),
-    ...(adoptantId
-      ? [{ href: `/adoptant/view/${adoptantId}`, label: "Mon profil" }]
+    ...(userType && userId
+      ? [{ href: `/${userType}/view/${userId}`, label: "Mon profil" }]
       : []),
   ];
 
   return (
-    <nav className="p-4">
+    <nav>
       <div className="flex flex-row items-center justify-between">
         <a href="/" className="flex flex-row items-center gap-3">
           <img
@@ -50,9 +42,9 @@ export default function Navbar() {
             alt="Logo"
             className="size-10 md:size-12 border-2 border-[var(--color-secondary)] rounded-full hover:scale-110 transition-transform duration-300"
           />
-          <span className="text-lg md:text-xl font-bold tracking-tight">
+          <h1 className="text-lg md:text-xl font-bold tracking-tight">
             Sans Croquettes Fixes
-          </span>
+          </h1>
         </a>
         <ul className="hidden lg:flex flex-row gap-3">
           {links.map((link) =>

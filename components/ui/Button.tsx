@@ -16,7 +16,7 @@ export default function Button({
   onClick,
 }: ButtonProps) {
   const baseStyle =
-    "font-bold rounded-xl border border-2 hover:bg-transparent backdrop-blur-sm transition-colors duration-200 text-center";
+    "text-[var(--color-secondary)] font-bold rounded-xl border border-2 hover:bg-[var(--color-secondary)]/40 backdrop-blur-sm transition-colors duration-200 text-center";
 
   const variants = {
     primary: "bg-[var(--color-primary)] border-[var(--color-primary)] hover:text-[var(--color-primary)]",

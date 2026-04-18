@@ -30,4 +30,10 @@ body {
 .container {
   max-width: 1400px;
   margin: 0 auto;
+  padding: 2rem 1.75rem;
+}
+
+span {
+  font-size: 6rem;
+  color: var(--color-primary);
 }
