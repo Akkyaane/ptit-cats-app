@@ -48,7 +48,7 @@ export default function Navbar() {
         isScrolled ? "bg-[var(--color-tertiary)]" : "bg-transparent"
       }`}
     >
-      <div className="max-w-[1400px] mx-auto py-4">
+      <div className="max-w-[1400px] mx-auto py-4 relative px-[1.75rem]">
         <div className="flex flex-row items-center justify-between">
           <a href="/" className="flex flex-row items-center gap-3">
             <img
@@ -116,13 +116,36 @@ export default function Navbar() {
           </button>
         </div>
         <div
-          className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            isMobileMenuOpen
-              ? "opacity-100 mt-4 border-t border-[var(--color-secondary)]/15 pt-4"
-              : "max-h-0 opacity-0"
+          className={`lg:hidden fixed inset-0 bg-[var(--color-tertiary)] overflow-hidden transition-all duration-200 ease-in-out z-60 ${
+            isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
+          onClick={() => setIsMobileMenuOpen(false)}
         >
-          <ul className="flex flex-col gap-3">
+          <button
+            className="absolute top-4 md:top-5 right-7 p-2 hover:bg-white/15 rounded-xl transition-colors duration-200 z-10"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsMobileMenuOpen(false);
+            }}
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+          <ul
+            className="flex flex-col gap-3 h-full items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
             {links.map((link) =>
               pathname === link.href ? null : (
                 <li key={link.href}>

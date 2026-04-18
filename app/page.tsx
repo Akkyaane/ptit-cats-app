@@ -51,7 +51,7 @@ export default function displayIndex() {
         </div>
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-50 size-12 rounded-xl cursor-pointer bg-[var(--color-primary)] fill-[var(--color-secondary)] border border-2 border-[var(--color-primary)] hover:bg-[var(--color-secondary)] hover:fill-[var(--color-primary)] transition-colors duration-200 flex items-center justify-center"
+          className="fixed bottom-6 right-6 z-49 size-12 rounded-xl cursor-pointer bg-[var(--color-primary)] fill-[var(--color-secondary)] border border-2 border-[var(--color-primary)] hover:bg-[var(--color-secondary)] hover:fill-[var(--color-primary)] transition-colors duration-200 flex items-center justify-center"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
