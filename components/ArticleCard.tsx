@@ -20,7 +20,7 @@ export default function ArticleCard({
       <img
         src={imageUrl}
         alt=""
-        className="w-full aspect-3/2 object-cover rounded-sm"
+        className="w-full aspect-3/2 object-cover rounded-xl"
       />
       <div className="p-5 flex flex-col gap-2">
         <h3 className="text-lg md:text-xl font-bold leading-tight">
