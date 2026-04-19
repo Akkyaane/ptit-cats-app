@@ -6,6 +6,7 @@ import { useInView } from "framer-motion";
 import CountUp from "react-countup";
 import Button from "@/components/ui/Button";
 import AdoptionPostCard from "@/components/adoptionPost/AdoptionPostCard";
+import AdoptionPostCarousel from "@/components/adoptionPost/AdoptionPostCarousel";
 import HeadingSecondary from "@/components/ui/HeadingSecondary";
 import ArticleCard from "@/components/ArticleCard";
 import Card from "@/components/ui/Card";
@@ -54,53 +55,100 @@ export default function Index() {
             underlineVariant="primary"
             children="Nos dernières annonces d'adoption"
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <AdoptionPostCard
-              imageUrl="./assets/animals/animal-1.jpg"
-              title="Minou et Coco"
-              description="Deux chatons adorables, pleins de vie et de tendresse, cherchent une famille aimante pour les accueillir."
-              attributes={[{ age: "13 ans | 1 an" }, { sex: "M | F" }]}
-              tags={["Atypique", "Duo", "Senior"]}
-              followUp={[
-                "✓ Vaccinés",
-                "✓ Castrés",
-                "✓ Déparasités",
-                "✓ Identifiés",
-              ]}
-              price="120€"
-              link="/adoption-posts/view/1"
-            />
-            <AdoptionPostCard
-              imageUrl="./assets/animals/animal-2.jpg"
-              title="Tigrou"
-              description="Tigrou est un chat très affectueux qui adore les câlins. Il est parfait pour une famille avec enfants."
-              attributes={[{ age: "2 ans" }, { sex: "M" }]}
-              tags={[]}
-              followUp={[
-                "✓ Vaccinés",
-                "✓ Castrés",
-                "✓ Déparasités",
-                "✓ Identifiés",
-              ]}
-              price="80€"
-              link="/adoption-posts/view/2"
-            />
-            <AdoptionPostCard
-              imageUrl="./assets/animals/animal-3.jpg"
-              title="Max et Luna"
-              description="Max et Luna sont inséparables. Ces deux chats adorables rêvent d'une maison chaleureuse où vivre ensemble."
-              attributes={[{ age: "1 mois | 3 ans" }, { sex: "M | F" }]}
-              tags={["Chaton", "Duo"]}
-              followUp={[
-                "✓ Vaccinés",
-                "✓ Castrés",
-                "✓ Déparasités",
-                "✓ Identifiés",
-              ]}
-              price="140€"
-              link="/adoption-posts/view/3"
-            />
-          </div>
+          <AdoptionPostCarousel
+            items={[
+              {
+                imageUrl: "./assets/animals/animal-1.jpg",
+                title: "Minou et Coco",
+                description: "Deux chatons adorables, pleins de vie et de tendresse, cherchent une famille aimante pour les accueillir.",
+                attributes: [{ age: "13 ans | 1 an" }, { sex: "M | F" }],
+                tags: ["Atypique", "Duo", "Senior"],
+                followUp: [
+                  "✓ Vaccinés",
+                  "✓ Castrés",
+                  "✓ Déparasités",
+                  "✓ Identifiés",
+                ],
+                price: "120€",
+                link: "/adoption-posts/view/1",
+              },
+              {
+                imageUrl: "./assets/animals/animal-2.jpg",
+                title: "Tigrou",
+                description: "Tigrou est un chat très affectueux qui adore les câlins. Il est parfait pour une famille avec enfants.",
+                attributes: [{ age: "2 ans" }, { sex: "M" }],
+                tags: [],
+                followUp: [
+                  "✓ Vaccinés",
+                  "✓ Castrés",
+                  "✓ Déparasités",
+                  "✓ Identifiés",
+                ],
+                price: "80€",
+                link: "/adoption-posts/view/2",
+              },
+              {
+                imageUrl: "./assets/animals/animal-3.jpg",
+                title: "Max et Luna",
+                description: "Max et Luna sont inséparables. Ces deux chats adorables rêvent d'une maison chaleureuse où vivre ensemble.",
+                attributes: [{ age: "1 mois | 3 ans" }, { sex: "M | F" }],
+                tags: ["Chaton", "Duo"],
+                followUp: [
+                  "✓ Vaccinés",
+                  "✓ Castrés",
+                  "✓ Déparasités",
+                  "✓ Identifiés",
+                ],
+                price: "140€",
+                link: "/adoption-posts/view/3",
+              },
+                            {
+                imageUrl: "./assets/animals/animal-3.jpg",
+                title: "Max et Luna",
+                description: "Max et Luna sont inséparables. Ces deux chats adorables rêvent d'une maison chaleureuse où vivre ensemble.",
+                attributes: [{ age: "1 mois | 3 ans" }, { sex: "M | F" }],
+                tags: ["Chaton", "Duo"],
+                followUp: [
+                  "✓ Vaccinés",
+                  "✓ Castrés",
+                  "✓ Déparasités",
+                  "✓ Identifiés",
+                ],
+                price: "140€",
+                link: "/adoption-posts/view/3",
+              },
+                            {
+                imageUrl: "./assets/animals/animal-3.jpg",
+                title: "Max et Luna",
+                description: "Max et Luna sont inséparables. Ces deux chats adorables rêvent d'une maison chaleureuse où vivre ensemble.",
+                attributes: [{ age: "1 mois | 3 ans" }, { sex: "M | F" }],
+                tags: ["Chaton", "Duo"],
+                followUp: [
+                  "✓ Vaccinés",
+                  "✓ Castrés",
+                  "✓ Déparasités",
+                  "✓ Identifiés",
+                ],
+                price: "140€",
+                link: "/adoption-posts/view/3",
+              },
+                            {
+                imageUrl: "./assets/animals/animal-3.jpg",
+                title: "Max et Luna",
+                description: "Max et Luna sont inséparables. Ces deux chats adorables rêvent d'une maison chaleureuse où vivre ensemble.",
+                attributes: [{ age: "1 mois | 3 ans" }, { sex: "M | F" }],
+                tags: ["Chaton", "Duo"],
+                followUp: [
+                  "✓ Vaccinés",
+                  "✓ Castrés",
+                  "✓ Déparasités",
+                  "✓ Identifiés",
+                ],
+                price: "140€",
+                link: "/adoption-posts/view/3",
+              },
+            ]}
+          />
           <div className="flex flex-col sm:flex-row justify-center">
             <Button href="/adoption-posts" variant="primary" size="lg">
               Voir toutes les annonces
