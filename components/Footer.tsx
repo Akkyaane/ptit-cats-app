@@ -6,7 +6,7 @@ export default function Navbar() {
   const links = [
     { href: "/", label: "Accueil" },
     { href: "/adoption-posts", label: "À l'adoption" },
-    { href: "/kibble-distribution", label: "Distribution de croquettes" },
+    { href: "/distribution", label: "Distribution" },
     { href: "/about", label: "À propos" },
     { href: "/blog", label: "Blog" },
     { href: "/contact", label: "Contact" },

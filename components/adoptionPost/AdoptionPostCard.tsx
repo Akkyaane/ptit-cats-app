@@ -6,22 +6,22 @@ type AdoptionPostCardProps = {
   imageUrl?: string;
   title?: string;
   description?: string;
-  attributes?: [{ age: string }, { sex: string }];
-  tags?: string[];
-  followUp?: string[];
+  attributes: { [key: string]: string }[];
+  tags: string[];
+  followUp: string[];
   price?: string;
   link?: string;
 };
 
 export default function AdoptionPostCard({
-  imageUrl = "",
-  title = "",
-  description = "",
-  attributes = [{ age: "" }, { sex: "" }],
-  tags = [],
-  followUp = [],
-  price = "",
-  link = "",
+  imageUrl,
+  title,
+  description,
+  attributes,
+  tags,
+  followUp,
+  price,
+  link
 }: AdoptionPostCardProps) {
   return (
     <div className="flex flex-col rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100">

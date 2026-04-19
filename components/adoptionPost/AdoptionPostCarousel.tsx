@@ -51,9 +51,9 @@ export default function AdoptionPostCarousel({ items }: AdoptionPostCarouselProp
   return (
     <div className="w-full">
       <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex gap-8">
+        <div className="flex gap-2">
           {items.map((item, index) => (
-            <div key={index} className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_33.333%] min-w-0">
+            <div key={index} className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_33.333%] min-w-0 box-border p-4">
               <AdoptionPostCard
                 imageUrl={item.imageUrl}
                 title={item.title}

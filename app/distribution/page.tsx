@@ -1,7 +1,7 @@
 "use client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import HeadingSecondary from "@/components/ui/HeadingSecondary";
+import HeadingSecondary from "@/components/ui/HeadingTertiary";
 import Button from "@/components/ui/Button";
 
 export default function KibbleDistribution() {

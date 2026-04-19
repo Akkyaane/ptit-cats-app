@@ -5,11 +5,11 @@ import { useRef } from "react";
 import { useInView } from "framer-motion";
 import CountUp from "react-countup";
 import Button from "@/components/ui/Button";
-import AdoptionPostCard from "@/components/adoptionPost/AdoptionPostCard";
 import AdoptionPostCarousel from "@/components/adoptionPost/AdoptionPostCarousel";
-import HeadingSecondary from "@/components/ui/HeadingSecondary";
+import HeadingTertiary from "@/components/ui/HeadingTertiary";
 import ArticleCard from "@/components/ArticleCard";
 import Card from "@/components/ui/Card";
+import HeadingSecondary from "@/components/ui/HeadingSecondary";
 
 export default function Index() {
   const ref = useRef(null);
@@ -27,10 +27,10 @@ export default function Index() {
         <div className="container">
           <Navbar />
           <section className="flex flex-col items-start justify-center gap-6 py-24 md:py-32 max-w-xl md:max-w-2xl lg:py-48 lg:max-w-3xl">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
+            <HeadingSecondary>
               Chaque animal porte une histoire. <br /> Et si vous écriviez la
               suite avec lui ?
-            </h2>
+            </HeadingSecondary>
             <p className="text-lg md:text-xl lg:text-2xl text-[var(--color-secondary)]/90 leading-relaxed max-w-sm md:max-w-md lg:max-w-lg">
               Découvrez nos compagnons à quatre pattes qui attendent de
               rencontrer leur humain pour la vie.
@@ -50,7 +50,7 @@ export default function Index() {
 
       <main className="flex flex-col items-center justify-center">
         <section className="container flex flex-col gap-12">
-          <HeadingSecondary
+          <HeadingTertiary
             headingVariant="primary"
             underlineVariant="primary"
             children="Nos dernières annonces d'adoption"
@@ -60,7 +60,8 @@ export default function Index() {
               {
                 imageUrl: "./assets/animals/animal-1.jpg",
                 title: "Minou et Coco",
-                description: "Deux chatons adorables, pleins de vie et de tendresse, cherchent une famille aimante pour les accueillir.",
+                description:
+                  "Deux chatons adorables, pleins de vie et de tendresse, cherchent une famille aimante pour les accueillir.",
                 attributes: [{ age: "13 ans | 1 an" }, { sex: "M | F" }],
                 tags: ["Atypique", "Duo", "Senior"],
                 followUp: [
@@ -75,7 +76,8 @@ export default function Index() {
               {
                 imageUrl: "./assets/animals/animal-2.jpg",
                 title: "Tigrou",
-                description: "Tigrou est un chat très affectueux qui adore les câlins. Il est parfait pour une famille avec enfants.",
+                description:
+                  "Tigrou est un chat très affectueux qui adore les câlins. Il est parfait pour une famille avec enfants.",
                 attributes: [{ age: "2 ans" }, { sex: "M" }],
                 tags: [],
                 followUp: [
@@ -90,7 +92,8 @@ export default function Index() {
               {
                 imageUrl: "./assets/animals/animal-3.jpg",
                 title: "Max et Luna",
-                description: "Max et Luna sont inséparables. Ces deux chats adorables rêvent d'une maison chaleureuse où vivre ensemble.",
+                description:
+                  "Max et Luna sont inséparables. Ces deux chats adorables rêvent d'une maison chaleureuse où vivre ensemble.",
                 attributes: [{ age: "1 mois | 3 ans" }, { sex: "M | F" }],
                 tags: ["Chaton", "Duo"],
                 followUp: [
@@ -102,10 +105,11 @@ export default function Index() {
                 price: "140€",
                 link: "/adoption-posts/view/3",
               },
-                            {
+              {
                 imageUrl: "./assets/animals/animal-3.jpg",
                 title: "Max et Luna",
-                description: "Max et Luna sont inséparables. Ces deux chats adorables rêvent d'une maison chaleureuse où vivre ensemble.",
+                description:
+                  "Max et Luna sont inséparables. Ces deux chats adorables rêvent d'une maison chaleureuse où vivre ensemble.",
                 attributes: [{ age: "1 mois | 3 ans" }, { sex: "M | F" }],
                 tags: ["Chaton", "Duo"],
                 followUp: [
@@ -117,10 +121,11 @@ export default function Index() {
                 price: "140€",
                 link: "/adoption-posts/view/3",
               },
-                            {
+              {
                 imageUrl: "./assets/animals/animal-3.jpg",
                 title: "Max et Luna",
-                description: "Max et Luna sont inséparables. Ces deux chats adorables rêvent d'une maison chaleureuse où vivre ensemble.",
+                description:
+                  "Max et Luna sont inséparables. Ces deux chats adorables rêvent d'une maison chaleureuse où vivre ensemble.",
                 attributes: [{ age: "1 mois | 3 ans" }, { sex: "M | F" }],
                 tags: ["Chaton", "Duo"],
                 followUp: [
@@ -132,10 +137,11 @@ export default function Index() {
                 price: "140€",
                 link: "/adoption-posts/view/3",
               },
-                            {
+              {
                 imageUrl: "./assets/animals/animal-3.jpg",
                 title: "Max et Luna",
-                description: "Max et Luna sont inséparables. Ces deux chats adorables rêvent d'une maison chaleureuse où vivre ensemble.",
+                description:
+                  "Max et Luna sont inséparables. Ces deux chats adorables rêvent d'une maison chaleureuse où vivre ensemble.",
                 attributes: [{ age: "1 mois | 3 ans" }, { sex: "M | F" }],
                 tags: ["Chaton", "Duo"],
                 followUp: [
@@ -156,7 +162,7 @@ export default function Index() {
           </div>
         </section>
         <section className="container flex flex-col gap-12">
-          <HeadingSecondary
+          <HeadingTertiary
             headingVariant="primary"
             underlineVariant="primary"
             children="Qui sommes-nous ?"
@@ -227,7 +233,7 @@ export default function Index() {
           </div>
         </section>
         <section className="container flex flex-col gap-12">
-          <HeadingSecondary
+          <HeadingTertiary
             headingVariant="primary"
             underlineVariant="primary"
             children="Nos derniers articles"
@@ -269,7 +275,7 @@ export default function Index() {
               className="hidden md:block object-cover rounded-tl-xl rounded-bl-xl md:h-[500px]"
             />
             <div className="bg-[var(--color-quaternary)] px-6 py-12 md:px-16 md:py-32 rounded-xl flex flex-col gap-12 items-center justify-center">
-              <HeadingSecondary
+              <HeadingTertiary
                 headingVariant="secondary"
                 underlineVariant="primary"
                 children="Les félins de l'ombre"
@@ -296,7 +302,7 @@ export default function Index() {
         <section className="bg-[var(--color-tertiary)]/10 rounded-xl text-[var(--color-quaternary)] w-full">
           <div className="container">
             <div className="flex flex-col items-center justify-center gap-8">
-              <HeadingSecondary
+              <HeadingTertiary
                 headingVariant="primary"
                 underlineVariant="secondary"
                 children="Comment vous remercier ?"
