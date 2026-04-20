@@ -207,7 +207,7 @@ export default function Index() {
               <img
                 src="assets/img/background-5.jpg"
                 alt="Photo de chats Sans Croquettes Fixes"
-                className="rounded-xl w-full h-[800px] md:h-[600px] md:w-[400px] object-cover"
+                className="rounded-xl w-full h-[800px] md:h-[600px] md:w-[500px] object-cover lg:mx-auto"
               />
               <div className="absolute inset-x-4 -bottom-12 md:bottom-4 grid gap-4 grid-cols-1 lg:grid-cols-3 text-center w-fit ml-auto">
                 <Card
