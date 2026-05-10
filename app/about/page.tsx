@@ -1,182 +1,315 @@
+"use client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import HeadingSecondary from "@/components/ui/HeadingSecondary";
+import HeadingTertiary from "@/components/ui/HeadingTertiary";
+import Button from "@/components/ui/Button";
 
 export default function About() {
   return (
     <div>
-      <header className="bg-[url('/assets/img/background-1.jpg')] bg-center bg-no-repeat bg-cover">
-        <div className="max-w-[1200px] mx-auto">
+      <header className="bg-[url('/assets/img/background-1.jpg')]">
+        <section className="container relative">
+          <img
+            src="/assets/img/icone-10.svg"
+            alt=""
+            aria-hidden="true"
+            className="hidden lg:block absolute top-20 right-8 xl:right-24 w-72 xl:w-96"
+          />
           <Navbar />
-          <section className="flex flex-col items-start justify-center gap-6 py-24 px-4 md:py-32 md:max-w-xl lg:py-48 lg:max-w-2xl text-white">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight drop-shadow-lg">
-              À propos de Sans Croquettes Fixes
-            </h1>
-            <p className="text-lg md:text-xl leading-relaxed drop-shadow-md">
-              Une association dédiée à la protection animale et à la solidarité humaine.
-            </p>
-          </section>
-        </div>
+          <div className="flex flex-col items-center justify-center gap-6 py-16 md:py-24 lg:py-40">
+            <HeadingSecondary>À propos de nous</HeadingSecondary>
+          </div>
+        </section>
+        <Button up={true} />
       </header>
-      <main className="max-w-[1200px] mx-auto px-4 py-8 flex flex-col gap-12 text-[var(--color-quaternary)]">
-        <section className="bg-[var(--color-tertiary)] p-8 rounded-lg shadow-md">
-          <p className="text-base md:text-lg leading-relaxed">
+
+      <main>
+        <section className="container flex flex-col gap-12 text-[var(--color-quaternary)]">
+          <div className="relative">
+            <span className="absolute md:left-[1rem] lg:left-[9rem] xl:left-[17rem] top-[-3rem]">
+              &ldquo;
+            </span>
+            <h2 className="text-2xl md:text-3xl font-bold text-center">
+              Parce que l'abandon ne devrait jamais être une solution
+            </h2>
+            <span className="absolute right-0 md:right-[1rem] lg:right-[9rem] xl:right-[17rem] top-0">
+              &rdquo;
+            </span>
+          </div>
+          <div className="leading-10 text-lg mx-auto max-w-4xl flex flex-col gap-6">
+            <p>
+              L’association Sans Croquettes Fixes est née autour de cette
+              conviction. À l'origine, c'était quelques mains tendues pour
+              distribuer gratuitement de la nourriture aux animaux des
+              sans-abri. Avec le temps, l'association est devenue un refuge au
+              sens large : un lieu sûr pour les animaux qui n'avaient plus nul
+              part où aller, et un soutien pour ceux qui, malgré les
+              difficultés, refusaient de baisser les bras.
+            </p>
+            <p>
+              Nous sommes une association à but non lucratif (loi 1901) qui
+              porte secours aux animaux en difficulté, en les plaçant dans des
+              familles d'accueil. Une fois qu'ils sont prêts, aussi bien
+              physiquement que psychologiquement, nous les proposons à
+              l'adoption. Pour le moment, nos prises en charge concernent
+              uniquement les chats. Toutes nos actions sont faites bénévolement.
+              Nous ne sommes ni un refuge, ni une entreprise, mais une équipe
+              engagée pour le bien-être des humains et de leurs compagnons.
+            </p>
+          </div>
+          <div className="leading-10 text-lg mx-auto max-w-4xl flex flex-col gap-6">
+            <HeadingTertiary
+              headingVariant="primary"
+              underlineVariant="primary"
+              children="Les débuts de Sans Croquettes Fixes"
+            />
+            <p>
+              Tout a commencé en <strong>2015</strong> à la suite d’échanges
+              avec des associations effectuant des maraudes auprès des personnes
+              sans-abri. Une question s'est alors posée :{" "}
+              <strong>
+                qui prend soin des animaux des personnes à la rue ?
+              </strong>{" "}
+              Face à l'absence de réponse, Hélène et Anaïs ont décidé d'agir.
+              Aux côtés de l’association <strong>La Main Tendue</strong>, elles
+              ont lancé les premières distributions grâce au soutien de
+              vétérinaires, de particuliers et de commerces locaux. Ces actions
+              ont permis non seulement d’apporter de la nourriture, mais aussi
+              de créer un lien de confiance avec les bénéficiaires et leurs
+              animaux. <br /> Au fil des années, nos actions se sont élargies.
+              La <strong>distribution hebdomadaire de croquettes à Lyon</strong>{" "}
+              reste au cœur de notre mission, mais la{" "}
+              <strong>prise en charge de chats en difficulté</strong> a pris une
+              place grandissante. Depuis nos débuts, nous avons toujours fait le
+              choix de garder une{" "}
+              <strong>dimension profondément humaine</strong>. Derrière un
+              animal en souffrance, il y a souvent une personne en détresse.
+              L’association s’attache ainsi à accompagner les deux, avec
+              bienveillance, écoute et respect.
+            </p>
+            <div className="flex flex-col items-center">
+              <img
+                src="/assets/img/signature.png"
+                alt="Signature Anaïs Hillion"
+                className="w-[250px]"
+              />
+              <p className="text-lg font-semibold">
+                Anaïs Hillion, co-fondatrice de Sans Croquettes Fixes
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="container bg-[var(--color-quaternary)] flex flex-col gap-6">
+          <HeadingTertiary
+            headingVariant="secondary"
+            underlineVariant="primary"
+            children="Notre vision"
+          />
+          <p className="leading-10 text-lg mx-auto max-w-4xl">
             Chez Sans Croquettes Fixes, nous croyons que la protection animale
-            passe aussi par la solidarité humaine. Derrière chaque animal en
-            difficulté, il y a souvent un maître en détresse. C’est pourquoi nous
-            accompagnons celles et ceux qui n’arrivent plus à subvenir aux besoins
-            de leur compagnon, en leur apportant soutien, conseils et présence.
-            Notre mission ne se limite pas à donner quelques croquettes ou faire
-            une prise en charge, elle vise aussi à redonner espoir et à s’inscrire
-            dans une vision long terme.
+            passe aussi par la solidarité humaine. C'est pourquoi nous
+            accompagnons celles et ceux qui n'arrivent plus à subvenir aux
+            besoins de leur compagnon, en leur apportant soutien, conseils et
+            présence. Notre mission ne se limite pas à donner quelques
+            croquettes ou faire une prise en charge, elle vise aussi à redonner
+            espoir et à s'inscrire dans une vision long terme.
           </p>
         </section>
 
-        <section>
-          <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">Nos Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <img src="/assets/img/icone-1.png" alt="Prise en charge" className="w-16 h-16 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2 text-center">Prise en charge</h3>
-              <p className="text-center">
-                Chats malades, âgés ou abandonnés : Sans Croquettes Fixes prend en
-                charge ceux qui n’ont plus d’autre solution, pour leur offrir
-                soins, sécurité et, parfois, une seconde chance.
+        <section className="container flex flex-col gap-12">
+          <HeadingTertiary
+            headingVariant="primary"
+            underlineVariant="primary"
+            children="Nos actions"
+          />
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-5">
+            <article className="rounded-xl border border-gray-100 p-6">
+              <div className="flex flex-col items-center text-center">
+                <img
+                  src="/assets/img/icone-1.png"
+                  alt="Prise en charge"
+                  className="w-16"
+                />
+                <h3 className="text-xl font-semibold">Prise en charge</h3>
+              </div>
+              <p className="text-center leading-relaxed text-[var(--color-quaternary)]/75">
+                Les chats malades, âgés ou abandonnés sont recueillis et soignés
+                par l’association, qui leur offre sécurité et parfois une
+                seconde chance.
               </p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <img src="/assets/img/icone-2.png" alt="Distribution" className="w-16 h-16 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2 text-center">Distribution</h3>
-              <p className="text-center">
-                Tous les vendredis à Lyon (69), nous proposons une distribution
-                gratuite de croquettes pour aider les familles en difficulté à
-                nourrir leurs animaux et éviter les abandons pour des raisons
-                financières.
+            </article>
+
+            <article className="rounded-xl border border-gray-100 p-6">
+              <div className="flex flex-col items-center text-center">
+                <img
+                  src="/assets/img/icone-2.png"
+                  alt="Distribution"
+                  className="w-16"
+                />
+                <h3 className="text-xl font-semibold">Distribution</h3>
+              </div>
+              <p className="text-center leading-relaxed text-[var(--color-quaternary)]/75">
+                Chaque vendredi, une distribution gratuite de croquettes aide
+                les familles en difficulté à nourrir leurs animaux.
               </p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <img src="/assets/img/icone-3.png" alt="Stérilisation" className="w-16 h-16 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2 text-center">Stérilisation</h3>
-              <p className="text-center">
-                Tout au long de l’année, nous menons des campagnes de
-                stérilisation, notamment en partenariat avec les communes, pour
-                limiter la prolifération des chats errants et améliorer leur
-                qualité de vie.
+            </article>
+
+            <article className="rounded-xl border border-gray-100 p-6">
+              <div className="flex flex-col items-center text-center">
+                <img
+                  src="/assets/img/icone-3.png"
+                  alt="Stérilisation"
+                  className="w-16"
+                />
+                <h3 className="text-xl font-semibold">Stérilisation</h3>
+              </div>
+              <p className="text-center leading-relaxed text-[var(--color-quaternary)]/75">
+                Toute l’année, nous menons des campagnes de stérilisation avec
+                les communes afin de limiter la prolifération des chats errants
+                et d’améliorer leur qualité de vie.
               </p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <img src="/assets/img/icone-4.png" alt="Accompagnement" className="w-16 h-16 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2 text-center">Accompagnement</h3>
-              <p className="text-center">
+            </article>
+
+            <article className="rounded-xl border border-gray-100 p-6">
+              <div className="flex flex-col items-center text-center">
+                <img
+                  src="/assets/img/icone-4.png"
+                  alt="Accompagnement"
+                  className="w-16"
+                />
+                <h3 className="text-xl font-semibold">Accompagnement</h3>
+              </div>
+              <p className="text-center leading-relaxed text-[var(--color-quaternary)]/75">
                 Nous accompagnons les particuliers confrontés à des difficultés
-                avec leurs animaux en leur apportant écoute, conseils et solutions
-                adaptées. L’objectif : éviter les abandons et ne recourir à une
-                prise en charge qu’en dernier recours.
+                avec leurs animaux grâce à une écoute, des conseils et des
+                solutions adaptées, afin d'éviter les abandons et ne recourir à
+                une prise en charge qu'en dernier recours.
               </p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <img src="/assets/img/icone-5.png" alt="Sensibilisation" className="w-16 h-16 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2 text-center">Sensibilisation</h3>
-              <p className="text-center">
-                Nous participons régulièrement à des événements pour sensibiliser
-                le public à la cause animale, au respect du vivant et au bien-être
-                des animaux, quels qu’ils soient.
+            </article>
+
+            <article className="rounded-xl border border-gray-100 p-6">
+              <div className="flex flex-col items-center text-center">
+                <img
+                  src="/assets/img/icone-5.png"
+                  alt="Sensibilisation"
+                  className="w-16"
+                />
+                <h3 className="text-xl font-semibold">Sensibilisation</h3>
+              </div>
+              <p className="text-center leading-relaxed text-[var(--color-quaternary)]/75">
+                Nous participons régulièrement à des événements pour
+                sensibiliser le public à la cause animale et au bien-être de
+                tous les animaux.
               </p>
-            </div>
+            </article>
           </div>
         </section>
 
-        <section className="bg-[var(--color-secondary)] p-8 rounded-lg shadow-md">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">À Lyon, nous venons en aide aux humains et à leurs animaux.</h2>
-          <p className="text-base md:text-lg leading-relaxed mb-6">
-            Sans Croquettes Fixes est une association loi 1901 à but non lucratif,
-            déclarée en préfecture depuis août 2015 (SIRET : 81819530700017).
-            Basés à Lyon, nous agissons dans toute la région pour limiter les
-            abandons en soutenant les propriétaires d’animaux en difficulté.
-            Chaque vendredi, nous distribuons gratuitement de la nourriture pour
-            les animaux des personnes en situation de précarité. Nous apportons
-            également une solution aux chats sans solution, en les plaçant en
-            familles d’accueil. Une fois qu’ils sont prêts, aussi bien
-            physiquement que psychologiquement, nous les proposons à l’adoption.
-            Pour le moment, nos prises en charge concernent uniquement les chats.
-            Toutes nos actions sont bénévoles. Nous ne sommes ni un refuge, ni une
-            entreprise, mais une équipe engagée pour le bien-être des humains et
-            de leurs compagnons.
+        <section className="container flex flex-col gap-12 text-[var(--color-quaternary)]">
+          <HeadingTertiary
+            headingVariant="primary"
+            underlineVariant="primary"
+            children="Derrière chaque sauvetage, une rencontre inoubliable"
+          />
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
+            <article className="overflow-hidden rounded-xl border border-gray-100 flex flex-wrap">
+              <div className="flex sm:flex-row">
+                <div className="flex-1">
+                  <img
+                    src="/assets/animals/animal-6.jpg"
+                    alt="Mambo"
+                    className="h-full w-full object-cover object-center"
+                  />
+                </div>
+                <div className="flex-1 p-5 md:p-6 flex flex-col gap-2">
+                  <h3 className="text-lg font-semibold md:text-xl">Mambo</h3>
+                  <p className="text-sm">En famille d'accueil</p>
+                  <p className="leading-relaxed text-[var(--color-quaternary)]">
+                    Atteint d'une malformation très rare, Mambo a eu besoin
+                    d'importantes chirurgies que nous avons pu financer grâce à
+                    votre soutien.
+                  </p>
+                </div>
+              </div>
+            </article>
+            <article className="overflow-hidden rounded-xl border border-gray-100 flex flex-wrap">
+              <div className="flex sm:flex-row">
+                <div className="flex-1">
+                  <img
+                    src="/assets/animals/animal-7.jpg"
+                    alt="Puppy"
+                    className="h-full w-full object-cover object-center"
+                  />
+                </div>
+                <div className="flex-1 p-5 md:p-6 flex flex-col gap-2">
+                  <h3 className="text-lg font-semibold md:text-xl">Puppy</h3>
+                  <p className="text-sm">En soin</p>
+                  <p className="leading-relaxed text-[var(--color-quaternary)]">
+                    Trouvée à 500gr avec un prolapsus et deux fémurs cassés,
+                    aucune association n'a voulu tenter de la prendre en charge,
+                    mais grâce à vous, elle a pu être sauvée.
+                  </p>
+                </div>
+              </div>
+            </article>
+            <article className="overflow-hidden rounded-xl border border-gray-100 flex flex-wrap">
+              <div className="flex sm:flex-row">
+                <div className="flex-1">
+                  <img
+                    src="/assets/animals/animal-8.jpeg"
+                    alt="Kiki"
+                    className="h-full w-full object-cover object-center"
+                  />
+                </div>
+                <div className="flex-1 p-5 md:p-6 flex flex-col gap-2">
+                  <h3 className="text-lg font-semibold md:text-xl">Kiki</h3>
+                  <p className="text-sm">En famille d'accueil</p>
+                  <p className="leading-relaxed text-[var(--color-quaternary)]">
+                    Suite à l'hospitalisation longue durée de son humain, Kiki
+                    s'est retrouvé sans solution. Nous l'avons récupéré et placé
+                    en famille d'accueil.
+                  </p>
+                </div>
+              </div>
+            </article>
+            <article className="overflow-hidden rounded-xl border border-gray-100 flex flex-wrap">
+              <div className="flex sm:flex-row">
+                <div className="flex-1">
+                  <img
+                    src="/assets/animals/animal-9.jpg"
+                    alt="Pépinette"
+                    className="h-full w-full object-cover object-center"
+                  />
+                </div>
+                <div className="flex-1 p-5 md:p-6 flex flex-col gap-2">
+                  <h3 className="text-lg font-semibold md:text-xl">
+                    Pépinette
+                  </h3>
+                  <p className="text-sm">En famille d'accueil</p>
+                  <p className="leading-relaxed text-[var(--color-quaternary)]">
+                    Après un long traitement PIF, Pépinette est enfin en
+                    rémission et s'adapte peu à peu à la vie en famille.
+                  </p>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section className="bg-[var(--color-tertiary)] p-8 flex flex-col items-center gap-6">
+          <h3 className="text-2xl md:text-3xl font-bold">
+            Vous avez besoin d'aide ?
+          </h3>
+          <p className="text-lg max-w-3xl text-center">
+            Vous faites face à une situation compliquée et vous avez besoin d'un
+            coup de main pour prendre soin de vos animaux ? Vous êtes témoin
+            d'une situation d'urgence pour un animal en danger ?
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <h3 className="text-xl font-semibold mb-2">Aide alimentaire</h3>
-              <p>Distribution gratuite de nourriture pour les animaux des personnes en situation de précarité, chaque semaine à Lyon.</p>
-            </div>
-            <div className="text-center">
-              <h3 className="text-xl font-semibold mb-2">Prises en charge et adoptions</h3>
-              <p>Accompagnement de chats en détresse, placés en familles d’accueil puis proposés à l’adoption.</p>
-            </div>
-            <div className="text-center">
-              <h3 className="text-xl font-semibold mb-2">Prévention de l’abandon</h3>
-              <p>Soutien concret aux maîtres en difficulté pour éviter les séparations forcées.</p>
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">Derrière chaque sauvetage, une rencontre inoubliable.</h2>
-          <p className="text-center text-lg mb-8">Vous avez changé leur vie.</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <article className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <img src="/assets/animals/mambo.jpg" alt="Mambo" className="w-full h-32 object-cover rounded mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Mambo</h3>
-              <p>Atteint d’une malformation très rare, Mambo a eu besoin d’importantes chirurgies que nous avons pu financer grâce à votre soutien.</p>
-            </article>
-            <article className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <img src="/assets/animals/puppy.jpg" alt="Puppy" className="w-full h-32 object-cover rounded mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Puppy</h3>
-              <p>Trouvée à 500gr avec un prolapsus et deux fémurs cassés, aucune association n’a voulu tenter de la prendre en charge, mais grâce à vous, elle a pu être sauvée.</p>
-            </article>
-            <article className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <img src="/assets/animals/kiki.jpg" alt="Kiki" className="w-full h-32 object-cover rounded mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Kiki</h3>
-              <p>Suite à l’hospitalisation longue durée de son humain, Kiki s’est retrouvé sans solution. Nous l’avons récupéré et placé en famille d’accueil.</p>
-            </article>
-            <article className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <img src="/assets/animals/pepinette.jpg" alt="Pépinette" className="w-full h-32 object-cover rounded mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Pépinette</h3>
-              <p>Après un long traitement PIF, Pépinette est enfin en rémission et s’adapte peu à peu à la vie en famille.</p>
-            </article>
-          </div>
-        </section>
-
-        <section className="bg-[var(--color-tertiary)] p-8 rounded-lg shadow-md">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">Les débuts de Sans Croquettes Fixes</h2>
-          <p className="text-base md:text-lg leading-relaxed">
-            L’idée de Sans Croquettes Fixes est née en 2015, à la suite d’une
-            discussion avec des associations menant des maraudes auprès des
-            sans-abris. Une question s’est imposée : qui prend soin des animaux
-            des personnes à la rue ? La réponse étant “personne”, Hélène et Anaïs
-            ont décidé d’agir. Les premières actions ont été menées aux côtés de
-            l’association La Main Tendue. Grâce à la générosité de vétérinaires,
-            de particuliers et d’enseignes locales, nous avons pu distribuer de la
-            nourriture et créer un lien de confiance avec les maîtres comme avec
-            leurs animaux. Au fil des années, nos actions se sont élargies. La
-            distribution hebdomadaire de croquettes à Lyon reste au cœur de notre
-            mission, mais la prise en charge de chats en difficulté a pris une
-            place grandissante. Depuis nos débuts, nous avons toujours fait le
-            choix de garder une dimension profondément humaine. Derrière un animal
-            en souffrance, il y a souvent une personne en détresse. Notre rôle est
-            d’aider les deux, avec bienveillance, écoute et respect.
-          </p>
-        </section>
-
-        <section className="text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">Parce que l'abandon ne devrait jamais être une solution</h2>
-          <p className="text-base md:text-lg leading-relaxed mb-6">C’est autour de cette conviction que Sans Croquettes Fixes est née. Au départ, c’était quelques mains tendues pour distribuer gratuitement de la nourriture aux animaux des sans-abri. Et puis, au fil des années, l’association est devenue un refuge au sens large : un lieu sûr pour les animaux qui n’avaient plus nulle part où aller, et un soutien pour ceux qui, malgré les difficultés, refusent de baisser les bras.</p>
-          <img src="/assets/img/signature.png" alt="Signature Anaïs Hillion" className="mx-auto mb-4" />
-          <p className="text-lg font-semibold">Anaïs Hillion, co-fondatrice de Sans Croquettes Fixes</p>
-        </section>
-
-        <section className="bg-[var(--color-primary)] text-white p-8 rounded-lg shadow-md text-center">
-          <h3 className="text-2xl font-bold mb-4">Vous avez besoin d'aide ?</h3>
-          <p className="text-lg mb-4">Vous faites face à une situation compliquée et vous avez besoin d’un coup de main pour prendre soin de vos animaux ? Vous êtes témoin d’une situation d’urgence pour un animal en danger ?</p>
-          <a href="/contact" className="bg-white text-[var(--color-primary)] px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">Contactez-nous</a>
+          <Button href="/contact" variant="primary" size="lg">
+            Contactez-nous
+          </Button>
         </section>
       </main>
       <Footer />
