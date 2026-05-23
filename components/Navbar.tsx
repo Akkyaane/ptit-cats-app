@@ -53,12 +53,12 @@ export default function Navbar() {
           <a href="/" className="flex flex-row items-center gap-3">
             <img
               src="/assets/img/logo.png"
-              alt="Logo"
+              alt="Logo SansCroquettesFixes"
               className="size-10 md:size-12 border-2 border-[var(--color-secondary)] rounded-full hover:scale-110 transition-transform duration-300"
             />
-            <h1 className="text-lg md:text-xl font-bold tracking-tight">
+            <span className="text-lg md:text-xl font-bold tracking-tight">
               Sans Croquettes Fixes
-            </h1>
+            </span>
           </a>
           <ul className="hidden lg:flex flex-row gap-3">
             {links.map((link) =>
@@ -90,6 +90,9 @@ export default function Navbar() {
           <button
             className="lg:hidden p-2 hover:bg-white/15 rounded-xl transition-colors duration-200"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-expanded={isMobileMenuOpen}
+            type="button"
           >
             <svg
               className="w-6 h-6"

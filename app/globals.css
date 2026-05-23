@@ -1,15 +1,16 @@
-@import url("https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
 @import "tailwindcss";
 
 :root {
-  --color-primary: #ff0084;
+  --color-primary: #dc0072;
   --color-secondary: #ffffff;
   --color-tertiary: #f1a5b1;
   --color-quaternary: #240046;
+  --font-nunito: "Nunito", sans-serif;
 }
 
 @theme {
-  --font-patrick-hand: "Patrick Hand", sans-serif;
+  --font-nunito: var(--font-nunito);
   --color-primary: var(--color-primary);
   --color-secondary: var(--color-secondary);
   --color-tertiary: var(--color-tertiary);
@@ -24,16 +25,11 @@
 body {
   background: var(--color-secondary);
   color: var(--color-secondary);
-  font-family: var(--font-patrick-hand);
+  font-family: var(--font-nunito);
 }
 
 .container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem 1.75rem;
-}
-
-span {
-  font-size: 6rem;
-  color: var(--color-primary);
 }

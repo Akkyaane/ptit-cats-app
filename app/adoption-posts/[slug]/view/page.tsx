@@ -2,13 +2,14 @@ import { IAdoptionPost } from "@/interfaces/IAdoptionPost";
 import AdoptionPost from "@/components/adoptionPost/AdoptionPost";
 
 async function getAdoptionPost(documentId: string) {
-  const res = await fetch(`http://localhost:1337/api/adoption-posts/${documentId}?populate=*`, {
-    next: { revalidate: 1800 }
+  const res = await fetch(`http://localhost:1337/api/adoption-posts/${documentId}?populate[cats][populate][animal_requirements]=*&populate=photos`, {
   });
 
   if (!res.ok) return null;
 
   const response = await res.json();
+  console.log("Adoption post data:", response.data
+  );
   return response.data;
 }
 

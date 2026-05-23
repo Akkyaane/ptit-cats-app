@@ -1,8 +1,8 @@
 ﻿"use client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import HeadingSecondary from "@/components/ui/HeadingSecondary";
-import HeadingTertiary from "@/components/ui/HeadingTertiary";
+import HeadingSecondary from "@/components/ui/HeadingPrimary";
+import HeadingTertiary from "@/components/ui/HeadingSecondary";
 import Button from "@/components/ui/Button";
 
 export default function Distribution() {

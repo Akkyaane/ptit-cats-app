@@ -1,3 +1,5 @@
+import { IAnimalRequirement } from "@/interfaces/IAnimalRequirement";
+
 export interface ICat {
   id: number;
   name: string;
@@ -11,5 +13,5 @@ export interface ICat {
   catAffinity: "Yes" | "No" | "Unknown";
   childAffinity: "Yes" | "No" | "Unknown";
   livingEnvironmentType: "Apartment" | "House" | "Other";
-  keyPoints: string[];
+  animal_requirements?: IAnimalRequirement[];
 }

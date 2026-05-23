@@ -27,6 +27,14 @@ export default function AdoptionPost({
       ))}
       {cats.map((cat, index) => (
         <div key={index} className="mt-6">
+          {/** Ensure we always work with an array even if API omits this relation */}
+          {(() => {
+            const animalRequirements = Array.isArray(cat.animal_requirements)
+              ? cat.animal_requirements
+              : [];
+
+            return (
+              <>
           {showDetails && (
             <h3 className="text-xl font-semibold text-black">{cat.name}</h3>
           )}
@@ -77,18 +85,21 @@ export default function AdoptionPost({
                     ? "Maison"
                     : "Autre"}
               </p>
-              {cat.keyPoints.length > 0 && (
+              {animalRequirements.length > 0 && (
                 <div>
                   <p className="text-gray-900 mt-2">Points clés : </p>
-                  {cat.keyPoints.map((keyPoint, index) => (
+                  {animalRequirements.map((requirement, index) => (
                     <p className="text-gray-900 mt-2" key={index}>
-                      {keyPoint}
+                      {requirement.label}
                     </p>
                   ))}
                 </div>
               )}
             </>
           )}
+              </>
+            );
+          })()}
         </div>
       ))}
       <p className="font-semibold mt-4 text-black">{price} €</p>

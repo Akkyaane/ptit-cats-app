@@ -13,7 +13,7 @@ export async function createBenevole(formData: FormData) {
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/volunteers`,
+      `${process.env.STRAPI_LOCALHOST_URL}/api/volunteers`,
       {
         method: "POST",
         headers: {

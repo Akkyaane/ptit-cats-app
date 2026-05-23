@@ -11,6 +11,7 @@ type AdoptionPostCardProps = {
   followUp: string[];
   price?: string;
   link?: string;
+  fixedSize?: boolean;
 };
 
 export default function AdoptionPostCard({
@@ -21,13 +22,22 @@ export default function AdoptionPostCard({
   tags,
   followUp,
   price,
-  link
+  link,
+  fixedSize = false,
 }: AdoptionPostCardProps) {
+  const cardClassName = fixedSize
+    ? "flex flex-col h-[560px] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100 h-fit"
+    : "flex flex-col rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100 h-fit";
+
+  const imageClassName = fixedSize
+    ? "w-full h-56 object-cover object-top"
+    : "w-full";
+
   return (
-    <div className="flex flex-col rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100">
+    <div className={cardClassName}>
       <div className="relative">
-        <img src={imageUrl} alt="" className="w-full" />
-        <div className="absolute top-3 left-3 flex gap-2 flex-wrap justify-start max-w-[50%]">
+        <img src={imageUrl} alt="" className={imageClassName} />
+        <div className="absolute top-3 left-3 flex gap-2 flex-wrap justify-start max-w-[50%] text-[var(--color-secondary)]">
           {attributes.map((attribute, index) =>
             Object.entries(attribute).map(([key, value]) =>
               value ? (
@@ -41,7 +51,7 @@ export default function AdoptionPostCard({
             ),
           )}
         </div>
-        <div className="absolute top-3 right-3 flex gap-2 flex-wrap justify-end max-w-[50%]">
+        <div className="absolute top-3 right-3 flex gap-2 flex-wrap justify-end max-w-[50%] text-[var(--color-secondary)]">
           {tags.map((tag, index) =>
             tag ? (
               <p

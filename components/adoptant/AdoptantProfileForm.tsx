@@ -42,7 +42,7 @@ export default function AdoptantProfileForm({
       </div>
 
       <div className="flex flex-col gap-2">
-        <span className="text-sm font-bold text-[var(--color-quaternary)]">Avez-vous un jardin ?</span>
+        <em className="text-sm font-bold text-[var(--color-quaternary)]">Avez-vous un jardin ?</em>
         <div className="flex gap-6">
           <label className="flex items-center gap-2 cursor-pointer text-[var(--color-quaternary)] font-bold">
             <input type="radio" name="hasGarden" value="true" className="accent-[var(--color-primary)]" /> Oui

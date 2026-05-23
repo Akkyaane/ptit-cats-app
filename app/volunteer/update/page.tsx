@@ -59,9 +59,9 @@ export default async function VolunteerListPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className={`hidden sm:inline text-xs font-bold px-3 py-1 rounded-full ${roleColors[b.role] ?? "bg-gray-100 text-gray-600"}`}>
+                    <em className={`hidden sm:inline text-xs font-bold px-3 py-1 rounded-full ${roleColors[b.role] ?? "bg-gray-100 text-gray-600"}`}>
                       {b.role}
-                    </span>
+                    </em>
                     <Link
                       href={`/volunteer/view/${b.documentId}`}
                       className="px-4 py-2 font-bold rounded-xl bg-[var(--color-quaternary)] border-2 border-[var(--color-quaternary)] text-white hover:bg-[var(--color-quaternary)]/10 hover:text-[var(--color-quaternary)] transition-colors duration-200 text-sm whitespace-nowrap"

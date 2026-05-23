@@ -3,7 +3,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Button from "@/components/ui/Button";
-import HeadingSecondary from "@/components/ui/HeadingSecondary";
+import HeadingSecondary from "@/components/ui/HeadingPrimary";
 
 export default function LegalNotice() {
   const sectionBaseClass =

@@ -17,7 +17,7 @@ export default function Navbar() {
   return (
     <footer className="bg-[var(--color-quaternary)] py-10 md:py-14">
       <div className="max-w-[1200px] mx-auto px-4">
-        <div className="flex flex-col justify-content items-center gap-8">
+        <div className="flex flex-col justify-center items-center gap-8">
           <ul className="grid grid-cols-2 gap-3 text-center md:flex md:gap-6">
             {links.map((link) =>
               pathname === link.href ? null : (
@@ -37,6 +37,7 @@ export default function Navbar() {
               href="https://www.facebook.com/sanscroquettesfixes"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Facebook de Sans Croquettes Fixes (nouvelle fenêtre)"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -54,6 +55,7 @@ export default function Navbar() {
               href="https://x.com/CroquettesFixes"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="X (Twitter) de Sans Croquettes Fixes (nouvelle fenêtre)"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -68,6 +70,7 @@ export default function Navbar() {
               href="https://www.instagram.com/sanscroquettesfixes/"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Instagram de Sans Croquettes Fixes (nouvelle fenêtre)"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -88,6 +91,7 @@ export default function Navbar() {
               href="https://www.tiktok.com/@sanscroquettesfixes"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="TikTok de Sans Croquettes Fixes (nouvelle fenêtre)"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

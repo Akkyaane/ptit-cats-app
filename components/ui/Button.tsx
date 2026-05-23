@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 
 const scrollToTop = () => {
@@ -25,7 +27,7 @@ export default function Button({
   onClick,
 }: ButtonProps) {
   const baseStyle =
-    "text-[var(--color-secondary)] font-bold rounded-xl border border-2 hover:bg-[var(--color-secondary)]/40 backdrop-blur-sm transition-colors duration-200 text-center";
+    "text-[var(--color-secondary)] font-bold rounded-xl border border-2 hover:bg-[var(--color-secondary)]/40 backdrop-blur-sm transition-colors duration-200 text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]";
 
   const variants = {
     primary:
@@ -43,11 +45,11 @@ export default function Button({
   const className = `${baseStyle} ${variants[variant]} ${sizes[size]}`;
 
   if (href) {
+    const isExternal = href.startsWith("http") || href.startsWith("//");
     return (
       <Link
         href={href}
-        target="_blank"
-        rel="noopener noreferrer"
+        {...(isExternal && { target: "_blank", rel: "noopener noreferrer" })}
         className={className}
       >
         {children}
@@ -59,7 +61,8 @@ export default function Button({
     return (
       <button
         onClick={scrollToTop}
-        className="fixed bottom-6 right-6 z-49 size-12 rounded-xl cursor-pointer bg-[var(--color-primary)] fill-[var(--color-secondary)] border border-2 border-[var(--color-primary)] hover:bg-[var(--color-secondary)] hover:fill-[var(--color-primary)] transition-colors duration-200 flex items-center justify-center"
+        aria-label="Retour en haut de page"
+        className="fixed bottom-6 right-6 z-50 size-12 rounded-xl cursor-pointer bg-[var(--color-primary)] fill-[var(--color-secondary)] border border-2 border-[var(--color-primary)] hover:bg-[var(--color-secondary)] hover:fill-[var(--color-primary)] transition-colors duration-200 flex items-center justify-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -73,7 +76,7 @@ export default function Button({
   }
 
   return (
-    <button onClick={onClick} className={className}>
+    <button type="button" onClick={onClick} className={className}>
       {children}
     </button>
   );

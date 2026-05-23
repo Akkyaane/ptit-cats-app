@@ -73,7 +73,7 @@ export default function AdoptionPostCarousel({ items }: AdoptionPostCarouselProp
           onClick={scrollPrev}
           disabled={!canScrollPrev}
           className="text-[var(--color-primary)] text-2xl disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-          aria-label="Previous slide"
+          aria-label="Diapositive précédente"
         >
           ←
         </button>
@@ -89,7 +89,7 @@ export default function AdoptionPostCarousel({ items }: AdoptionPostCarouselProp
                   ? "w-3 bg-[var(--color-primary)]"
                   : "w-3 bg-[var(--color-primary)]/40 hover:bg-[var(--color-primary)]/60"
               }`}
-              aria-label={`Go to slide ${index + 1}`}
+              aria-label={`Aller à la diapositive ${index + 1}`}
             />
           ))}
         </div>
@@ -97,7 +97,7 @@ export default function AdoptionPostCarousel({ items }: AdoptionPostCarouselProp
           onClick={scrollNext}
           disabled={!canScrollNext}
           className="text-[var(--color-primary)] text-2xl disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-          aria-label="Next slide"
+          aria-label="Diapositive suivante"
         >
           →
         </button>
