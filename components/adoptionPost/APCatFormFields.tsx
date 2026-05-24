@@ -4,6 +4,7 @@ import { ICat } from "@/interfaces/ICat";
 import { IAnimalRequirement } from "@/interfaces/IAnimalRequirement";
 
 interface Props {
+  index: number;
   value: Partial<ICat>;
   onChange: (data: Partial<ICat>) => void;
   onRemove: () => void;
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export default function APCatFormFields({
+  index,
   value,
   onChange,
   onRemove,
@@ -19,17 +21,17 @@ export default function APCatFormFields({
   const update = (field: keyof ICat, val: unknown) =>
     onChange({ ...value, [field]: val });
 
-  const fieldClass = "w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-primary";
-  const labelClass = "text-sm font-medium text-quaternary";
+  const fieldClass = "w-full px-4 py-3 rounded-xl border-2 border-[var(--color-tertiary)] text-[var(--color-quaternary)] focus:outline-none focus:border-[var(--color-primary)] focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-1 transition-colors duration-200";
+  const labelClass = "text-sm font-bold text-[var(--color-quaternary)]";
 
   return (
-    <fieldset className="border border-tertiary rounded p-4 flex flex-col gap-4">
+    <fieldset className="border-2 border-[var(--color-tertiary)] rounded-xl p-6 flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-base font-semibold text-quaternary">Informations du chat</h2>
+        <h2 className="text-base font-bold text-[var(--color-quaternary)]">Informations du chat {index}</h2>
         <button
           type="button"
           onClick={onRemove}
-          className="text-sm text-red-500 hover:text-red-700 transition-colors duration-200"
+          className="text-sm font-bold text-red-500 hover:text-red-700 transition-colors duration-200"
         >
           Supprimer
         </button>
@@ -89,7 +91,7 @@ export default function APCatFormFields({
               id={field}
               checked={(value[field] as boolean) ?? false}
               onChange={(e) => update(field, e.target.checked)}
-              className="w-4 h-4 accent-primary"
+              className="w-4 h-4 accent-[var(--color-primary)]"
             />
             <label htmlFor={field} className={labelClass}>{label}</label>
           </div>
@@ -138,9 +140,9 @@ export default function APCatFormFields({
         </select>
       </div>
 
-      {animalRequirements.length > 0 && (
-        <div className="flex flex-col gap-2">
-          <em className={labelClass}>Points clés</em>
+      <div className="flex flex-col gap-2">
+        <em className={labelClass}>Points clés</em>
+        {animalRequirements.length > 0 ? (
           <div className="grid grid-cols-2 gap-2">
             {animalRequirements.map((requirement) => (
               <div key={requirement.id} className="flex items-center gap-2">
@@ -157,16 +159,18 @@ export default function APCatFormFields({
                       : current.filter((r) => r.id !== requirement.id);
                     update("animal_requirements", updated);
                   }}
-                  className="w-4 h-4 accent-primary"
+                  className="w-4 h-4 accent-[var(--color-primary)]"
                 />
-                <label htmlFor={`keyPoint-${requirement.id}`} className="text-sm text-gray-700">
+                <label htmlFor={`keyPoint-${requirement.id}`} className={labelClass}>
                   {requirement.label}
                 </label>
               </div>
             ))}
           </div>
-        </div>
-      )}
+        ) : (
+          <p className="text-sm text-[var(--color-quaternary)]/60 italic">Aucun critère d&apos;exigence disponible.</p>
+        )}
+      </div>
     </fieldset>
   );
 }

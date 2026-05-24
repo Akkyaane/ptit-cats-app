@@ -18,7 +18,7 @@ export default function APForm({ animalRequirements = [] }: Props) {
   const [longDescription, setLongDescription] = useState("");
   const [photos, setPhotos] = useState<File[]>([]);
   const [isDuo, setIsDuo] = useState(false);
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState<number | "">("");
   const [cats, setCats] = useState<CatFormEntry[]>([]);
   const [status, setStatus] = useState<{
     loading: boolean;
@@ -31,7 +31,21 @@ export default function APForm({ animalRequirements = [] }: Props) {
   });
 
   const addCat = () =>
-    setCats([...cats, { _key: crypto.randomUUID() }]);
+    setCats([
+      ...cats,
+      {
+        _key: crypto.randomUUID(),
+        sex: "Male",
+        livingEnvironmentType: "Apartment",
+        dogAffinity: "Unknown",
+        catAffinity: "Unknown",
+        childAffinity: "Unknown",
+        isDewormed: false,
+        isVaccinated: false,
+        isSterilizedOrCastrated: false,
+        isIdentified: false,
+      },
+    ]);
 
   const removeCat = (key: string) =>
     setCats(cats.filter((c) => c._key !== key));
@@ -55,7 +69,7 @@ export default function APForm({ animalRequirements = [] }: Props) {
     formData.append("shortDescription", shortDescription);
     formData.append("longDescription", longDescription);
     formData.append("isDuo", isDuo.toString());
-    formData.append("price", price.toString());
+    formData.append("price", price === "" ? "0" : price.toString());
 
     const catsPayload = cats.map(({ _key, ...rest }) => rest);
     formData.append("cats", JSON.stringify(catsPayload));
@@ -83,7 +97,7 @@ export default function APForm({ animalRequirements = [] }: Props) {
       setLongDescription("");
       setPhotos([]);
       setIsDuo(false);
-      setPrice(0);
+      setPrice("");
       setCats([]);
     } catch (err) {
       const errorMessage =
@@ -92,11 +106,24 @@ export default function APForm({ animalRequirements = [] }: Props) {
     }
   };
 
+  const inputClass =
+    "w-full px-4 py-3 rounded-xl border-2 border-[var(--color-tertiary)] text-[var(--color-quaternary)] focus:outline-none focus:border-[var(--color-primary)] focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-1 transition-colors duration-200";
+  const lClass = "text-sm font-bold text-[var(--color-quaternary)]";
+  const req = (
+    <span aria-hidden="true" className="text-[var(--color-primary)] font-bold">
+      {" "}
+      *
+    </span>
+  );
+
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full max-w-lg">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-6 w-full max-w-2xl mx-auto"
+    >
       <div className="flex flex-col gap-1">
-        <label htmlFor="title" className="text-sm font-medium text-quaternary">
-          Titre
+        <label htmlFor="title" className={lClass}>
+          Titre{req}
         </label>
         <input
           id="title"
@@ -104,12 +131,12 @@ export default function APForm({ animalRequirements = [] }: Props) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
-          className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-primary"
+          className={inputClass}
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="slogan" className="text-sm font-medium text-quaternary">
+        <label htmlFor="slogan" className={lClass}>
           Slogan
         </label>
         <input
@@ -117,81 +144,96 @@ export default function APForm({ animalRequirements = [] }: Props) {
           type="text"
           value={slogan}
           onChange={(e) => setSlogan(e.target.value)}
-          className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-primary"
+          className={inputClass}
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="shortDescription" className="text-sm font-medium text-quaternary">
-          Description courte
+        <label htmlFor="shortDescription" className={lClass}>
+          Description courte{req}
         </label>
         <textarea
           id="shortDescription"
           value={shortDescription}
           onChange={(e) => setShortDescription(e.target.value)}
+          required
           rows={3}
-          className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-primary resize-none"
+          className={`${inputClass} resize-none`}
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="longDescription" className="text-sm font-medium text-quaternary">
-          Description longue
+        <label htmlFor="longDescription" className={lClass}>
+          Description longue{req}
         </label>
         <textarea
           id="longDescription"
           value={longDescription}
           onChange={(e) => setLongDescription(e.target.value)}
+          required
           rows={6}
-          className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-primary resize-none"
+          className={`${inputClass} resize-none`}
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="photos" className="text-sm font-medium text-quaternary">
-          Photos
+        <label htmlFor="photos" className={lClass}>
+          Photos{req}
         </label>
         <input
           id="photos"
           type="file"
-          accept="image/*"
+          accept=".jpg,.jpeg,.png,.webp"
           multiple
           onChange={handleFileChange}
           required
-          className="w-full text-sm text-gray-500 file:mr-3 file:py-2 file:px-4 file:border file:border-gray-300 file:bg-white file:text-sm file:font-medium hover:file:bg-gray-50"
+          className="w-full text-sm text-[var(--color-quaternary)] file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-2 file:border-[var(--color-tertiary)] file:bg-white file:text-sm file:font-bold file:text-[var(--color-quaternary)] hover:file:bg-[var(--color-tertiary)]/20 transition-colors duration-200"
         />
+        <p className="text-xs text-[var(--color-quaternary)]/60 mt-1">
+          Formats acceptés : JPG, JPEG, PNG, WEBP — Maintenez{" "}
+          <kbd className="px-1 py-0.5 rounded border border-gray-300 bg-gray-100 text-xs font-mono">
+            Ctrl
+          </kbd>{" "}
+          (ou{" "}
+          <kbd className="px-1 py-0.5 rounded border border-gray-300 bg-gray-100 text-xs font-mono">
+            ⌘ Cmd
+          </kbd>{" "}
+          sur Mac) pour sélectionner plusieurs fichiers.
+        </p>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3 p-4 rounded-xl border-2 border-[var(--color-tertiary)]">
         <input
           id="isDuo"
           type="checkbox"
           checked={isDuo}
           onChange={(e) => setIsDuo(e.target.checked)}
-          className="w-4 h-4 accent-primary"
+          className="w-5 h-5 accent-[var(--color-primary)]"
         />
-        <label htmlFor="isDuo" className="text-sm font-medium text-quaternary">
-          Duo
+        <label htmlFor="isDuo" className={lClass}>
+          Duo (plusieurs animaux ensemble)
         </label>
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="price" className="text-sm font-medium text-quaternary">
-          Prix (€)
+        <label htmlFor="price" className={lClass}>
+          Prix (€){req}
         </label>
         <input
           id="price"
           type="number"
           value={price}
-          onChange={(e) => setPrice(Number(e.target.value))}
+          onChange={(e) => setPrice(e.target.value === "" ? "" : Number(e.target.value))}
           required
-          className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-primary"
+          min={0}
+          className={inputClass}
         />
       </div>
 
-      {cats.map(({ _key, ...catData }) => (
+      {cats.map(({ _key, ...catData }, i) => (
         <APCatProfileFields
           key={_key}
+          index={i + 1}
           value={catData}
           onChange={(data) => updateCat(_key, data)}
           onRemove={() => removeCat(_key)}
@@ -202,26 +244,29 @@ export default function APForm({ animalRequirements = [] }: Props) {
       <button
         type="button"
         onClick={addCat}
-        className="w-full py-2 px-4 border border-gray-900 text-gray-900 bg-white hover:bg-gray-900 hover:text-white transition-colors duration-200 rounded font-medium"
+        className="w-full py-3 px-4 rounded-xl border-2 border-[var(--color-quaternary)] text-[var(--color-quaternary)] bg-white hover:bg-[var(--color-quaternary)] hover:text-white font-bold transition-colors duration-200"
       >
-        Ajouter un animal
+        + Ajouter un animal
       </button>
 
       <button
         type="submit"
         disabled={status.loading}
-        className="w-full py-2 px-4 bg-primary text-white font-medium rounded hover:bg-quaternary transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full py-3 px-4 rounded-xl bg-[var(--color-primary)] text-white font-bold hover:bg-[var(--color-quaternary)] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {status.loading ? "Envoi en cours..." : "Publier l'article"}
+        {status.loading ? "Envoi en cours..." : "Publier l'annonce"}
       </button>
 
       {status.success && (
-        <p className="text-sm text-green-600">✓ Formulaire et photos envoyés avec succès !</p>
+        <p className="text-sm font-bold text-green-600 text-center">
+          ✓ Annonce créée avec succès !
+        </p>
       )}
       {status.error && (
-        <p className="text-sm text-red-600">Erreur : {status.error}</p>
+        <p className="text-sm font-bold text-red-600 text-center">
+          Erreur : {status.error}
+        </p>
       )}
     </form>
   );
 }
-
