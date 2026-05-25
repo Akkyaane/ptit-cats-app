@@ -1,4 +1,4 @@
-import { cookies } from "next/headers";
+﻿import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
@@ -12,8 +12,8 @@ export default async function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--color-secondary)]">
-      <header className="bg-[var(--color-tertiary)]">
+    <div className="min-h-screen bg-secondary">
+      <header className="bg-tertiary">
         <div className="max-w-[1200px] mx-auto">
           <Navbar />
         </div>
@@ -21,10 +21,8 @@ export default async function AdminPage() {
       <main className="max-w-[1200px] mx-auto px-4 py-16">
         <div className="flex flex-col items-center gap-8">
           <div className="flex flex-col items-center gap-2">
-            <h1 className="text-3xl md:text-4xl font-bold text-[var(--color-quaternary)]">
-              Administration
-            </h1>
-            <div className="w-16 h-1 bg-[var(--color-tertiary)] rounded-full"></div>
+            <h1 className="text-3xl md:text-4xl font-bold ">Administration</h1>
+            <div className="w-16 h-1 bg-tertiary rounded-full"></div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl">
@@ -32,9 +30,9 @@ export default async function AdminPage() {
               href="/volunteer/create"
               className="flex flex-col items-center gap-4 p-8 bg-white rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-200"
             >
-              <div className="w-14 h-14 rounded-full bg-[var(--color-primary)]/10 flex items-center justify-center">
+              <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
                 <svg
-                  className="w-7 h-7 text-[var(--color-primary)]"
+                  className="w-7 h-7 text-primary"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -48,9 +46,7 @@ export default async function AdminPage() {
                 </svg>
               </div>
               <div className="text-center">
-                <p className="font-bold text-lg text-[var(--color-quaternary)]">
-                  Créer un compte bénévole
-                </p>
+                <p className="font-bold text-lg ">Créer un compte bénévole</p>
                 <p className="text-sm text-gray-500 mt-1">
                   Ajouter un nouveau bénévole
                 </p>
@@ -61,9 +57,9 @@ export default async function AdminPage() {
               href="/volunteer/update"
               className="flex flex-col items-center gap-4 p-8 bg-white rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-200"
             >
-              <div className="w-14 h-14 rounded-full bg-[var(--color-tertiary)]/30 flex items-center justify-center">
+              <div className="w-14 h-14 rounded-full bg-tertiary/30 flex items-center justify-center">
                 <svg
-                  className="w-7 h-7 text-[var(--color-quaternary)]"
+                  className="w-7 h-7 "
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -77,9 +73,7 @@ export default async function AdminPage() {
                 </svg>
               </div>
               <div className="text-center">
-                <p className="font-bold text-lg text-[var(--color-quaternary)]">
-                  Gérer les bénévoles
-                </p>
+                <p className="font-bold text-lg ">Gérer les bénévoles</p>
                 <p className="text-sm text-gray-500 mt-1">
                   Voir et modifier les comptes
                 </p>

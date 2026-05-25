@@ -1,4 +1,4 @@
-import APForm from "@/components/adoptionPost/APForm";
+﻿import APForm from "@/components/adoptionPost/APForm";
 import { IAnimalRequirement } from "@/interfaces/IAnimalRequirement";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -13,7 +13,11 @@ async function getAnimalRequirements(): Promise<IAnimalRequirement[]> {
       cache: "no-store",
     });
     if (!res.ok) {
-      console.error("[animal-requirements] fetch failed:", res.status, await res.text());
+      console.error(
+        "[animal-requirements] fetch failed:",
+        res.status,
+        await res.text(),
+      );
       return [];
     }
     const data = await res.json();
@@ -46,10 +50,13 @@ export default async function CreateAdoptionPost() {
         </div>
       </header>
 
-      <main className="text-[var(--color-quaternary)]">
+      <main className="">
         <div className="container flex flex-col gap-12">
           <section className="p-8 md:p-10 flex flex-col gap-12">
-            <HeadingSecondary headingVariant="primary" underlineVariant="primary">
+            <HeadingSecondary
+              headingVariant="primary"
+              underlineVariant="primary"
+            >
               Nouvelle annonce d&apos;adoption
             </HeadingSecondary>
             <APForm animalRequirements={animalRequirements} />

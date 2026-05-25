@@ -1,7 +1,7 @@
-"use client";
+﻿"use client";
 import { usePathname } from "next/navigation";
 
-export default function Navbar() {
+export default function Footer() {
   const pathname = usePathname();
   const links = [
     { href: "/", label: "Accueil" },
@@ -15,8 +15,8 @@ export default function Navbar() {
   ];
 
   return (
-    <footer className="bg-[var(--color-quaternary)] py-10 md:py-14">
-      <div className="max-w-[1200px] mx-auto px-4">
+    <footer className="bg-quaternary py-10 md:py-14 text-secondary">
+      <div className="container">
         <div className="flex flex-col justify-center items-center gap-8">
           <ul className="grid grid-cols-2 gap-3 text-center md:flex md:gap-6">
             {links.map((link) =>
@@ -24,7 +24,7 @@ export default function Navbar() {
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    className="hover:text-[var(--color-tertiary)] transition-colors duration-200 lg:text-lg"
+                    className="hover:text-tertiary transition-colors duration-200 lg:text-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tertiary rounded-sm"
                   >
                     {link.label}
                   </a>
@@ -32,7 +32,7 @@ export default function Navbar() {
               ),
             )}
           </ul>
-          <div className="flex gap-4 border-b border-[var(--color-tertiary)] pb-4 w-1/2 justify-center">
+          <div className="flex gap-4 border-b border-tertiary pb-4 w-1/2 justify-center">
             <a
               href="https://www.facebook.com/sanscroquettesfixes"
               target="_blank"
@@ -42,7 +42,7 @@ export default function Navbar() {
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 30 30"
-                className="w-[30px] md:w-[40px]"
+                className="w-8 md:w-10"
               >
                 {" "}
                 <path
@@ -61,7 +61,7 @@ export default function Navbar() {
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 30 30"
                 fill="#FFFFFF"
-                className="w-[30px] md:w-[40px]"
+                className="w-8 md:w-10"
               >
                 <path d="M26.37,26l-8.795-12.822l0.015,0.012L25.52,4h-2.65l-6.46,7.48L11.28,4H4.33l8.211,11.971L12.54,15.97L3.88,26h2.65 l7.182-8.322L19.42,26H26.37z M10.23,6l12.34,18h-2.1L8.12,6H10.23z" />
               </svg>
@@ -76,14 +76,14 @@ export default function Navbar() {
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 32 32"
                 fill="#ffffff"
-                className="w-[30px] md:w-[40px]"
+                className="w-8 md:w-10"
               >
                 <g>
                   <path d="M22.3,8.4c-0.8,0-1.4,0.6-1.4,1.4c0,0.8,0.6,1.4,1.4,1.4c0.8,0,1.4-0.6,1.4-1.4C23.7,9,23.1,8.4,22.3,8.4z" />
 
-                  <path d="M16,10.2c-3.3,0-5.9,2.7-5.9,5.9s2.7,5.9,5.9,5.9s5.9-2.7,5.9-5.9S19.3,10.2,16,10.2z M16,19.9c-2.1,0-3.8-1.7-3.8-3.8   c0-2.1,1.7-3.8,3.8-3.8c2.1,0,3.8,1.7,3.8,3.8C19.8,18.2,18.1,19.9,16,19.9z" />
+                  <path d="M16,10.2c-3.3,0-5.9,2.7-5.9,5.9s2.7,5.9,5.9,5.9s5.9-2.7,5.9-5.9S19.3,10.2,16,10.2z M16,19.9c-2.1,0-3.8-1.7-3.8-3.8 c0-2.1,1.7-3.8,3.8-3.8c2.1,0,3.8,1.7,3.8,3.8C19.8,18.2,18.1,19.9,16,19.9z" />
 
-                  <path d="M20.8,4h-9.5C7.2,4,4,7.2,4,11.2v9.5c0,4,3.2,7.2,7.2,7.2h9.5c4,0,7.2-3.2,7.2-7.2v-9.5C28,7.2,24.8,4,20.8,4z M25.7,20.8   c0,2.7-2.2,5-5,5h-9.5c-2.7,0-5-2.2-5-5v-9.5c0-2.7,2.2-5,5-5h9.5c2.7,0,5,2.2,5,5V20.8z" />
+                  <path d="M20.8,4h-9.5C7.2,4,4,7.2,4,11.2v9.5c0,4,3.2,7.2,7.2,7.2h9.5c4,0,7.2-3.2,7.2-7.2v-9.5C28,7.2,24.8,4,20.8,4z M25.7,20.8 c0,2.7-2.2,5-5,5h-9.5c-2.7,0-5-2.2-5-5v-9.5c0-2.7,2.2-5,5-5h9.5c2.7,0,5,2.2,5,5V20.8z" />
                 </g>
               </svg>
             </a>
@@ -96,7 +96,7 @@ export default function Navbar() {
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 30 30"
-                className="w-[30px] md:w-[40px]"
+                className="w-8 md:w-10"
               >
                 {" "}
                 <path

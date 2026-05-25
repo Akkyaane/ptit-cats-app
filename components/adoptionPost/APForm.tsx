@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import APCatProfileFields from "@/components/adoptionPost/APCatFormFields";
@@ -107,10 +107,10 @@ export default function APForm({ animalRequirements = [] }: Props) {
   };
 
   const inputClass =
-    "w-full px-4 py-3 rounded-xl border-2 border-[var(--color-tertiary)] text-[var(--color-quaternary)] focus:outline-none focus:border-[var(--color-primary)] focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-1 transition-colors duration-200";
-  const lClass = "text-sm font-bold text-[var(--color-quaternary)]";
+    "w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 transition-colors duration-200";
+  const lClass = "text-sm font-bold ";
   const req = (
-    <span aria-hidden="true" className="text-[var(--color-primary)] font-bold">
+    <span aria-hidden="true" className="text-primary font-bold">
       {" "}
       *
     </span>
@@ -187,9 +187,9 @@ export default function APForm({ animalRequirements = [] }: Props) {
           multiple
           onChange={handleFileChange}
           required
-          className="w-full text-sm text-[var(--color-quaternary)] file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-2 file:border-[var(--color-tertiary)] file:bg-white file:text-sm file:font-bold file:text-[var(--color-quaternary)] hover:file:bg-[var(--color-tertiary)]/20 transition-colors duration-200"
+          className="w-full text-sm file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-2 file:border-tertiary file:bg-white file:text-sm file:font-bold file:text-quaternary hover:file:bg-tertiary/20 transition-colors duration-200"
         />
-        <p className="text-xs text-[var(--color-quaternary)]/60 mt-1">
+        <p className="text-xs text-quaternary/60 mt-1">
           Formats acceptés : JPG, JPEG, PNG, WEBP — Maintenez{" "}
           <kbd className="px-1 py-0.5 rounded border border-gray-300 bg-gray-100 text-xs font-mono">
             Ctrl
@@ -202,13 +202,13 @@ export default function APForm({ animalRequirements = [] }: Props) {
         </p>
       </div>
 
-      <div className="flex items-center gap-3 p-4 rounded-xl border-2 border-[var(--color-tertiary)]">
+      <div className="flex items-center gap-3 p-4 rounded-xl border-2 border-tertiary">
         <input
           id="isDuo"
           type="checkbox"
           checked={isDuo}
           onChange={(e) => setIsDuo(e.target.checked)}
-          className="w-5 h-5 accent-[var(--color-primary)]"
+          className="w-5 h-5 accent-primary"
         />
         <label htmlFor="isDuo" className={lClass}>
           Duo (plusieurs animaux ensemble)
@@ -223,7 +223,9 @@ export default function APForm({ animalRequirements = [] }: Props) {
           id="price"
           type="number"
           value={price}
-          onChange={(e) => setPrice(e.target.value === "" ? "" : Number(e.target.value))}
+          onChange={(e) =>
+            setPrice(e.target.value === "" ? "" : Number(e.target.value))
+          }
           required
           min={0}
           className={inputClass}
@@ -244,7 +246,7 @@ export default function APForm({ animalRequirements = [] }: Props) {
       <button
         type="button"
         onClick={addCat}
-        className="w-full py-3 px-4 rounded-xl border-2 border-[var(--color-quaternary)] text-[var(--color-quaternary)] bg-white hover:bg-[var(--color-quaternary)] hover:text-white font-bold transition-colors duration-200"
+        className="w-full py-3 px-4 rounded-xl border-2 border-quaternary bg-white hover:bg-quaternary hover:text-white font-bold transition-colors duration-200"
       >
         + Ajouter un animal
       </button>
@@ -252,7 +254,7 @@ export default function APForm({ animalRequirements = [] }: Props) {
       <button
         type="submit"
         disabled={status.loading}
-        className="w-full py-3 px-4 rounded-xl bg-[var(--color-primary)] text-white font-bold hover:bg-[var(--color-quaternary)] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full py-3 px-4 rounded-xl bg-primary text-white font-bold hover:bg-quaternary transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {status.loading ? "Envoi en cours..." : "Publier l'annonce"}
       </button>

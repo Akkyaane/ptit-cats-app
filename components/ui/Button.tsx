@@ -1,5 +1,6 @@
-"use client";
+﻿"use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const scrollToTop = () => {
@@ -11,7 +12,7 @@ const scrollToTop = () => {
 
 type ButtonProps = {
   children?: React.ReactNode;
-  variant?: "primary" | "secondary" | "danger";
+  variant?: "primary" | "secondary";
   size?: "sm" | "lg";
   href?: string;
   up?: boolean;
@@ -26,15 +27,22 @@ export default function Button({
   up,
   onClick,
 }: ButtonProps) {
+  const [isScrolledDown, setIsScrolledDown] = useState(false);
+
+  useEffect(() => {
+    if (!up) return;
+    const onScroll = () => setIsScrolledDown(window.scrollY > 200);
+    onScroll();
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [up]);
+
   const baseStyle =
-    "text-[var(--color-secondary)] font-bold rounded-xl border border-2 hover:bg-[var(--color-secondary)]/40 backdrop-blur-sm transition-colors duration-200 text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]";
+    "text-secondary font-bold rounded-xl border-2 hover:bg-secondary/40 backdrop-blur-sm transition-colors duration-200 text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
   const variants = {
-    primary:
-      "bg-[var(--color-primary)] border-[var(--color-primary)] hover:text-[var(--color-primary)]",
-    secondary:
-      "bg-[var(--color-quaternary)] border-[var(--color-quaternary)] hover:text-[var(--color-quaternary)]",
-    danger: "",
+    primary: "bg-primary border-primary hover:text-primary",
+    secondary: "bg-quaternary border-quaternary hover:text-quaternary",
   };
 
   const sizes = {
@@ -53,21 +61,25 @@ export default function Button({
         className={className}
       >
         {children}
+        {isExternal && (
+          <span className="sr-only"> (nouvelle fenêtre)</span>
+        )}
       </Link>
     );
   }
 
   if (up) {
+    if (!isScrolledDown) return null;
     return (
       <button
         onClick={scrollToTop}
         aria-label="Retour en haut de page"
-        className="fixed bottom-6 right-6 z-50 size-12 rounded-xl cursor-pointer bg-[var(--color-primary)] fill-[var(--color-secondary)] border border-2 border-[var(--color-primary)] hover:bg-[var(--color-secondary)] hover:fill-[var(--color-primary)] transition-colors duration-200 flex items-center justify-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]"
+        className="fixed bottom-6 right-6 z-50 size-12 rounded-xl cursor-pointer bg-primary fill-secondary border-2 border-primary hover:bg-secondary hover:fill-primary transition-colors duration-200 flex items-center justify-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
-          className="w-[25px] h-[25px]"
+          className="size-6"
         >
           <path d="M12 3C12.2652 3 12.5196 3.10536 12.7071 3.29289L19.7071 10.2929C20.0976 10.6834 20.0976 11.3166 19.7071 11.7071C19.3166 12.0976 18.6834 12.0976 18.2929 11.7071L13 6.41421V20C13 20.5523 12.5523 21 12 21C11.4477 21 11 20.5523 11 20V6.41421L5.70711 11.7071C5.31658 12.0976 4.68342 12.0976 4.29289 11.7071C3.90237 11.3166 3.90237 10.6834 4.29289 10.2929L11.2929 3.29289C11.4804 3.10536 11.7348 3 12 3Z" />
         </svg>

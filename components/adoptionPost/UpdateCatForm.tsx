@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -47,8 +47,8 @@ export default function UpdateCatForm({ cat, animalRequirements }: Props) {
   }
 
   const inputClass =
-    "w-full px-4 py-3 rounded-xl border-2 border-[var(--color-tertiary)] text-[var(--color-quaternary)] focus:outline-none focus:border-[var(--color-primary)] focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-1 transition-colors duration-200 bg-white";
-  const lClass = "text-sm font-bold text-[var(--color-quaternary)]";
+    "w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 transition-colors duration-200 bg-white";
+  const lClass = "text-sm font-bold ";
 
   if (success) {
     return (
@@ -61,14 +61,14 @@ export default function UpdateCatForm({ cat, animalRequirements }: Props) {
   return (
     <form action={handleSubmit} className="flex flex-col gap-5">
       {error && (
-        <p className="text-sm font-bold text-[var(--color-primary)] bg-[var(--color-primary)]/10 px-4 py-3 rounded-xl text-center">
+        <p className="text-sm font-bold text-primary bg-primary/10 px-4 py-3 rounded-xl text-center">
           {error}
         </p>
       )}
 
       <div className="flex flex-col gap-1">
         <label htmlFor="name" className={lClass}>
-          Nom <span className="text-[var(--color-primary)]">*</span>
+          Nom <span className="text-primary">*</span>
         </label>
         <input
           id="name"
@@ -95,7 +95,7 @@ export default function UpdateCatForm({ cat, animalRequirements }: Props) {
 
       <div className="flex flex-col gap-1">
         <label htmlFor="sex" className={lClass}>
-          Sexe <span className="text-[var(--color-primary)]">*</span>
+          Sexe <span className="text-primary">*</span>
         </label>
         <select
           id="sex"
@@ -124,7 +124,7 @@ export default function UpdateCatForm({ cat, animalRequirements }: Props) {
               name={field}
               id={`update-${field}`}
               defaultChecked={cat[field] as boolean}
-              className="w-4 h-4 accent-[var(--color-primary)]"
+              className="w-4 h-4 accent-primary"
             />
             <label htmlFor={`update-${field}`} className={lClass}>
               {label}
@@ -142,7 +142,7 @@ export default function UpdateCatForm({ cat, animalRequirements }: Props) {
       ).map(([field, label]) => (
         <div key={field} className="flex flex-col gap-1">
           <label htmlFor={`update-${field}`} className={lClass}>
-            {label} <span className="text-[var(--color-primary)]">*</span>
+            {label} <span className="text-primary">*</span>
           </label>
           <select
             id={`update-${field}`}
@@ -160,7 +160,7 @@ export default function UpdateCatForm({ cat, animalRequirements }: Props) {
 
       <div className="flex flex-col gap-1">
         <label htmlFor="livingEnvironmentType" className={lClass}>
-          Type de lieu de vie <span className="text-[var(--color-primary)]">*</span>
+          Type de lieu de vie <span className="text-primary">*</span>
         </label>
         <select
           id="livingEnvironmentType"
@@ -187,9 +187,9 @@ export default function UpdateCatForm({ cat, animalRequirements }: Props) {
                   id={`req-${req.documentId}`}
                   value={req.documentId}
                   defaultChecked={cat.animal_requirements.some(
-                    (r) => r.documentId === req.documentId
+                    (r) => r.documentId === req.documentId,
                   )}
-                  className="w-4 h-4 accent-[var(--color-primary)]"
+                  className="w-4 h-4 accent-primary"
                 />
                 <label htmlFor={`req-${req.documentId}`} className={lClass}>
                   {req.label}
@@ -203,7 +203,7 @@ export default function UpdateCatForm({ cat, animalRequirements }: Props) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full px-6 py-3 font-bold rounded-xl bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary)]/80 transition-colors duration-200 disabled:opacity-60"
+        className="w-full px-6 py-3 font-bold rounded-xl bg-primary text-white hover:bg-primary/80 transition-colors duration-200 disabled:opacity-60"
       >
         {loading ? "Enregistrement..." : "Enregistrer les modifications"}
       </button>

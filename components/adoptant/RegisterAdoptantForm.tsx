@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -25,7 +25,7 @@ export default function RegisterAdoptantForm() {
   return (
     <form action={handleSubmit} className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <label htmlFor="name" className="text-sm font-bold text-[var(--color-quaternary)]">
+        <label htmlFor="name" className="text-sm font-bold ">
           Nom
         </label>
         <input
@@ -33,12 +33,12 @@ export default function RegisterAdoptantForm() {
           name="name"
           type="text"
           required
-          className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-tertiary)] text-[var(--color-quaternary)] focus:outline-none focus:border-[var(--color-primary)] transition-colors duration-200"
+          className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="firstName" className="text-sm font-bold text-[var(--color-quaternary)]">
+        <label htmlFor="firstName" className="text-sm font-bold ">
           Prénom
         </label>
         <input
@@ -46,12 +46,12 @@ export default function RegisterAdoptantForm() {
           name="firstName"
           type="text"
           required
-          className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-tertiary)] text-[var(--color-quaternary)] focus:outline-none focus:border-[var(--color-primary)] transition-colors duration-200"
+          className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="email" className="text-sm font-bold text-[var(--color-quaternary)]">
+        <label htmlFor="email" className="text-sm font-bold ">
           Email
         </label>
         <input
@@ -59,12 +59,12 @@ export default function RegisterAdoptantForm() {
           name="email"
           type="email"
           required
-          className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-tertiary)] text-[var(--color-quaternary)] focus:outline-none focus:border-[var(--color-primary)] transition-colors duration-200"
+          className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="password" className="text-sm font-bold text-[var(--color-quaternary)]">
+        <label htmlFor="password" className="text-sm font-bold ">
           Mot de passe
         </label>
         <input
@@ -73,12 +73,12 @@ export default function RegisterAdoptantForm() {
           type="password"
           autoComplete="new-password"
           required
-          className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-tertiary)] text-[var(--color-quaternary)] focus:outline-none focus:border-[var(--color-primary)] transition-colors duration-200"
+          className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200"
         />
       </div>
 
       {error && (
-        <p className="text-sm font-bold text-[var(--color-primary)] bg-[var(--color-primary)]/10 px-4 py-3 rounded-xl">
+        <p className="text-sm font-bold text-primary bg-primary/10 px-4 py-3 rounded-xl">
           {error}
         </p>
       )}
@@ -86,7 +86,7 @@ export default function RegisterAdoptantForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full px-6 py-3 font-bold rounded-xl bg-[var(--color-primary)] border-2 border-[var(--color-primary)] text-white hover:bg-[var(--color-primary)]/10 hover:text-[var(--color-primary)] transition-colors duration-200 disabled:opacity-60"
+        className="w-full px-6 py-3 font-bold rounded-xl bg-primary border-2 border-primary text-white hover:bg-primary/10 hover:text-primary transition-colors duration-200 disabled:opacity-60"
       >
         {loading ? "Création..." : "Créer mon compte"}
       </button>

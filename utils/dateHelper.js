@@ -1,16 +1,9 @@
 export function calculateAge(birthDateString) {
   const birthDate = new Date(birthDateString);
-
   const today = new Date();
-
-  const diffInMs = today - birthDate;
-
-  const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
-
+  const diffInDays = Math.floor((today - birthDate) / (1000 * 60 * 60 * 24));
   const diffInMonths = (today.getFullYear() - birthDate.getFullYear()) * 12 + (today.getMonth() - birthDate.getMonth());
-  
   let diffInYears = today.getFullYear() - birthDate.getFullYear();
-
   const m = today.getMonth() - birthDate.getMonth();
 
   if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {

@@ -1,7 +1,8 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import Button from "./ui/Button";
 
 export default function Navbar() {
@@ -42,25 +43,36 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsMobileMenuOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [isMobileMenuOpen]);
+
   return (
     <nav
-      className={`fixed inset-x-0 top-0 z-50 w-full transition-colors duration-200 ${
-        isScrolled ? "bg-[var(--color-tertiary)]" : "bg-transparent"
+      className={`fixed inset-x-0 top-0 z-50 w-full transition-colors duration-200 text-secondary ${
+        isScrolled ? "bg-tertiary" : "bg-transparent"
       }`}
     >
-      <div className="max-w-[1400px] mx-auto py-4 relative px-[1.75rem]">
+      <div className="container mx-auto py-4 relative">
         <div className="flex flex-row items-center justify-between">
-          <a href="/" className="flex flex-row items-center gap-3">
-            <img
+          <a href="/" className="flex flex-row items-center gap-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary rounded-sm">
+            <Image
               src="/assets/img/logo.png"
               alt="Logo SansCroquettesFixes"
-              className="size-10 md:size-12 border-2 border-[var(--color-secondary)] rounded-full hover:scale-110 transition-transform duration-300"
+              width={48}
+              height={48}
+              className="size-10 md:size-12 border-2 border-secondary rounded-full hover:scale-110 transition-transform duration-300"
             />
             <span className="text-lg md:text-xl font-bold tracking-tight">
               Sans Croquettes Fixes
             </span>
           </a>
-          <ul className="hidden lg:flex flex-row gap-3">
+          <ul className="hidden xl:flex flex-row gap-3">
             {links.map((link) =>
               pathname === link.href ? null : (
                 <li key={link.href}>
@@ -78,7 +90,7 @@ export default function Navbar() {
                   ) : (
                     <a
                       href={link.href}
-                      className="hover:text-[var(--color-quaternary)] transition-colors duration-200 lg:text-lg"
+                      className="hover:text-quaternary transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary rounded-sm whitespace-nowrap"
                     >
                       {link.label}
                     </a>
@@ -88,7 +100,7 @@ export default function Navbar() {
             )}
           </ul>
           <button
-            className="lg:hidden p-2 hover:bg-white/15 rounded-xl transition-colors duration-200"
+            className="xl:hidden p-2 hover:bg-white/15 rounded-xl transition-colors duration-200"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label={isMobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
             aria-expanded={isMobileMenuOpen}
@@ -119,12 +131,14 @@ export default function Navbar() {
           </button>
         </div>
         <div
-          className={`lg:hidden fixed inset-0 bg-[var(--color-tertiary)] overflow-hidden transition-all duration-200 ease-in-out z-60 ${
+          className={`xl:hidden fixed inset-0 bg-tertiary overflow-y-auto transition-all duration-200 ease-in-out z-[60] ${
             isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
           onClick={() => setIsMobileMenuOpen(false)}
         >
           <button
+            type="button"
+            aria-label="Fermer le menu"
             className="absolute top-4 md:top-5 right-7 p-2 hover:bg-white/15 rounded-xl transition-colors duration-200 z-10"
             onClick={(e) => {
               e.stopPropagation();
@@ -155,7 +169,7 @@ export default function Navbar() {
                   {link.href === "/donation" ? (
                     <a
                       href={link.href}
-                      className="block w-full text-center px-4 py-3 font-bold rounded-xl hover:bg-transparent bg-[var(--color-quaternary)] backdrop-blur-sm border border-2 border-[var(--color-quaternary)] hover:text-[var(--color-quaternary)] transition-colors duration-200"
+                      className="block w-full text-center px-4 py-3 font-bold rounded-xl hover:bg-transparent bg-quaternary backdrop-blur-sm hover:text-quaternary transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {link.label}
@@ -166,7 +180,7 @@ export default function Navbar() {
                     adoptantId ? (
                     <a
                       href={link.href}
-                      className="block w-full text-center px-4 py-3 font-bold rounded-xl hover:bg-transparent bg-[var(--color-primary)] backdrop-blur-sm border border-2 border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors duration-200"
+                      className="block w-full text-center px-4 py-3 font-bold rounded-xl hover:bg-transparent bg-primary backdrop-blur-sm hover:text-primary transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {link.label}
@@ -174,7 +188,7 @@ export default function Navbar() {
                   ) : (
                     <a
                       href={link.href}
-                      className="block py-3 hover:text-[var(--color-quaternary)] transition-colors duration-200 text-lg"
+                      className="block py-3 hover:text-quaternary transition-colors duration-200 text-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-quaternary rounded-sm"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {link.label}

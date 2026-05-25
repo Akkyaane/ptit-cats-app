@@ -1,4 +1,4 @@
-import { getAllAdoptants } from "@/app/adoptant/update/action";
+﻿import { getAllAdoptants } from "@/app/adoptant/update/action";
 import { IAdoptant } from "@/interfaces/IAdoptant";
 import Link from "next/link";
 

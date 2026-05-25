@@ -1,17 +1,21 @@
-"use client";
-
-import Navbar from "@/components/Navbar";
+﻿import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Button from "@/components/ui/Button";
-import HeadingSecondary from "@/components/ui/HeadingPrimary";
+import HeadingPrimary from "@/components/ui/HeadingPrimary";
 
 export default function LegalNotice() {
   const sectionBaseClass =
-    "flex flex-col gap-8 md:gap-12 max-w-4xl mx-auto text-base sm:text-lg md:text-xl leading-8 md:leading-10";
-  const sectionBorderedClass = `${sectionBaseClass} border-t-2 border-[var(--color-tertiary)] pt-8 md:pt-12`;
+    "flex flex-col gap-8 md:gap-12 max-w-4xl mx-auto text-base sm:text-lg md:text-xl leading-loose";
+  const sectionBorderedClass = `${sectionBaseClass} border-t-2 border-tertiary pt-8 md:pt-12`;
 
   return (
     <div>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-primary focus:text-secondary focus:px-4 focus:py-2 focus:rounded-xl focus:font-bold"
+      >
+        Aller au contenu principal
+      </a>
       <header className="bg-[url('/assets/img/background-1.jpg')]">
         <div className="container relative overflow-hidden">
           <img
@@ -21,19 +25,77 @@ export default function LegalNotice() {
             className="hidden lg:block absolute top-20 right-8 xl:right-24 w-72 xl:w-96"
           />
           <Navbar />
-          <section className="flex flex-col items-center justify-center gap-6 py-16 md:py-24 lg:py-40">
-            <HeadingSecondary>Mentions légales</HeadingSecondary>
-          </section>
+          <div className="flex flex-col items-center justify-center gap-6 py-16 md:py-24 lg:py-40">
+            <HeadingPrimary>Mentions légales</HeadingPrimary>
+          </div>
         </div>
-        <Button up={true} />
       </header>
-      <main className="container flex flex-col gap-10 md:gap-12 text-[var(--color-quaternary)] text-center">
-        <section className={sectionBaseClass}>
-          <p className="text-xl sm:text-2xl font-bold leading-tight">
-            Merci de lire avec attention les différentes modalités d’utilisation
-            du présent site avant d’y parcourir ses pages.
-          </p>
-          <p className="border-t-2 border-[var(--color-tertiary)] pt-8 md:pt-12">
+
+      <main
+        id="main-content"
+        className="container flex flex-col gap-10 md:gap-16 py-12 md:py-20 text-left"
+      >
+        <nav
+          aria-label="Sommaire des mentions légales"
+          className="max-w-4xl mx-auto w-full rounded-xl border-2 border-tertiary p-6 md:p-8"
+        >
+          <p className="mb-4 text-lg font-bold">Sommaire</p>
+          <ol className="flex flex-col gap-2 list-decimal list-inside">
+            <li>
+              <a href="#h-identite" className="text-primary underline hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-sm">
+                Identité des responsables
+              </a>
+            </li>
+            <li>
+              <a href="#h-conditions" className="text-primary underline hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-sm">
+                Conditions d'utilisation
+              </a>
+            </li>
+            <li>
+              <a href="#h-cookies" className="text-primary underline hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-sm">
+                Cookies
+              </a>
+            </li>
+            <li>
+              <a href="#h-liens" className="text-primary underline hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-sm">
+                Liens hypertextes
+              </a>
+            </li>
+            <li>
+              <a href="#h-services" className="text-primary underline hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-sm">
+                Services fournis
+              </a>
+            </li>
+            <li>
+              <a href="#h-limitations" className="text-primary underline hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-sm">
+                Limitations contractuelles sur les données
+              </a>
+            </li>
+            <li>
+              <a href="#h-propriete" className="text-primary underline hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-sm">
+                Propriété intellectuelle
+              </a>
+            </li>
+            <li>
+              <a href="#h-litiges" className="text-primary underline hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-sm">
+                Litiges
+              </a>
+            </li>
+            <li>
+              <a href="#h-donnees" className="text-primary underline hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-sm">
+                Données personnelles
+              </a>
+            </li>
+          </ol>
+        </nav>
+        <section aria-labelledby="h-identite" className={sectionBaseClass}>
+          <h2
+            id="h-identite"
+            className="text-xl sm:text-2xl font-bold leading-tight"
+          >
+            Ces mentions légales régissent l'utilisation du site sanscroquettesfixes.fr. En naviguant sur ce site, vous acceptez les conditions suivantes.
+          </h2>
+          <p className="border-t-2 border-tertiary pt-8 md:pt-12">
             En vous connectant sur ce site, vous acceptez, sans réserves, les
             présentes modalités. Aussi, conformément à l’article n°6 de la Loi
             n°2004-575 du 21 Juin 2004 pour la confiance dans l’économie
@@ -42,13 +104,14 @@ export default function LegalNotice() {
               href="https://www.sanscroquettesfixes.fr"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[var(--color-primary)] hover:underline"
+              className="text-primary underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-sm"
             >
               sanscroquettesfixes.fr
+              <span className="sr-only"> (nouvelle fenêtre)</span>
             </a>{" "}
             sont :
           </p>
-          <h4 className="text-2xl font-bold">Éditeur</h4>
+          <h3 className="text-2xl font-bold">Éditeur</h3>
           <ul className="space-y-2">
             <li>
               Association Sans Croquettes Fixes (association loi 1901 à but non
@@ -71,17 +134,18 @@ export default function LegalNotice() {
                 href="https://www.sanscroquettesfixes.fr"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[var(--color-primary)] hover:underline"
+                className="text-primary underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-sm"
               >
                 sanscroquettesfixes.fr
+                <span className="sr-only"> (nouvelle fenêtre)</span>
               </a>
             </li>
           </ul>
-          <h4 className="text-2xl font-bold">Hébergeur</h4>
+          <h3 className="text-2xl font-bold">Hébergeur</h3>
           <ul className="space-y-2">
             <li>IONOS 1and1 Développement</li>
           </ul>
-          <h4 className="text-2xl font-bold">Développeur</h4>
+          <h3 className="text-2xl font-bold">Développeur</h3>
           <ul className="space-y-2">
             <li>
               Association Sans Croquettes Fixes (association loi 1901 à but non
@@ -94,15 +158,16 @@ export default function LegalNotice() {
                 href="https://www.sanscroquettesfixes.fr"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[var(--color-primary)] hover:underline"
+                className="text-primary underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-sm"
               >
                 sanscroquettesfixes.fr
+                <span className="sr-only"> (nouvelle fenêtre)</span>
               </a>
             </li>
           </ul>
         </section>
-        <section className={sectionBorderedClass}>
-          <h4 className="text-2xl font-bold">Conditions d’utilisation</h4>
+        <section aria-labelledby="h-conditions" className={sectionBorderedClass}>
+          <h3 id="h-conditions" className="text-2xl font-bold">Conditions d'utilisation</h3>
           <p>
             Le présent site est proposé en différents langages web (HTML,
             Javascript, CSS, etc.) pour un meilleur confort d’utilisation et un
@@ -119,8 +184,8 @@ export default function LegalNotice() {
             ou indirect pouvant en découler.
           </p>
         </section>
-        <section className={sectionBorderedClass}>
-          <h4 className="text-2xl font-bold">Cookies</h4>
+        <section aria-labelledby="h-cookies" className={sectionBorderedClass}>
+          <h3 id="h-cookies" className="text-2xl font-bold">Cookies</h3>
           <p>
             Le site peut-être amené à vous demander l’acceptation des cookies
             pour des besoins de statistiques et d’affichage. Un cookie est une
@@ -132,8 +197,8 @@ export default function LegalNotice() {
             cookies.
           </p>
         </section>
-        <section className={sectionBorderedClass}>
-          <h4 className="text-2xl font-bold">Liens hypertextes</h4>
+        <section aria-labelledby="h-liens" className={sectionBorderedClass}>
+          <h3 id="h-liens" className="text-2xl font-bold">Liens hypertextes</h3>
           <p>
             Les sites Internet peuvent offrir des liens vers d’autres sites
             Internet ou d’autres ressources disponibles sur Internet.
@@ -149,8 +214,8 @@ export default function LegalNotice() {
             conformer à leurs conditions d’utilisation.
           </p>
         </section>
-        <section className={sectionBorderedClass}>
-          <h4 className="text-2xl font-bold">Services fournis</h4>
+        <section aria-labelledby="h-services" className={sectionBorderedClass}>
+          <h3 id="h-services" className="text-2xl font-bold">Services fournis</h3>
           <p>
             L’ensemble des activités de l’association ainsi que ses informations
             sont présentées sur notre site Internet. Sans Croquettes Fixes
@@ -163,10 +228,10 @@ export default function LegalNotice() {
             d’évoluer sans préavis.
           </p>
         </section>
-        <section className={sectionBorderedClass}>
-          <h4 className="text-2xl font-bold">
+        <section aria-labelledby="h-limitations" className={sectionBorderedClass}>
+          <h3 id="h-limitations" className="text-2xl font-bold">
             Limitations contractuelles sur les données
-          </h4>
+          </h3>
           <p>
             Les informations contenues sur ce site sont aussi précises que
             possible et le site remis à jour à différentes périodes de l’année,
@@ -189,8 +254,8 @@ export default function LegalNotice() {
             Fixes.
           </p>
         </section>
-        <section className={sectionBorderedClass}>
-          <h4 className="text-2xl font-bold">Propriété intellectuelle</h4>
+        <section aria-labelledby="h-propriete" className={sectionBorderedClass}>
+          <h3 id="h-propriete" className="text-2xl font-bold">Propriété intellectuelle</h3>
           <p>
             Tout le contenu du présent site, incluant, de façon non limitative,
             les graphismes, images, textes, vidéos, animations, sons, logos,
@@ -209,8 +274,8 @@ export default function LegalNotice() {
             copiés pourraient intenter une action en justice à votre encontre.
           </p>
         </section>
-        <section className={sectionBorderedClass}>
-          <h4 className="text-2xl font-bold">Litiges</h4>
+        <section aria-labelledby="h-litiges" className={sectionBorderedClass}>
+          <h3 id="h-litiges" className="text-2xl font-bold">Litiges</h3>
           <p>
             Les présentes conditions du site sont régies par les lois françaises
             et toute contestation ou litiges qui pourraient naître de
@@ -220,8 +285,8 @@ export default function LegalNotice() {
             éventuels, est le français.
           </p>
         </section>
-        <section className={sectionBorderedClass}>
-          <h4 className="text-2xl font-bold">Données personnelles</h4>
+        <section aria-labelledby="h-donnees" className={sectionBorderedClass}>
+          <h3 id="h-donnees" className="text-2xl font-bold">Données personnelles</h3>
           <p>
             De manière générale, vous n’êtes pas tenu de nous communiquer vos
             données personnelles lorsque vous visitez notre site Internet.
@@ -252,6 +317,7 @@ export default function LegalNotice() {
         </section>
       </main>
       <Footer />
+      <Button up={true} />
     </div>
   );
 }

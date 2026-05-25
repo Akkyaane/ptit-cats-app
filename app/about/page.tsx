@@ -1,4 +1,4 @@
-import Navbar from "@/components/Navbar";
+﻿import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import HeadingPrimary from "@/components/ui/HeadingPrimary";
 import HeadingSecondary from "@/components/ui/HeadingSecondary";
@@ -7,7 +7,7 @@ import Image from "next/image";
 
 export default function About() {
   return (
-    <div>
+    <>
       <header className="bg-[url('/assets/img/background-2.jpg')] bg-center bg-cover">
         <div className="container relative">
           <Navbar />
@@ -17,19 +17,19 @@ export default function About() {
         </div>
       </header>
 
-      <main className="flex flex-col gap-16 md:gap-24 lg:gap-32">
-        <section className="container flex flex-col gap-12 text-[var(--color-quaternary)]">
-          <div className="mx-auto max-w-2xl text-center">
+      <main className="flex flex-col gap-12 md:gap-16 lg:gap-24">
+        <section className="container flex flex-col gap-12" aria-label="A propos de nous" >
+          <blockquote className="mx-auto max-w-2xl text-center">
             <span
               aria-hidden="true"
-              className="block text-[7rem] leading-[1] text-[var(--color-primary)] -mb-4"
+              className="block text-[7rem] leading-[1] text-primary -mb-4"
             >
               &ldquo;
             </span>
             <p className="text-2xl md:text-3xl font-bold italic leading-snug">
-              Parce que l&rsquo;abandon ne devrait jamais être une solution
+              Parce que l'abandon ne devrait jamais être une solution
             </p>
-          </div>
+          </blockquote>
           <div className="leading-loose text-lg mx-auto max-w-4xl flex flex-col gap-6">
             <p>
               L’association Sans Croquettes Fixes est née autour de cette
@@ -55,7 +55,7 @@ export default function About() {
           </div>
         </section>
 
-        <section className="bg-[var(--color-quaternary)]">
+        <section className="bg-quaternary" aria-label="Notre vision">
           <div className="container flex flex-col gap-6 py-16 md:py-24">
             <HeadingSecondary
               headingVariant="secondary"
@@ -63,7 +63,7 @@ export default function About() {
             >
               Notre vision
             </HeadingSecondary>
-            <p className="leading-loose text-lg mx-auto max-w-4xl">
+            <p className="leading-loose text-lg mx-auto max-w-4xl text-secondary">
               Chez Sans Croquettes Fixes, nous croyons que la protection animale
               passe aussi par la solidarité humaine. C'est pourquoi nous
               accompagnons celles et ceux qui n'arrivent plus à subvenir aux
@@ -75,11 +75,11 @@ export default function About() {
           </div>
         </section>
 
-        <section className="container flex flex-col gap-12">
+        <section className="container flex flex-col gap-12" aria-label="Nos actions" >
           <HeadingSecondary headingVariant="primary" underlineVariant="primary">
             Nos actions
           </HeadingSecondary>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-5">
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
             <article className="rounded-xl border border-gray-100 p-6 flex flex-col items-center gap-4">
               <Image
                 src="/assets/img/icone-1.png"
@@ -88,7 +88,7 @@ export default function About() {
                 height={64}
                 className="w-16 h-auto"
               />
-              <p className="text-center leading-relaxed text-[var(--color-quaternary)]/90">
+              <p className="text-center leading-relaxed text-quaternary/90">
                 Les chats malades, âgés ou abandonnés sont recueillis et soignés
                 par l’association, qui leur offre sécurité et parfois une
                 seconde chance.
@@ -103,7 +103,7 @@ export default function About() {
                 height={64}
                 className="w-16 h-auto"
               />
-              <p className="text-center leading-relaxed text-[var(--color-quaternary)]/90">
+              <p className="text-center leading-relaxed text-quaternary/90">
                 Chaque vendredi, une distribution gratuite de croquettes aide
                 les familles en difficulté à nourrir leurs animaux.
               </p>
@@ -117,7 +117,7 @@ export default function About() {
                 height={64}
                 className="w-16 h-auto"
               />
-              <p className="text-center leading-relaxed text-[var(--color-quaternary)]/90">
+              <p className="text-center leading-relaxed text-quaternary/90">
                 Toute l’année, nous menons des campagnes de stérilisation avec
                 les communes afin de limiter la prolifération des chats errants
                 et d’améliorer leur qualité de vie.
@@ -132,7 +132,7 @@ export default function About() {
                 height={64}
                 className="w-16 h-auto"
               />
-              <p className="text-center leading-relaxed text-[var(--color-quaternary)]/90">
+              <p className="text-center leading-relaxed text-quaternary/90">
                 Nous accompagnons les propriétaires d'animaux en difficulté en
                 leur apportant du soutien, des conseils et des solutions
                 adaptées.
@@ -147,7 +147,7 @@ export default function About() {
                 height={64}
                 className="w-16 h-auto"
               />
-              <p className="text-center leading-relaxed text-[var(--color-quaternary)]/90">
+              <p className="text-center leading-relaxed text-quaternary/90">
                 Nous participons régulièrement à des événements pour
                 sensibiliser le public à la cause animale et au bien-être de
                 tous les animaux.
@@ -155,7 +155,7 @@ export default function About() {
             </article>
           </div>
         </section>
-        <section className="container flex flex-col gap-12 text-[var(--color-quaternary)]">
+        <section className="container flex flex-col gap-12" aria-label="Les débuts de Sans Croquettes Fixes" >
           <HeadingSecondary headingVariant="primary" underlineVariant="primary">
             Les débuts de Sans Croquettes Fixes
           </HeadingSecondary>
@@ -171,10 +171,8 @@ export default function About() {
               de commerces locaux. Ces actions ont permis non seulement
               d’apporter de la nourriture, mais aussi de créer un lien de
               confiance avec les bénéficiaires et leurs animaux. <br /> Au fil
-              des années, nos actions se sont élargies. La{" "}
-              <strong>distribution hebdomadaire de croquettes</strong> reste au
-              cœur de notre mission, mais la{" "}
-              <strong>prise en charge de chats en difficulté</strong> a pris une
+              des années, nos actions se sont élargies. La distribution hebdomadaire de croquettes reste au
+              cœur de notre mission, mais la prise en charge de chats en difficulté a pris une
               place grandissante. Depuis nos débuts, nous avons toujours fait le
               choix de garder une dimension profondément humaine. Derrière un
               animal en souffrance, il y a souvent une personne en détresse.
@@ -196,7 +194,7 @@ export default function About() {
           </div>
         </section>
 
-        <section className="container flex flex-col gap-12 text-[var(--color-quaternary)]">
+        <section className="container flex flex-col gap-12 ">
           <HeadingSecondary headingVariant="primary" underlineVariant="primary">
             Derrière chaque sauvetage, une rencontre inoubliable
           </HeadingSecondary>
@@ -213,10 +211,10 @@ export default function About() {
               </div>
               <div className="flex-1 p-5 md:p-6 flex flex-col gap-2">
                 <h3 className="text-lg font-semibold md:text-xl">Mambo</h3>
-                <p className="text-sm inline-block self-start bg-[var(--color-tertiary)] text-[var(--color-quaternary)] px-3 py-1 rounded-full font-medium">
+                <p className="text-sm inline-block self-start bg-tertiary px-3 py-1 rounded-full font-medium">
                   En famille d'accueil
                 </p>
-                <p className="leading-relaxed text-[var(--color-quaternary)]">
+                <p className="leading-relaxed ">
                   Atteint d'une malformation très rare, Mambo a eu besoin
                   d'importantes chirurgies financées grâce à votre soutien.
                 </p>
@@ -234,10 +232,10 @@ export default function About() {
               </div>
               <div className="flex-1 p-5 md:p-6 flex flex-col gap-2">
                 <h3 className="text-lg font-semibold md:text-xl">Puppy</h3>
-                <p className="text-sm inline-block self-start bg-[var(--color-tertiary)] text-[var(--color-quaternary)] px-3 py-1 rounded-full font-medium">
+                <p className="text-sm inline-block self-start bg-tertiary px-3 py-1 rounded-full font-medium">
                   En soin
                 </p>
-                <p className="leading-relaxed text-[var(--color-quaternary)]">
+                <p className="leading-relaxed ">
                   Trouvée à 500gr avec un prolapsus et deux fémurs cassés,
                   aucune autre association n'a voulu tenter de la prendre en
                   charge, mais grâce à vous, elle a pu être sauvée.
@@ -256,10 +254,10 @@ export default function About() {
               </div>
               <div className="flex-1 p-5 md:p-6 flex flex-col gap-2">
                 <h3 className="text-lg font-semibold md:text-xl">Kiki</h3>
-                <p className="text-sm inline-block self-start bg-[var(--color-tertiary)] text-[var(--color-quaternary)] px-3 py-1 rounded-full font-medium">
+                <p className="text-sm inline-block self-start bg-tertiary px-3 py-1 rounded-full font-medium">
                   En famille d'accueil
                 </p>
-                <p className="leading-relaxed text-[var(--color-quaternary)]">
+                <p className="leading-relaxed ">
                   Suite à l'hospitalisation longue durée de son humain, Kiki
                   s'est retrouvé sans solution. Nous l'avons récupéré et placé
                   en famille d'accueil.
@@ -278,10 +276,10 @@ export default function About() {
               </div>
               <div className="flex-1 p-5 md:p-6 flex flex-col gap-2">
                 <h3 className="text-lg font-semibold md:text-xl">Pépinette</h3>
-                <p className="text-sm inline-block self-start bg-[var(--color-tertiary)] text-[var(--color-quaternary)] px-3 py-1 rounded-full font-medium">
+                <p className="text-sm inline-block self-start bg-tertiary px-3 py-1 rounded-full font-medium">
                   En famille d'accueil
                 </p>
-                <p className="leading-relaxed text-[var(--color-quaternary)]">
+                <p className="leading-relaxed ">
                   Après un long traitement PIF, Pépinette est enfin en rémission
                   et s'adapte peu à peu à la vie de famille.
                 </p>
@@ -290,9 +288,12 @@ export default function About() {
           </div>
         </section>
 
-        <section className="bg-[var(--color-tertiary)]/10 text-[var(--color-quaternary)]">
+        <section className="bg-tertiary/10 " aria-label="Vous avez besoin d'aide ?">
           <div className="container flex flex-col items-center gap-6 py-16 md:py-24">
-            <HeadingSecondary headingVariant="primary" underlineVariant="primary">
+            <HeadingSecondary
+              headingVariant="primary"
+              underlineVariant="primary"
+            >
               Vous avez besoin d'aide ?
             </HeadingSecondary>
             <p className="text-lg max-w-3xl text-center">
@@ -308,6 +309,6 @@ export default function About() {
       </main>
       <Footer />
       <Button up={true} />
-    </div>
+    </>
   );
 }

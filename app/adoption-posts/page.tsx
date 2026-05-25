@@ -1,4 +1,4 @@
-import Footer from "@/components/Footer";
+﻿import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import AdoptionPostCard from "@/components/adoptionPost/AdoptionPostCard";
 import Button from "@/components/ui/Button";
@@ -12,9 +12,12 @@ type AdoptionPostApi = IAdoptionPost & {
 };
 
 async function getAdoptionPosts() {
-  const res = await fetch(`${process.env.STRAPI_PUBLIC_BASE_URL}/api/adoption-posts?populate=*`, {
-    next: { revalidate: 5 },
-  });
+  const res = await fetch(
+    `${process.env.STRAPI_PUBLIC_BASE_URL}/api/adoption-posts?populate=*`,
+    {
+      next: { revalidate: 5 },
+    },
+  );
 
   if (!res.ok) {
     throw new Error("Erreur lors de la récupération des annonces d'adoption.");
@@ -68,9 +71,7 @@ function formatAge(birthDate?: string) {
 
 function buildAttributes(cats: ICat[]) {
   const ages = cats.map((cat) => formatAge(cat.birthDate)).join(" | ");
-  const sexes = cats
-    .map((cat) => (cat.sex === "Male" ? "M" : "F"))
-    .join(" | ");
+  const sexes = cats.map((cat) => (cat.sex === "Male" ? "M" : "F")).join(" | ");
 
   const attributes: Record<string, string>[] = [];
   attributes.push({ age: ages });
@@ -119,12 +120,9 @@ export default async function DisplayAdoptionPosts() {
         {/* <Button up={true} /> */}
       </header>
 
-      <main className="text-[var(--color-quaternary)]">
+      <main className="">
         <section className="container flex flex-col gap-12">
-          <HeadingTertiary
-            headingVariant="primary"
-            underlineVariant="primary"
-          >
+          <HeadingTertiary headingVariant="primary" underlineVariant="primary">
             Nos annonces d'adoption
           </HeadingTertiary>
 

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { ICat } from "@/interfaces/ICat";
 import { IAnimalRequirement } from "@/interfaces/IAnimalRequirement";
@@ -21,13 +21,14 @@ export default function APCatFormFields({
   const update = (field: keyof ICat, val: unknown) =>
     onChange({ ...value, [field]: val });
 
-  const fieldClass = "w-full px-4 py-3 rounded-xl border-2 border-[var(--color-tertiary)] text-[var(--color-quaternary)] focus:outline-none focus:border-[var(--color-primary)] focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-1 transition-colors duration-200";
-  const labelClass = "text-sm font-bold text-[var(--color-quaternary)]";
+  const fieldClass =
+    "w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 transition-colors duration-200";
+  const labelClass = "text-sm font-bold ";
 
   return (
-    <fieldset className="border-2 border-[var(--color-tertiary)] rounded-xl p-6 flex flex-col gap-4">
+    <fieldset className="border-2 border-tertiary rounded-xl p-6 flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-base font-bold text-[var(--color-quaternary)]">Informations du chat {index}</h2>
+        <h2 className="text-base font-bold ">Informations du chat {index}</h2>
         <button
           type="button"
           onClick={onRemove}
@@ -38,7 +39,9 @@ export default function APCatFormFields({
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="name" className={labelClass}>Nom</label>
+        <label htmlFor="name" className={labelClass}>
+          Nom
+        </label>
         <input
           type="text"
           name="name"
@@ -51,7 +54,9 @@ export default function APCatFormFields({
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="birthDate" className={labelClass}>Date de naissance</label>
+        <label htmlFor="birthDate" className={labelClass}>
+          Date de naissance
+        </label>
         <input
           type="date"
           name="birthDate"
@@ -63,7 +68,9 @@ export default function APCatFormFields({
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="sex" className={labelClass}>Sexe</label>
+        <label htmlFor="sex" className={labelClass}>
+          Sexe
+        </label>
         <select
           name="sex"
           id="sex"
@@ -78,12 +85,14 @@ export default function APCatFormFields({
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        {([
-          ["isDewormed", "Déparasité"],
-          ["isVaccinated", "Vacciné"],
-          ["isSterilizedOrCastrated", "Stérilisé / castré"],
-          ["isIdentified", "Identifié"],
-        ] as [keyof ICat, string][]).map(([field, label]) => (
+        {(
+          [
+            ["isDewormed", "Déparasité"],
+            ["isVaccinated", "Vacciné"],
+            ["isSterilizedOrCastrated", "Stérilisé / castré"],
+            ["isIdentified", "Identifié"],
+          ] as [keyof ICat, string][]
+        ).map(([field, label]) => (
           <div key={field} className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -91,21 +100,27 @@ export default function APCatFormFields({
               id={field}
               checked={(value[field] as boolean) ?? false}
               onChange={(e) => update(field, e.target.checked)}
-              className="w-4 h-4 accent-[var(--color-primary)]"
+              className="w-4 h-4 accent-primary"
             />
-            <label htmlFor={field} className={labelClass}>{label}</label>
+            <label htmlFor={field} className={labelClass}>
+              {label}
+            </label>
           </div>
         ))}
       </div>
 
       <div className="flex flex-col gap-3">
-        {([
-          ["dogAffinity", "Entente avec les chiens"],
-          ["catAffinity", "Entente avec les chats"],
-          ["childAffinity", "Entente avec les enfants"],
-        ] as [keyof ICat, string][]).map(([field, label]) => (
+        {(
+          [
+            ["dogAffinity", "Entente avec les chiens"],
+            ["catAffinity", "Entente avec les chats"],
+            ["childAffinity", "Entente avec les enfants"],
+          ] as [keyof ICat, string][]
+        ).map(([field, label]) => (
           <div key={field} className="flex flex-col gap-1">
-            <label htmlFor={field} className={labelClass}>{label}</label>
+            <label htmlFor={field} className={labelClass}>
+              {label}
+            </label>
             <select
               name={field}
               id={field}
@@ -123,14 +138,19 @@ export default function APCatFormFields({
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="livingEnvironmentType" className={labelClass}>Type de lieu de vie</label>
+        <label htmlFor="livingEnvironmentType" className={labelClass}>
+          Type de lieu de vie
+        </label>
         <select
           name="livingEnvironmentType"
           id="livingEnvironmentType"
           required
           value={value.livingEnvironmentType ?? "Apartment"}
           onChange={(e) =>
-            update("livingEnvironmentType", e.target.value as ICat["livingEnvironmentType"])
+            update(
+              "livingEnvironmentType",
+              e.target.value as ICat["livingEnvironmentType"],
+            )
           }
           className={fieldClass}
         >
@@ -151,7 +171,9 @@ export default function APCatFormFields({
                   name="keyPoints"
                   id={`keyPoint-${requirement.id}`}
                   value={requirement.id}
-                  checked={(value.animal_requirements ?? []).some((r) => r.id === requirement.id)}
+                  checked={(value.animal_requirements ?? []).some(
+                    (r) => r.id === requirement.id,
+                  )}
                   onChange={(e) => {
                     const current = value.animal_requirements ?? [];
                     const updated = e.target.checked
@@ -159,16 +181,21 @@ export default function APCatFormFields({
                       : current.filter((r) => r.id !== requirement.id);
                     update("animal_requirements", updated);
                   }}
-                  className="w-4 h-4 accent-[var(--color-primary)]"
+                  className="w-4 h-4 accent-primary"
                 />
-                <label htmlFor={`keyPoint-${requirement.id}`} className={labelClass}>
+                <label
+                  htmlFor={`keyPoint-${requirement.id}`}
+                  className={labelClass}
+                >
                   {requirement.label}
                 </label>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-sm text-[var(--color-quaternary)]/60 italic">Aucun critère d&apos;exigence disponible.</p>
+          <p className="text-sm text-quaternary/60 italic">
+            Aucun critère d&apos;exigence disponible.
+          </p>
         )}
       </div>
     </fieldset>

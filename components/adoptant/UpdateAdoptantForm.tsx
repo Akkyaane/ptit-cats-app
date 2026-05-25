@@ -1,11 +1,15 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { updateAdoptant } from "@/app/adoptant/update/action";
 import { IAdoptant } from "@/interfaces/IAdoptant";
 
-export default function UpdateAdoptantForm({ adoptant }: { adoptant: IAdoptant }) {
+export default function UpdateAdoptantForm({
+  adoptant,
+}: {
+  adoptant: IAdoptant;
+}) {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
@@ -23,7 +27,7 @@ export default function UpdateAdoptantForm({ adoptant }: { adoptant: IAdoptant }
   return (
     <form action={handleSubmit} className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <label htmlFor="name" className="text-sm font-bold text-[var(--color-quaternary)]">
+        <label htmlFor="name" className="text-sm font-bold ">
           Nom
         </label>
         <input
@@ -32,12 +36,12 @@ export default function UpdateAdoptantForm({ adoptant }: { adoptant: IAdoptant }
           type="text"
           defaultValue={adoptant.name}
           required
-          className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-tertiary)] text-[var(--color-quaternary)] focus:outline-none focus:border-[var(--color-primary)] transition-colors duration-200"
+          className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="firstName" className="text-sm font-bold text-[var(--color-quaternary)]">
+        <label htmlFor="firstName" className="text-sm font-bold ">
           Prénom
         </label>
         <input
@@ -46,12 +50,12 @@ export default function UpdateAdoptantForm({ adoptant }: { adoptant: IAdoptant }
           type="text"
           defaultValue={adoptant.firstName}
           required
-          className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-tertiary)] text-[var(--color-quaternary)] focus:outline-none focus:border-[var(--color-primary)] transition-colors duration-200"
+          className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="email" className="text-sm font-bold text-[var(--color-quaternary)]">
+        <label htmlFor="email" className="text-sm font-bold ">
           Email
         </label>
         <input
@@ -60,19 +64,19 @@ export default function UpdateAdoptantForm({ adoptant }: { adoptant: IAdoptant }
           type="email"
           defaultValue={adoptant.email}
           required
-          className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-tertiary)] text-[var(--color-quaternary)] focus:outline-none focus:border-[var(--color-primary)] transition-colors duration-200"
+          className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="housingType" className="text-sm font-bold text-[var(--color-quaternary)]">
+        <label htmlFor="housingType" className="text-sm font-bold ">
           Type de logement
         </label>
         <select
           id="housingType"
           name="housingType"
           defaultValue={adoptant.housingType ?? ""}
-          className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-tertiary)] text-[var(--color-quaternary)] focus:outline-none focus:border-[var(--color-primary)] transition-colors duration-200 bg-white"
+          className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200 bg-white"
         >
           <option value="">-- Non renseigné --</option>
           <option value="maison">Maison</option>
@@ -81,25 +85,25 @@ export default function UpdateAdoptantForm({ adoptant }: { adoptant: IAdoptant }
       </div>
 
       <div className="flex flex-col gap-2">
-        <em className="text-sm font-bold text-[var(--color-quaternary)]">Avez-vous un jardin ?</em>
+        <em className="text-sm font-bold ">Avez-vous un jardin ?</em>
         <div className="flex gap-6">
-          <label className="flex items-center gap-2 cursor-pointer text-[var(--color-quaternary)] font-bold">
+          <label className="flex items-center gap-2 cursor-pointer font-bold">
             <input
               type="radio"
               name="hasGarden"
               value="true"
               defaultChecked={adoptant.hasGarden === true}
-              className="accent-[var(--color-primary)]"
+              className="accent-primary"
             />{" "}
             Oui
           </label>
-          <label className="flex items-center gap-2 cursor-pointer text-[var(--color-quaternary)] font-bold">
+          <label className="flex items-center gap-2 cursor-pointer font-bold">
             <input
               type="radio"
               name="hasGarden"
               value="false"
               defaultChecked={adoptant.hasGarden !== true}
-              className="accent-[var(--color-primary)]"
+              className="accent-primary"
             />{" "}
             Non
           </label>
@@ -107,14 +111,14 @@ export default function UpdateAdoptantForm({ adoptant }: { adoptant: IAdoptant }
       </div>
 
       {error && (
-        <p className="text-sm font-bold text-[var(--color-primary)] bg-[var(--color-primary)]/10 px-4 py-3 rounded-xl">
+        <p className="text-sm font-bold text-primary bg-primary/10 px-4 py-3 rounded-xl">
           {error}
         </p>
       )}
 
       <button
         type="submit"
-        className="w-full px-6 py-3 font-bold rounded-xl bg-[var(--color-primary)] border-2 border-[var(--color-primary)] text-white hover:bg-[var(--color-primary)]/10 hover:text-[var(--color-primary)] transition-colors duration-200"
+        className="w-full px-6 py-3 font-bold rounded-xl bg-primary border-2 border-primary text-white hover:bg-primary/10 hover:text-primary transition-colors duration-200"
       >
         Mettre à jour
       </button>

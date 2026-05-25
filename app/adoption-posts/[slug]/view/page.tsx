@@ -1,44 +1,70 @@
-import { IAdoptionPost } from "@/interfaces/IAdoptionPost";
-import AdoptionPost from "@/components/adoptionPost/AdoptionPost";
+﻿import APForm from "@/components/adoptionPost/APForm";
+import { IAnimalRequirement } from "@/interfaces/IAnimalRequirement";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import HeadingPrimary from "@/components/ui/HeadingPrimary";
+import HeadingSecondary from "@/components/ui/HeadingSecondary";
+import Image from "next/image";
 
-async function getAdoptionPost(documentId: string) {
-  const res = await fetch(`http://localhost:1337/api/adoption-posts/${documentId}?populate[cats][populate][animal_requirements]=*&populate=photos`, {
-  });
-
-  if (!res.ok) return null;
-
-  const response = await res.json();
-  console.log("Adoption post data:", response.data
-  );
-  return response.data;
+async function getAnimalRequirements(): Promise<IAnimalRequirement[]> {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    const res = await fetch(`${baseUrl}/api/animal-requirements`, {
+      cache: "no-store",
+    });
+    if (!res.ok) {
+      console.error(
+        "[animal-requirements] fetch failed:",
+        res.status,
+        await res.text(),
+      );
+      return [];
+    }
+    const data = await res.json();
+    return data.data ?? [];
+  } catch (err) {
+    console.error("[animal-requirements] fetch error:", err);
+    return [];
+  }
 }
 
-export default async function displayAdoptionPost({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const adoptionPost = await getAdoptionPost(slug);
-
-    if (!adoptionPost) {
-    return <div className="p-8">Annonce introuvable.</div>;
-  }
+export default async function CreateAdoptionPost() {
+  const animalRequirements = await getAnimalRequirements();
 
   return (
-    <main className="p-8">
-      <h1 className="text-3xl font-bold mb-6">Chat 1</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <AdoptionPost
-            key={adoptionPost.id}
-            id={adoptionPost.id}
-            title={adoptionPost.title}
-            slogan={adoptionPost.slogan}
-            shortDescription={adoptionPost.shortDescription}
-            longDescription={adoptionPost.longDescription}
-            photos={adoptionPost.photos}
-            isDuo={adoptionPost.isDuo}
-            price={adoptionPost.price}
-            cats={adoptionPost.cats}
-            showDetails={true}
+    <div>
+      <header className="bg-[url('/assets/img/background-2.jpg')]">
+        <div className="container relative">
+          <Image
+            src="/assets/img/icone-10.svg"
+            alt=""
+            aria-hidden="true"
+            width={384}
+            height={384}
+            className="hidden lg:block absolute top-20 right-8 xl:right-24 w-72 xl:w-96"
           />
-      </div>
-    </main>
+          <Navbar />
+          <div className="flex flex-col items-center justify-center gap-6 py-16 md:py-24 lg:py-40">
+            <HeadingPrimary>Créer une annonce</HeadingPrimary>
+          </div>
+        </div>
+      </header>
+
+      <main className="">
+        <div className="container flex flex-col gap-12">
+          <section className="p-8 md:p-10 flex flex-col gap-12">
+            <HeadingSecondary
+              headingVariant="primary"
+              underlineVariant="primary"
+            >
+              Nouvelle annonce d&apos;adoption
+            </HeadingSecondary>
+            <APForm animalRequirements={animalRequirements} />
+          </section>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
   );
 }

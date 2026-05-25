@@ -1,36 +1,38 @@
-type HeadingSecondaryProps = {
+﻿type HeadingSecondaryProps = {
+  id?: string;
   headingVariant?: "primary" | "secondary";
   underlineVariant?: "primary" | "secondary";
   children: React.ReactNode;
 };
 
 export default function HeadingSecondary({
+  id,
   headingVariant = "primary",
   underlineVariant = "primary",
-  children
+  children,
 }: HeadingSecondaryProps) {
-  const baseHeading =
-    "text-2xl md:text-3xl lg:text-4xl font-bold mb-4";
+  const baseHeading = "text-2xl md:text-3xl lg:text-4xl font-bold mb-4";
 
-  const baseUnderline =
-    "w-16 h-1 rounded-full mx-auto";
+  const baseUnderline = "w-16 h-1 rounded-full mx-auto";
 
   const headingVariants = {
-    primary: "text-[var(--color-quaternary)]",
-    secondary: "text-[var(--color-secondary)]",
+    primary: "",
+    secondary: "text-secondary",
   };
 
   const underlineVariants = {
-    primary: "bg-[var(--color-tertiary)]",
-    secondary: "bg-[var(--color-primary)]",
+    primary: "bg-tertiary",
+    secondary: "bg-primary",
   };
 
   return (
     <div className="flex flex-col items-center justify-center text-center">
-      <h2 className={`${baseHeading} ${headingVariants[headingVariant]}`}>
+      <h2 id={id} className={`${baseHeading} ${headingVariants[headingVariant]}`}>
         {children}
       </h2>
-      <div className={`${baseUnderline} ${underlineVariants[underlineVariant]}`} />
+      <div
+        className={`${baseUnderline} ${underlineVariants[underlineVariant]}`}
+      />
     </div>
   );
 }
