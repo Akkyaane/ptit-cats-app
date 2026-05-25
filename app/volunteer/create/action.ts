@@ -13,12 +13,12 @@ export async function createBenevole(formData: FormData) {
 
   try {
     const response = await fetch(
-      `${process.env.STRAPI_LOCALHOST_URL}/api/volunteers`,
+      `${process.env.STRAPI_PUBLIC_BASE_URL}/api/volunteers`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.STRAPI_ADMIN_TOKEN}`,
+          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
         },
         body: JSON.stringify({
           data: {

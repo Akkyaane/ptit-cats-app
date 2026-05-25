@@ -27,11 +27,11 @@ export async function POST(request: Request) {
         animal_requirements: (animal_requirements ?? []).map((r) => r.documentId),
       };
 
-      const catRes = await fetch(`${process.env.STRAPI_LOCALHOST_URL}/api/cats`, {
+      const catRes = await fetch(`${process.env.STRAPI_PUBLIC_BASE_URL}/api/cats`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.STRAPI_ADMIN_TOKEN}`,
+          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
         },
         body: JSON.stringify({ data: catData }),
       });
@@ -51,12 +51,12 @@ export async function POST(request: Request) {
 
     // Create adoption post referencing created cat IDs
     const response = await fetch(
-      `${process.env.STRAPI_LOCALHOST_URL}/api/adoption-posts`,
+      `${process.env.STRAPI_PUBLIC_BASE_URL}/api/adoption-posts`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.STRAPI_ADMIN_TOKEN}`,
+          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
         },
         body: JSON.stringify({
           data: {
@@ -76,9 +76,27 @@ export async function POST(request: Request) {
     }
 
     const createdEntry = await response.json();
-    const entryId = createdEntry.data.documentId as string;
+    const entryDocumentId = createdEntry.data.documentId as string;
+    const entryNumericId = String(createdEntry.data.id);
+    console.log("[adoption-posts] post created — id:", entryNumericId, "documentId:", entryDocumentId);
 
     console.log("[adoption-posts] photos received:", photos.length, photos.map((p) => `${p.name} (${p.size}B)`));
+
+    // Resolve the "Assets" folder ID in Strapi media library
+    let assetsFolderId: string | null = null;
+    try {
+      const foldersRes = await fetch(
+        `${process.env.STRAPI_PUBLIC_BASE_URL}/api/upload/folders`,
+        { headers: { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` } }
+      );
+      if (foldersRes.ok) {
+        const foldersData = await foldersRes.json();
+        const found = (foldersData.data ?? []).find(
+          (f: { name: string; id: number }) => f.name === "Assets"
+        );
+        if (found) assetsFolderId = String(found.id);
+      }
+    } catch { /* proceed without folder targeting */ }
 
     const photosForm = new FormData();
     for (const photo of photos) {
@@ -86,14 +104,12 @@ export async function POST(request: Request) {
       const blob = new Blob([buffer], { type: photo.type });
       photosForm.append("files", blob, photo.name);
     }
-    photosForm.append("ref", "api::adoption-post.adoption-post");
-    photosForm.append("refId", entryId);
-    photosForm.append("field", "photos");
+    if (assetsFolderId) photosForm.append("folder", assetsFolderId);
 
-    const uploadRes = await fetch(`${process.env.STRAPI_LOCALHOST_URL}/api/upload`, {
+    const uploadRes = await fetch(`${process.env.STRAPI_PUBLIC_BASE_URL}/api/upload`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.STRAPI_ADMIN_TOKEN}`,
+        Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
       },
       body: photosForm,
     });
@@ -104,7 +120,29 @@ export async function POST(request: Request) {
       throw new Error("Échec du téléversement des photos");
     }
 
-    return NextResponse.json({ success: true, entryId }, { status: 200 });
+    const uploadedFiles = await uploadRes.json() as { id: number }[];
+    console.log("[adoption-posts] uploaded file ids:", uploadedFiles.map((f) => f.id));
+
+    // Link uploaded files to the adoption post entry
+    const patchRes = await fetch(
+      `${process.env.STRAPI_PUBLIC_BASE_URL}/api/adoption-posts/${entryDocumentId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
+        },
+        body: JSON.stringify({ data: { photos: uploadedFiles.map((f) => f.id) } }),
+      }
+    );
+
+    if (!patchRes.ok) {
+      const patchError = await patchRes.text();
+      console.error("[adoption-posts] photo link failed:", patchRes.status, patchError);
+      throw new Error("Échec de la liaison des photos");
+    }
+
+    return NextResponse.json({ success: true, entryId: entryDocumentId }, { status: 200 });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Erreur inconnue";
     return NextResponse.json({ error: message }, { status: 500 });

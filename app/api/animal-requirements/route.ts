@@ -4,8 +4,8 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     const response = await fetch(
-      `${process.env.STRAPI_LOCALHOST_URL}/api/animal-requirements?populate=*`,
-      { headers: { Authorization: `Bearer ${process.env.STRAPI_ADMIN_TOKEN}` } },
+      `${process.env.STRAPI_PUBLIC_BASE_URL}/api/animal-requirements?populate=*`,
+      { headers: { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` } },
     );
 
     if (!response.ok) {

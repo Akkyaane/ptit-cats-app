@@ -4,11 +4,11 @@ import { IAdoptant } from "@/interfaces/IAdoptant";
 
 export async function getAllAdoptants(): Promise<IAdoptant[]> {
   const response = await fetch(
-    `${process.env.STRAPI_LOCALHOST_URL}/api/adoptants`,
+    `${process.env.STRAPI_PUBLIC_BASE_URL}/api/adoptants`,
     {
       cache: "no-store",
       headers: {
-        Authorization: `Bearer ${process.env.STRAPI_ADMIN_TOKEN}`,
+        Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
       },
     }
   );
@@ -21,11 +21,11 @@ export async function getAllAdoptants(): Promise<IAdoptant[]> {
 
 export async function getAdoptantById(id: string): Promise<IAdoptant | null> {
   const response = await fetch(
-    `${process.env.STRAPI_LOCALHOST_URL}/api/adoptants/${id}`,
+    `${process.env.STRAPI_PUBLIC_BASE_URL}/api/adoptants/${id}`,
     {
       cache: "no-store",
       headers: {
-        Authorization: `Bearer ${process.env.STRAPI_ADMIN_TOKEN}`,
+        Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
       },
     }
   );
@@ -52,12 +52,12 @@ export async function updateAdoptant(
 
   try {
     const response = await fetch(
-      `${process.env.STRAPI_LOCALHOST_URL}/api/adoptants/${documentId}`,
+      `${process.env.STRAPI_PUBLIC_BASE_URL}/api/adoptants/${documentId}`,
       {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.STRAPI_ADMIN_TOKEN}`,
+          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
         },
         body: JSON.stringify({
           data: { name, firstName, email, housingType: housingType || null, hasGarden },

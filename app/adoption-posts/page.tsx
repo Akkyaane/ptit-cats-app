@@ -12,7 +12,7 @@ type AdoptionPostApi = IAdoptionPost & {
 };
 
 async function getAdoptionPosts() {
-  const res = await fetch(`${process.env.STRAPI_LOCALHOST_URL}/api/adoption-posts?populate=*`, {
+  const res = await fetch(`${process.env.STRAPI_PUBLIC_BASE_URL}/api/adoption-posts?populate=*`, {
     next: { revalidate: 5 },
   });
 
@@ -33,7 +33,7 @@ function getPhotoUrl(photoPath?: string) {
     return photoPath;
   }
 
-  return `${process.env.STRAPI_LOCALHOST_URL}${photoPath}`;
+  return `${process.env.STRAPI_PUBLIC_BASE_URL}${photoPath}`;
 }
 
 function formatAge(birthDate?: string) {

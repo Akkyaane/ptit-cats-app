@@ -1,5 +1,6 @@
 import { IAdoptionPost } from "@/interfaces/IAdoptionPost";
 import { calculateAge } from "@/utils/dateHelper";
+import Link from "next/link";
 
 export default function AdoptionPost({
   title,
@@ -10,7 +11,8 @@ export default function AdoptionPost({
   price,
   cats,
   showDetails,
-}: IAdoptionPost) {
+  isAdmin = false,
+}: IAdoptionPost & { isAdmin?: boolean }) {
   return (
     <div className="border border-gray-300 p-6 bg-white">
       <h2 className="text-2xl font-bold text-black mt-4">{title}</h2>
@@ -100,6 +102,16 @@ export default function AdoptionPost({
               </>
             );
           })()}
+          {isAdmin && cat.documentId && (
+            <div className="mt-4">
+              <Link
+                href={`/cats/update/${cat.documentId}`}
+                className="inline-block px-4 py-2 text-sm font-bold rounded-lg border-2 border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white transition-colors duration-200"
+              >
+                Modifier
+              </Link>
+            </div>
+          )}
         </div>
       ))}
       <p className="font-semibold mt-4 text-black">{price} €</p>

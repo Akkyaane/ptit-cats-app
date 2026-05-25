@@ -2,6 +2,7 @@ import { IAnimalRequirement } from "@/interfaces/IAnimalRequirement";
 
 export interface ICat {
   id: number;
+  documentId: string;
   name: string;
   sex: "Male" | "Female";
   birthDate?: string;
