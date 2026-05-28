@@ -1,21 +1,11 @@
 ﻿"use client";
 import { useEffect, useState } from "react";
 import EmblaCarousel from "embla-carousel-react";
-import AdoptionPostCard from "./AdoptionPostCard";
-
-interface CarouselItem {
-  imageUrl: string;
-  title: string;
-  description: string;
-  attributes: { [key: string]: string }[];
-  tags: string[];
-  followUp: string[];
-  price: string;
-  link: string;
-}
+import IAdoptionListing from "../../interfaces/IAdoptionListing";
+import AdoptionListingCard from "./AdoptionListingCard";
 
 interface AdoptionPostCarouselProps {
-  items: CarouselItem[];
+  items: IAdoptionListing[];
 }
 
 export default function AdoptionPostCarousel({
@@ -54,20 +44,21 @@ export default function AdoptionPostCarousel({
     <div className="w-full">
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex gap-2">
-          {items.map((item, index) => (
+          {items.map((adoptionListing: IAdoptionListing) => (
             <div
-              key={`${item.link}-${index}`}
               className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_33.333%] min-w-0 box-border p-4"
             >
-              <AdoptionPostCard
-                imageUrl={item.imageUrl}
-                title={item.title}
-                description={item.description}
-                attributes={item.attributes}
-                tags={item.tags}
-                followUp={item.followUp}
-                price={item.price}
-                link={item.link}
+              <AdoptionListingCard
+                key={adoptionListing.documentId}
+                documentId={adoptionListing.documentId}
+                title={adoptionListing.title}
+                slogan={adoptionListing.slogan}
+                shortDescription={adoptionListing.shortDescription}
+                longDescription={adoptionListing.longDescription}
+                media={adoptionListing.media}
+                isDuo={adoptionListing.isDuo}
+                price={adoptionListing.price}
+                animals={adoptionListing.animals}
               />
             </div>
           ))}

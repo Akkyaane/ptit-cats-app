@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import APCatProfileFields from "@/components/adoptionPost/APCatFormFields";
-import { ICat } from "@/interfaces/ICat";
+import { ICat } from "@/interfaces/IAnimal";
 import { IAnimalRequirement } from "@/interfaces/IAnimalRequirement";
 
 type CatFormEntry = Partial<ICat> & { _key: string };
@@ -79,7 +79,7 @@ export default function APForm({ animalRequirements = [] }: Props) {
     });
 
     try {
-      const response = await fetch("/api/adoption-posts", {
+      const response = await fetch("/api/adoption-listings", {
         method: "POST",
         body: formData,
       });

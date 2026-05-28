@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "utils/dateHelper.js", "components/AnimalCard"  ],
+, "utils/dateHelper.ts", "components/AnimalCard"  ],
   "exclude": ["node_modules"]
 }

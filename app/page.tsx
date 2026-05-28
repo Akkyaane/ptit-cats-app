@@ -1,8 +1,7 @@
-﻿"use client";
-import Navbar from "@/components/Navbar";
+﻿import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { useRef } from "react";
-import { useInView } from "framer-motion";
+// import { useRef } from "react";
+// import { useInView } from "framer-motion";
 import CountUp from "react-countup";
 import Button from "@/components/ui/Button";
 import AdoptionPostCarousel from "@/components/adoptionPost/AdoptionPostCarousel";
@@ -11,10 +10,39 @@ import HeadingSecondary from "@/components/ui/HeadingSecondary";
 import ArticleCard from "@/components/ArticleCard";
 import Card from "@/components/ui/Card";
 import Image from "next/image";
+import IAdoptionListing from "@/interfaces/IAdoptionListing";
 
-export default function Index() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "150px" });
+async function getAll(): Promise<IAdoptionListing[]> {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/adoption-listings`,
+      {
+        next: { revalidate: 60 },
+      },
+    );
+
+    if (!res.ok) {
+      console.error(
+        `[adoption-listings] getAll: ${res.status} - ${res.statusText} - ${await res.text()}`,
+      );
+
+      return [];
+    }
+
+    const data = await res.json();
+
+    return data.data ?? [];
+  } catch (err) {
+    console.error(`[adoption-listings] getAll: ${err}`);
+
+    return [];
+  }
+}
+
+export default async function Index() {
+  const adoptionListings = await getAll();
+  // const ref = useRef(null);
+  // const isInView = useInView(ref, { once: true, margin: "150px" });
   const endValues = [10, 5, 18];
   const suffixes = [
     "ans d'engagement",
@@ -40,7 +68,7 @@ export default function Index() {
               rencontrer leur humain pour la vie.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 w-full">
-              <Button href="/adoption-posts" variant="secondary" size="lg">
+              <Button href="/adoption-listings" variant="secondary" size="lg">
                 Découvrir nos compagnons
               </Button>
               <Button href="/pet-matchmaker" variant="primary" size="lg">
@@ -52,117 +80,30 @@ export default function Index() {
       </header>
 
       <main className="flex flex-col items-center gap-12 md:gap-16 lg:gap-24">
-        <section aria-label="Nos dernières annonces d'adoption" className="container flex flex-col gap-12">
+        <section
+          aria-label="Nos dernières annonces d'adoption"
+          className="container flex flex-col gap-12"
+        >
           <HeadingSecondary headingVariant="primary" underlineVariant="primary">
             Nos dernières annonces d'adoption
           </HeadingSecondary>
-          <AdoptionPostCarousel
-            items={[
-              {
-                imageUrl: "/assets/animals/animal-1.jpg",
-                title: "Minou et Coco",
-                description:
-                  "Deux chatons adorables, pleins de vie et de tendresse, cherchent une famille aimante pour les accueillir.",
-                attributes: [{ age: "13 ans | 1 an" }, { sex: "M | F" }],
-                tags: ["Atypique", "Duo", "Senior"],
-                followUp: [
-                  "✓ Vaccinés",
-                  "✓ Castrés",
-                  "✓ Déparasités",
-                  "✓ Identifiés",
-                ],
-                price: "120€",
-                link: "/adoption-posts/view/1",
-              },
-              {
-                imageUrl: "/assets/animals/animal-2.jpg",
-                title: "Tigrou",
-                description:
-                  "Tigrou est un chat très affectueux qui adore les câlins. Il est parfait pour une famille avec enfants.",
-                attributes: [{ age: "2 ans" }, { sex: "M" }],
-                tags: [],
-                followUp: [
-                  "✓ Vaccinés",
-                  "✓ Castrés",
-                  "✓ Déparasités",
-                  "✓ Identifiés",
-                ],
-                price: "80€",
-                link: "/adoption-posts/view/2",
-              },
-              {
-                imageUrl: "/assets/animals/animal-3.jpg",
-                title: "Max et Luna",
-                description:
-                  "Max et Luna sont inséparables. Ces deux chats adorables rêvent d'une maison chaleureuse où vivre ensemble.",
-                attributes: [{ age: "1 mois | 3 ans" }, { sex: "M | F" }],
-                tags: ["Chaton", "Duo"],
-                followUp: [
-                  "✓ Vaccinés",
-                  "✓ Castrés",
-                  "✓ Déparasités",
-                  "✓ Identifiés",
-                ],
-                price: "140€",
-                link: "/adoption-posts/view/3",
-              },
-              {
-                imageUrl: "/assets/animals/animal-3.jpg",
-                title: "Max et Luna",
-                description:
-                  "Max et Luna sont inséparables. Ces deux chats adorables rêvent d'une maison chaleureuse où vivre ensemble.",
-                attributes: [{ age: "1 mois | 3 ans" }, { sex: "M | F" }],
-                tags: ["Chaton", "Duo"],
-                followUp: [
-                  "✓ Vaccinés",
-                  "✓ Castrés",
-                  "✓ Déparasités",
-                  "✓ Identifiés",
-                ],
-                price: "140€",
-                link: "/adoption-posts/view/3",
-              },
-              {
-                imageUrl: "/assets/animals/animal-3.jpg",
-                title: "Max et Luna",
-                description:
-                  "Max et Luna sont inséparables. Ces deux chats adorables rêvent d'une maison chaleureuse où vivre ensemble.",
-                attributes: [{ age: "1 mois | 3 ans" }, { sex: "M | F" }],
-                tags: ["Chaton", "Duo"],
-                followUp: [
-                  "✓ Vaccinés",
-                  "✓ Castrés",
-                  "✓ Déparasités",
-                  "✓ Identifiés",
-                ],
-                price: "140€",
-                link: "/adoption-posts/view/3",
-              },
-              {
-                imageUrl: "/assets/animals/animal-3.jpg",
-                title: "Max et Luna",
-                description:
-                  "Max et Luna sont inséparables. Ces deux chats adorables rêvent d'une maison chaleureuse où vivre ensemble.",
-                attributes: [{ age: "1 mois | 3 ans" }, { sex: "M | F" }],
-                tags: ["Chaton", "Duo"],
-                followUp: [
-                  "✓ Vaccinés",
-                  "✓ Castrés",
-                  "✓ Déparasités",
-                  "✓ Identifiés",
-                ],
-                price: "140€",
-                link: "/adoption-posts/view/3",
-              },
-            ]}
-          />
+          {adoptionListings.length === 0 ? (
+            <p className="text-center text-lg">
+              Aucun chat n'est disponible pour le moment.
+            </p>
+          ) : (
+              <AdoptionPostCarousel items={adoptionListings} />
+          )}
           <div className="flex flex-col sm:flex-row justify-center">
-            <Button href="/adoption-posts" variant="primary" size="lg">
+            <Button href="/adoption-listings" variant="primary" size="lg">
               Voir toutes les annonces
             </Button>
           </div>
         </section>
-        <section aria-label="Qui sommes-nous ?" className="container flex flex-col gap-12">
+        <section
+          aria-label="Qui sommes-nous ?"
+          className="container flex flex-col gap-12"
+        >
           <HeadingSecondary headingVariant="primary" underlineVariant="primary">
             Qui sommes-nous ?
           </HeadingSecondary>
@@ -232,7 +173,10 @@ export default function Index() {
             </div>
           </div>
         </section>
-        <section aria-label="Nos derniers articles" className="container flex flex-col gap-12">
+        <section
+          aria-label="Nos derniers articles"
+          className="container flex flex-col gap-12"
+        >
           <HeadingSecondary headingVariant="primary" underlineVariant="primary">
             Nos derniers articles
           </HeadingSecondary>
@@ -303,7 +247,10 @@ export default function Index() {
             </div>
           </div>
         </section>
-        <section aria-label="Comment vous remercier" className="bg-tertiary/10 w-full">
+        <section
+          aria-label="Comment vous remercier"
+          className="bg-tertiary/10 w-full"
+        >
           <div className="container py-16 md:py-24">
             <div className="flex flex-col items-center justify-center gap-8">
               <HeadingSecondary
@@ -319,12 +266,15 @@ export default function Index() {
                 et continue de le faire chaque jour.
               </p>
 
-              <ul
+              {/* <ul
                 aria-label="Statistiques clés"
                 className="flex gap-12 md:gap-24 flex-col md:flex-row"
               >
                 {endValues.map((endValue, i) => (
-                  <li key={suffixes[i]} className="flex flex-col items-center text-lg">
+                  <li
+                    key={suffixes[i]}
+                    className="flex flex-col items-center text-lg"
+                  >
                     <span
                       ref={ref}
                       aria-hidden="true"
@@ -346,13 +296,13 @@ export default function Index() {
                     {suffixes[i]}
                   </li>
                 ))}
-              </ul>
+              </ul> */}
             </div>
           </div>
         </section>
       </main>
       <Footer />
-      <Button up={true} />
+      {/* <Button up={true} /> */}
     </>
   );
 }

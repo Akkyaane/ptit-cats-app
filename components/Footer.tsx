@@ -5,7 +5,7 @@ export default function Footer() {
   const pathname = usePathname();
   const links = [
     { href: "/", label: "Accueil" },
-    { href: "/adoption-posts", label: "À l'adoption" },
+    { href: "/adoption-listings", label: "À l'adoption" },
     { href: "/distribution", label: "Distribution" },
     { href: "/about", label: "À propos" },
     { href: "/blog", label: "Blog" },

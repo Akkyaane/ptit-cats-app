@@ -14,7 +14,13 @@
   color: black;
 }
 
+html,
 body {
+  min-height: 100dvh;
+}
+
+body {
+  margin: 0;
   background: var(--color-secondary);
   color: var(--color-quaternary);
   font-family: var(--font-nunito);
@@ -24,8 +30,4 @@ body {
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem 1.75rem;
-}
-
-html {
-  scroll-padding-top: 8rem;
 }

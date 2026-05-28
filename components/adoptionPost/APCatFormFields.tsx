@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { ICat } from "@/interfaces/ICat";
+import { ICat } from "@/interfaces/IAnimal";
 import { IAnimalRequirement } from "@/interfaces/IAnimalRequirement";
 
 interface Props {

@@ -24,7 +24,7 @@ export default function DeleteCatButton({
       setError(result.error);
       setConfirm(false);
     } else {
-      router.push("/adoption-posts");
+      router.push("/adoption-listings");
     }
   }
 

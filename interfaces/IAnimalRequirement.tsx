@@ -1,5 +1,4 @@
-export interface IAnimalRequirement {
-  id: number;
+export default interface IAnimalRequirement {
   documentId: string;
   label: string;
 }
