@@ -10,7 +10,7 @@ export default interface IAdoptionListing {
     id: string;
     documentId: string;
     url: string;
-  }[]; // A redefinir
+  }[];
   isDuo: boolean;
   price: number;
   animals: IAnimal[];

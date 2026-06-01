@@ -2,7 +2,7 @@
 
 export async function getAllBenevoles() {
   const response = await fetch(
-    `${process.env.STRAPI_PUBLIC_BASE_URL}/api/volunteers`,
+    `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/volunteers`,
     {
       headers: {
         Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
@@ -18,7 +18,7 @@ export async function getAllBenevoles() {
 
 export async function getBenevoleById(id: string) {
   const response = await fetch(
-    `${process.env.STRAPI_PUBLIC_BASE_URL}/api/volunteers/${id}`,
+    `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/volunteers/${id}`,
     {
       headers: {
         Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
@@ -43,7 +43,7 @@ export async function updateBenevole(documentId: string, formData: FormData) {
   }
 
   const response = await fetch(
-    `${process.env.STRAPI_PUBLIC_BASE_URL}/api/volunteers/${documentId}`,
+    `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/volunteers/${documentId}`,
     {
       method: "PUT",
       headers: {
@@ -63,7 +63,7 @@ export async function updateBenevole(documentId: string, formData: FormData) {
 
 export async function deleteBenevole(documentId: string) {
   const response = await fetch(
-    `${process.env.STRAPI_PUBLIC_BASE_URL}/api/volunteers/${documentId}`,
+    `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/volunteers/${documentId}`,
     {
       method: "DELETE",
       headers: {

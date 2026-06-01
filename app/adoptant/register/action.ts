@@ -15,7 +15,7 @@ export async function createAdoptant(formData: FormData) {
   try {
 
     const existingRes = await fetch(
-      `${process.env.STRAPI_PUBLIC_BASE_URL}/api/adoptants?filters[email][$eq]=${encodeURIComponent(email)}`,
+      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoptants?filters[email][$eq]=${encodeURIComponent(email)}`,
       {
         headers: {
           Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
@@ -30,7 +30,7 @@ export async function createAdoptant(formData: FormData) {
     }
 
     const authResponse = await fetch(
-      `${process.env.STRAPI_PUBLIC_BASE_URL}/api/auth/local/register`,
+      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/auth/local/register`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -60,7 +60,7 @@ export async function createAdoptant(formData: FormData) {
     const jwt: string = authJson.jwt;
 
     const adoptantResponse = await fetch(
-      `${process.env.STRAPI_PUBLIC_BASE_URL}/api/adoptants`,
+      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoptants`,
       {
         method: "POST",
         headers: {

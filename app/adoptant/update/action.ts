@@ -4,7 +4,7 @@ import { IAdoptant } from "@/interfaces/IAdoptant";
 
 export async function getAllAdoptants(): Promise<IAdoptant[]> {
   const response = await fetch(
-    `${process.env.STRAPI_PUBLIC_BASE_URL}/api/adoptants`,
+    `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoptants`,
     {
       cache: "no-store",
       headers: {
@@ -21,7 +21,7 @@ export async function getAllAdoptants(): Promise<IAdoptant[]> {
 
 export async function getAdoptantById(id: string): Promise<IAdoptant | null> {
   const response = await fetch(
-    `${process.env.STRAPI_PUBLIC_BASE_URL}/api/adoptants/${id}`,
+    `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoptants/${id}`,
     {
       cache: "no-store",
       headers: {
@@ -52,7 +52,7 @@ export async function updateAdoptant(
 
   try {
     const response = await fetch(
-      `${process.env.STRAPI_PUBLIC_BASE_URL}/api/adoptants/${documentId}`,
+      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoptants/${documentId}`,
       {
         method: "PUT",
         headers: {

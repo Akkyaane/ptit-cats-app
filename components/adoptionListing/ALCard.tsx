@@ -5,7 +5,7 @@ import buildFollowUp from "@/utils/followUpHelper";
 import Button from "../ui/Button";
 import Image from "next/image";
 
-export default function AdoptionListingCard({
+export default function ALCard({
   documentId,
   title,
   shortDescription,
@@ -23,7 +23,7 @@ export default function AdoptionListingCard({
       <div className="relative">
         <div className="relative w-full aspect-[4/3]">
           <Image
-            src={process.env.STRAPI_PUBLIC_BASE_URL + media[0].url}
+            src={process.env.NEXT_PUBLIC_STRAPI_BASE_URL + media[0].url}
             alt={title ? `Photo de ${title}` : ""}
             fill
             className="object-cover object-top"

@@ -2,15 +2,15 @@
 import { useEffect, useState } from "react";
 import EmblaCarousel from "embla-carousel-react";
 import IAdoptionListing from "../../interfaces/IAdoptionListing";
-import AdoptionListingCard from "./AdoptionListingCard";
+import AdoptionListingCard from "./ALCard";
 
-interface AdoptionPostCarouselProps {
+interface ALCarouselProps {
   items: IAdoptionListing[];
 }
 
-export default function AdoptionPostCarousel({
+export default function ALCarousel({
   items,
-}: AdoptionPostCarouselProps) {
+}: ALCarouselProps) {
   const [emblaRef, emblaApi] = EmblaCarousel();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [canScrollPrev, setCanScrollPrev] = useState(false);

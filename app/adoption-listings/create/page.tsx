@@ -1,4 +1,4 @@
-﻿import APForm from "@/components/adoptionPost/APForm";
+﻿import APForm from "@/components/adoptionListing/ALForm";
 import { IAnimalRequirement } from "@/interfaces/IAnimalRequirement";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";

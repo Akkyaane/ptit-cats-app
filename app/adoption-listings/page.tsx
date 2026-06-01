@@ -1,12 +1,12 @@
 ﻿import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import AdoptionListingCard from "@/components/adoptionPost/AdoptionListingCard";
+import ALCard from "@/components/adoptionListing/ALCard";
 import Button from "@/components/ui/Button";
 import HeadingPrimary from "@/components/ui/HeadingPrimary";
 import HeadingSecondary from "@/components/ui/HeadingSecondary";
 import IAdoptionListing from "@/interfaces/IAdoptionListing";
 
-async function getAll(): Promise<IAdoptionListing[]> {
+async function getAll(): Promise<IAdoptionListing[] | []> {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/adoption-listings`,
@@ -25,7 +25,7 @@ async function getAll(): Promise<IAdoptionListing[]> {
 
     const data = await res.json();
 
-    return data.data ?? [];
+    return data.data;
   } catch (err) {
     console.error(`[adoption-listings] getAll: ${err}`);
 
@@ -33,7 +33,7 @@ async function getAll(): Promise<IAdoptionListing[]> {
   }
 }
 
-export default async function displayAdoptionListings() {
+export default async function displayAll() {
   const adoptionListings = await getAll();
 
   return (
@@ -67,7 +67,7 @@ export default async function displayAdoptionListings() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {adoptionListings.map((adoptionListing: IAdoptionListing) => (
-                <AdoptionListingCard
+                <ALCard
                   key={adoptionListing.documentId}
                   documentId={adoptionListing.documentId}
                   title={adoptionListing.title}

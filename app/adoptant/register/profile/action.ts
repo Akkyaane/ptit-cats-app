@@ -13,7 +13,7 @@ export async function completeAdoptantProfile(
 
   try {
     const response = await fetch(
-      `${process.env.STRAPI_PUBLIC_BASE_URL}/api/adoptants/${documentId}`,
+      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoptants/${documentId}`,
       {
         method: "PUT",
         headers: {

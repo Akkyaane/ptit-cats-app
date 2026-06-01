@@ -1,10 +1,10 @@
-import { IAnimalRequirement } from "@/interfaces/IAnimalRequirement";
+import IAnimalRequirement from "@/interfaces/IAnimalRequirement";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
     const response = await fetch(
-      `${process.env.STRAPI_PUBLIC_BASE_URL}/api/animal-requirements?populate=*`,
+      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/animal-requirements?populate=*`,
       { headers: { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` } },
     );
 

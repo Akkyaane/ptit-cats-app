@@ -10,11 +10,9 @@ export default function buildTags(
 
   Object.entries(attributes).forEach(([key, value]) => {
     if (key === "age") {
-      const number = parseInt(value, 10);
+      !value.includes("an") && !value.includes("ans") ? tags.push("Chaton") : null;
 
-      number < 1 ? tags.push("Chaton") : null;
-
-      number >= 10 ? tags.push("Senior") : null;
+      value.includes("ans") && parseInt(value, 10) >= 10 ? tags.push("Senior") : null;
     }
   });
 

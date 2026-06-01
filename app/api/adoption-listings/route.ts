@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     const res = await fetch(
-      `${process.env.STRAPI_PUBLIC_BASE_URL}/api/adoption-listings?populate=*`,
+      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoption-listings?populate=*`,
       {
         headers: { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` },
         next: { revalidate: 5 },
@@ -26,36 +26,6 @@ export async function GET() {
   }
 }
 
-// export async function GET(): Promise<IAdoptionListing[]> {
-//   try {
-//     const res = await fetch(
-//       `${process.env.STRAPI_PUBLIC_BASE_URL}/api/adoption-listings?populate=*`,
-//       {
-//         headers: { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` },
-//         next: { revalidate: 5 },
-//       },
-//     );
-
-//     if (!res.ok) {
-//       console.error(
-//         `[adoption-listings] API GET: ${res.status} - ${res.statusText} - ${await res.text()}`,
-//       );
-
-//       return [];
-//     }
-
-//     const data = await res.json();
-
-//     return data.data ?? [];
-//   } catch (err) {
-//     console.error(`[adoption-listings] API GET: ${err}`);
-
-//     return [];
-//   }
-// }
-
-
-
 
 // function getPhotoUrl(photoPath?: string) {
 //   if (!photoPath) {
@@ -66,7 +36,7 @@ export async function GET() {
 //     return photoPath;
 //   }
 
-//   return `${process.env.STRAPI_PUBLIC_BASE_URL}${photoPath}`;
+//   return `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${photoPath}`;
 // }
 
 // export async function POST(request: Request) {
@@ -113,7 +83,7 @@ export async function GET() {
 //       };
 
 //       const catRes = await fetch(
-//         `${process.env.STRAPI_PUBLIC_BASE_URL}/api/animals`,
+//         `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/animals`,
 //         {
 //           method: "POST",
 //           headers: {
@@ -151,7 +121,7 @@ export async function GET() {
 
 //     // Create adoption post referencing created cat IDs
 //     const response = await fetch(
-//       `${process.env.STRAPI_PUBLIC_BASE_URL}/api/adoption-listings`,
+//       `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoption-listings`,
 //       {
 //         method: "POST",
 //         headers: {
@@ -208,7 +178,7 @@ export async function GET() {
 //     let assetsFolderId: string | null = null;
 //     try {
 //       const foldersRes = await fetch(
-//         `${process.env.STRAPI_PUBLIC_BASE_URL}/api/upload/folders`,
+//         `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/upload/folders`,
 //         {
 //           headers: { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` },
 //         },
@@ -233,7 +203,7 @@ export async function GET() {
 //     if (assetsFolderId) photosForm.append("folder", assetsFolderId);
 
 //     const uploadRes = await fetch(
-//       `${process.env.STRAPI_PUBLIC_BASE_URL}/api/upload`,
+//       `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/upload`,
 //       {
 //         method: "POST",
 //         headers: {
@@ -261,7 +231,7 @@ export async function GET() {
 
 //     // Link uploaded files to the adoption post entry
 //     const patchRes = await fetch(
-//       `${process.env.STRAPI_PUBLIC_BASE_URL}/api/adoption-listings/${entryDocumentId}`,
+//       `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoption-listings/${entryDocumentId}`,
 //       {
 //         method: "PUT",
 //         headers: {

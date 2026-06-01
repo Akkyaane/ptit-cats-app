@@ -1,21 +1,19 @@
 ﻿import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-// import { useRef } from "react";
-// import { useInView } from "framer-motion";
-import CountUp from "react-countup";
 import Button from "@/components/ui/Button";
-import AdoptionPostCarousel from "@/components/adoptionPost/AdoptionPostCarousel";
+import AdoptionPostCarousel from "@/components/adoptionListing/ALCarousel";
 import HeadingPrimary from "@/components/ui/HeadingPrimary";
 import HeadingSecondary from "@/components/ui/HeadingSecondary";
 import ArticleCard from "@/components/ArticleCard";
 import Card from "@/components/ui/Card";
 import Image from "next/image";
 import IAdoptionListing from "@/interfaces/IAdoptionListing";
+import Statistics from "@/components/Statistics";
 
-async function getAll(): Promise<IAdoptionListing[]> {
+async function getSome(): Promise<IAdoptionListing[]> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/adoption-listings`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/adoption-listings/first`,
       {
         next: { revalidate: 60 },
       },
@@ -23,7 +21,7 @@ async function getAll(): Promise<IAdoptionListing[]> {
 
     if (!res.ok) {
       console.error(
-        `[adoption-listings] getAll: ${res.status} - ${res.statusText} - ${await res.text()}`,
+        `[adoption-listings/first] getSome: ${res.status} - ${res.statusText} - ${await res.text()}`,
       );
 
       return [];
@@ -33,22 +31,14 @@ async function getAll(): Promise<IAdoptionListing[]> {
 
     return data.data ?? [];
   } catch (err) {
-    console.error(`[adoption-listings] getAll: ${err}`);
+    console.error(`[adoption-listings/first] getSome: ${err}`);
 
     return [];
   }
 }
 
 export default async function Index() {
-  const adoptionListings = await getAll();
-  // const ref = useRef(null);
-  // const isInView = useInView(ref, { once: true, margin: "150px" });
-  const endValues = [10, 5, 18];
-  const suffixes = [
-    "ans d'engagement",
-    "animaux sauvés",
-    "tonnes de croquettes distribuées",
-  ];
+  const adoptionListings = await getSome();
 
   return (
     <>
@@ -92,7 +82,7 @@ export default async function Index() {
               Aucun chat n'est disponible pour le moment.
             </p>
           ) : (
-              <AdoptionPostCarousel items={adoptionListings} />
+            <AdoptionPostCarousel items={adoptionListings} />
           )}
           <div className="flex flex-col sm:flex-row justify-center">
             <Button href="/adoption-listings" variant="primary" size="lg">
@@ -266,43 +256,13 @@ export default async function Index() {
                 et continue de le faire chaque jour.
               </p>
 
-              {/* <ul
-                aria-label="Statistiques clés"
-                className="flex gap-12 md:gap-24 flex-col md:flex-row"
-              >
-                {endValues.map((endValue, i) => (
-                  <li
-                    key={suffixes[i]}
-                    className="flex flex-col items-center text-lg"
-                  >
-                    <span
-                      ref={ref}
-                      aria-hidden="true"
-                      className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary"
-                    >
-                      {i !== 0 ? "+" : ""}
-                      {isInView ? <CountUp end={endValue} duration={2} /> : 0}
-                      {i !== 0 ? "K" : ""}
-                    </span>
-                    <span
-                      className="sr-only"
-                      aria-live="polite"
-                      aria-atomic="true"
-                    >
-                      {isInView
-                        ? `${i !== 0 ? "+" : ""}${endValue}${i !== 0 ? "K" : ""} ${suffixes[i]}`
-                        : ""}
-                    </span>
-                    {suffixes[i]}
-                  </li>
-                ))}
-              </ul> */}
+              <Statistics />
             </div>
           </div>
         </section>
       </main>
       <Footer />
-      {/* <Button up={true} /> */}
+      <Button up={true} />
     </>
   );
 }

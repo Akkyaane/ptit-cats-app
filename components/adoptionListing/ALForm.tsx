@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useState } from "react";
-import APCatProfileFields from "@/components/adoptionPost/APCatFormFields";
+import APCatProfileFields from "@/components/adoptionListing/AnimalFields";
 import { ICat } from "@/interfaces/IAnimal";
 import { IAnimalRequirement } from "@/interfaces/IAnimalRequirement";
 

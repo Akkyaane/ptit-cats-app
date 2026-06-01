@@ -12,7 +12,7 @@ export async function loginUser(formData: FormData) {
 
   try {
     const volunteerRes = await fetch(
-      `${process.env.STRAPI_PUBLIC_BASE_URL}/api/volunteers?filters[email][$eq]=${encodeURIComponent(email)}`,
+      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/volunteers?filters[email][$eq]=${encodeURIComponent(email)}`,
       {
         headers: {
           Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
@@ -47,7 +47,7 @@ export async function loginUser(formData: FormData) {
     }
 
     const response = await fetch(
-      `${process.env.STRAPI_PUBLIC_BASE_URL}/api/auth/local`,
+      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/auth/local`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -63,7 +63,7 @@ export async function loginUser(formData: FormData) {
     const jwt: string = json.jwt;
 
     const adoptantRes = await fetch(
-      `${process.env.STRAPI_PUBLIC_BASE_URL}/api/adoptants?filters[email][$eq]=${encodeURIComponent(email)}`,
+      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoptants?filters[email][$eq]=${encodeURIComponent(email)}`,
       {
         headers: {
           Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
