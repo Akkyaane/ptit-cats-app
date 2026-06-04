@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Button from "./ui/Button";
+import Link from "next/link";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -18,7 +19,11 @@ export default function Navbar() {
   };
   const [adoptantId, volunteerId, userRole] = cookies.map(getCookie);
   const userType = volunteerId ? "volunteer" : adoptantId ? "adoptant" : null;
-  const userId = volunteerId ?? adoptantId;
+  const userHref = volunteerId
+    ? `/volunteer/view/${volunteerId}`
+    : adoptantId
+      ? "/adoptant/profile"
+      : null;
   const pathname = usePathname();
   type NavLink = { href: string; label: string; variant?: "primary" | "secondary" };
   const links: NavLink[] = [
@@ -31,8 +36,9 @@ export default function Navbar() {
     { href: "/donation", label: "Faire un don", variant: "secondary" },
     { href: "/login", label: "Se connecter / S'inscrire", variant: "primary" },
     ...(userRole === "Admin" ? [{ href: "/admin", label: "Admin", variant: "primary" as const }] : []),
-    ...(userType && userId
-      ? [{ href: `/${userType}/view/${userId}`, label: "Mon profil", variant: "primary" as const }]
+    ...(userType && userHref
+      ? [{ href: userHref, label: "Mon profil", variant: "primary" as const }]
+
       : []),
   ];
 
@@ -72,21 +78,20 @@ export default function Navbar() {
     >
       <div className="container mx-auto py-4 relative">
         <div className="flex flex-row items-center justify-between">
-          <a
-            href="/"
-            className="flex flex-row items-center gap-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary rounded-sm"
-          >
-            <Image
-              src="/assets/img/logo.png"
-              alt="Logo SansCroquettesFixes"
-              width={48}
-              height={48}
-              className="size-10 md:size-12 border-2 border-secondary rounded-full hover:scale-110 transition-transform duration-300"
-            />
-            <span className="text-lg md:text-xl font-bold tracking-tight">
-              Sans Croquettes Fixes
-            </span>
-          </a>
+          <Link href="/">
+            <a className="flex flex-row items-center gap-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary rounded-sm">
+              <Image
+                src="/assets/img/logo.png"
+                alt="Logo SansCroquettesFixes"
+                width={48}
+                height={48}
+                className="size-10 md:size-12 border-2 border-secondary rounded-full hover:scale-110 transition-transform duration-300"
+              />
+              <span className="text-lg md:text-xl font-bold tracking-tight">
+                Sans Croquettes Fixes
+              </span>
+            </a>
+          </Link>
           <ul className="hidden xl:flex flex-row gap-3">
             {links.map((link) =>
               pathname === link.href ? null : (

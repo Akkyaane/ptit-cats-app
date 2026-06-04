@@ -1,18 +1,17 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { buildAdoptantPayload } from "@/utils/adoptantForm";
 
 export async function createAdoptant(formData: FormData) {
-  const name = formData.get("name") as string;
-  const firstName = formData.get("firstName") as string;
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
+  const payload = buildAdoptantPayload(formData, { includePassword: true });
 
-  if (!name || !firstName || !email || !password) {
-    return { error: "Tous les champs sont obligatoires." };
+  if ("error" in payload) {
+    return { error: payload.error };
   }
 
   try {
+    const { name, firstName, email, password, ...profileData } = payload.data;
 
     const existingRes = await fetch(
       `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoptants?filters[email][$eq]=${encodeURIComponent(email)}`,
@@ -68,7 +67,7 @@ export async function createAdoptant(formData: FormData) {
           Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
         },
         body: JSON.stringify({
-          data: { name, firstName, email },
+          data: { name, firstName, email, ...profileData },
         }),
       }
     );
@@ -90,6 +89,12 @@ export async function createAdoptant(formData: FormData) {
       maxAge: 60 * 60 * 24 * 7,
     });
     cookieStore.set("adoptant_id", documentId, {
+      httpOnly: false,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
+    });
+    cookieStore.set("user_role", "adoptant", {
       httpOnly: false,
       sameSite: "lax",
       path: "/",

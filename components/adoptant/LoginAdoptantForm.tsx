@@ -33,6 +33,7 @@ export default function LoginAdoptantForm() {
           id="email"
           name="email"
           type="email"
+          autoComplete="username"
           required
           className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200"
         />

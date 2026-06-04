@@ -1,6 +1,7 @@
 "use server";
 
 import { IAdoptant } from "@/interfaces/IAdoptant";
+import { buildAdoptantPayload } from "@/utils/adoptantForm";
 
 export async function getAllAdoptants(): Promise<IAdoptant[]> {
   const response = await fetch(
@@ -40,17 +41,40 @@ export async function updateAdoptant(
   documentId: string,
   formData: FormData
 ) {
-  const name = formData.get("name") as string;
-  const firstName = formData.get("firstName") as string;
-  const email = formData.get("email") as string;
-  const housingType = formData.get("housingType") as string;
-  const hasGarden = formData.get("hasGarden") === "true";
+  if (!documentId) {
+    return { error: "Identifiant adoptant manquant." };
+  }
 
-  if (!name || !firstName || !email) {
-    return { error: "Les champs nom, prénom et email sont requis." };
+  const payload = buildAdoptantPayload(formData, { includePassword: false });
+
+  if ("error" in payload) {
+    return { error: payload.error };
   }
 
   try {
+    const currentResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoptants/${documentId}`,
+      {
+        cache: "no-store",
+        headers: {
+          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
+        },
+      }
+    );
+
+    const updateData = { ...payload.data };
+    if (currentResponse.ok) {
+      const currentJson = await currentResponse.json();
+      const currentEmail = currentJson?.data?.email;
+      if (
+        typeof currentEmail === "string" &&
+        typeof updateData.email === "string" &&
+        currentEmail.trim().toLowerCase() === updateData.email.trim().toLowerCase()
+      ) {
+        delete updateData.email;
+      }
+    }
+
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoptants/${documentId}`,
       {
@@ -60,12 +84,26 @@ export async function updateAdoptant(
           Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
         },
         body: JSON.stringify({
-          data: { name, firstName, email, housingType: housingType || null, hasGarden },
+          data: updateData,
         }),
       }
     );
 
-    if (!response.ok) return { error: "Erreur lors de la mise à jour." };
+    if (!response.ok) {
+      const errorBody = await response.text();
+      console.error("Strapi update adoptant error:", errorBody);
+
+      try {
+        const parsed = JSON.parse(errorBody);
+        const message =
+          parsed?.error?.message ||
+          parsed?.message ||
+          "Erreur lors de la mise à jour.";
+        return { error: message };
+      } catch {
+        return { error: "Erreur lors de la mise à jour." };
+      }
+    }
 
     return { success: true };
   } catch (err) {

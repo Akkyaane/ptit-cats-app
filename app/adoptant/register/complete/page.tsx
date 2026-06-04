@@ -6,7 +6,7 @@ export default async function RegisterCompletePage({
 }: {
   searchParams: Promise<{ id: string }>;
 }) {
-  const { id } = await searchParams;
+  await searchParams;
 
   return (
     <div className="min-h-screen bg-secondary">
@@ -29,10 +29,10 @@ export default async function RegisterCompletePage({
             </p>
             <div className="flex flex-col gap-3">
               <Link
-                href={`/adoptant/register/profile?id=${id}`}
+                href="/adoptant/profile"
                 className="w-full px-6 py-3 font-bold rounded-xl bg-quaternary border-2 border-quaternary text-white hover:bg-quaternary/10 hover:text-quaternary transition-colors duration-200 text-center"
               >
-                Oui, compléter mon profil
+                Oui, ouvrir mon profil
               </Link>
               <Link
                 href="/"
