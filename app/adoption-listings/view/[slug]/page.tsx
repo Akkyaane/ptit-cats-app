@@ -1,4 +1,5 @@
-﻿import Button from "@/components/ui/Button";
+import { cookies } from "next/headers";
+import Button from "@/components/ui/Button";
 import Breadcrumb from "@/components/Breadcrumb";
 import GalleryWithLightbox from "@/components/adoptionListing/GalleryWithLightbox";
 import calculateAge from "@/helpers/dateHelper";
@@ -29,6 +30,17 @@ export default async function displayOne(params: { params: { slug: string } }) {
   const param = await params.params;
   const documentId = param.slug;
   const adoptionListing = await getOne(documentId);
+
+  // Détermine le comportement du bouton "Je suis intéressé·e"
+  const cookieStore = await cookies();
+  const adoptantId = cookieStore.get("adoptant_id")?.value;
+  const volunteerId = cookieStore.get("volunteer_id")?.value;
+  const userRole = cookieStore.get("user_role")?.value;
+  const isAdoptant = Boolean(adoptantId && userRole === "adoptant");
+  const isVolunteerOrAdmin = Boolean(volunteerId || (userRole && userRole !== "adoptant"));
+  const interestHref = isAdoptant
+    ? `/adoptant/adoption-request/${documentId}`
+    : `/login?redirect=/adoptant/adoption-request/${documentId}`;
 
   const birthDates: (string | null)[] = [];
   const ages: (string | null)[] = [];
@@ -196,7 +208,7 @@ export default async function displayOne(params: { params: { slug: string } }) {
               {allRequirements && allRequirements.length > 0 && (
                 <div className="py-5 border-b border-gray-100">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-quaternary/50 mb-3">
-                    Conditions d'adoption
+                    Conditions d&apos;adoption
                   </p>
                   <ul className="flex flex-wrap gap-2">
                     {allRequirements.map(
@@ -216,7 +228,7 @@ export default async function displayOne(params: { params: { slug: string } }) {
 
               <div className="py-5 border-b border-gray-100 flex flex-col gap-1">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-quaternary/50">
-                  Frais d'adoption
+                  Frais d&apos;adoption
                 </p>
                 <div className="flex items-baseline gap-1">
                   <span className="text-4xl font-black text-primary">
@@ -227,9 +239,15 @@ export default async function displayOne(params: { params: { slug: string } }) {
               </div>
 
               <div className="pt-5">
-                <Button href="/contact" variant="primary" size="lg">
-                  Je suis intéressé·e
-                </Button>
+                {isVolunteerOrAdmin ? (
+                  <p className="text-sm text-quaternary/50 italic text-center">
+                    Cette fonctionnalité est réservée aux adoptants.
+                  </p>
+                ) : (
+                  <Button href={interestHref} variant="primary" size="lg">
+                    Je suis intéressé·e
+                  </Button>
+                )}
               </div>
             </aside>
           </div>
@@ -381,7 +399,7 @@ export default async function displayOne(params: { params: { slug: string } }) {
                       animal.animal_requirements.length > 0 && (
                         <div className="flex flex-col gap-2 pt-4 border-t border-gray-100">
                           <p className="text-[10px] font-bold uppercase tracking-widest text-quaternary/50 mb-1">
-                            Conditions d'adoption
+                            Conditions d&apos;adoption
                           </p>
                           <ul className="flex flex-wrap gap-2">
                             {animal.animal_requirements.map((req) => (

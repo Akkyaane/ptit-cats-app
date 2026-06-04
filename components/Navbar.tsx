@@ -78,19 +78,20 @@ export default function Navbar() {
     >
       <div className="container mx-auto py-4 relative">
         <div className="flex flex-row items-center justify-between">
-          <Link href="/">
-            <a className="flex flex-row items-center gap-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary rounded-sm">
-              <Image
-                src="/assets/img/logo.png"
-                alt="Logo SansCroquettesFixes"
-                width={48}
-                height={48}
-                className="size-10 md:size-12 border-2 border-secondary rounded-full hover:scale-110 transition-transform duration-300"
-              />
-              <span className="text-lg md:text-xl font-bold tracking-tight">
-                Sans Croquettes Fixes
-              </span>
-            </a>
+          <Link
+            href="/"
+            className="flex flex-row items-center gap-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary rounded-sm"
+          >
+            <Image
+              src="/assets/img/logo.png"
+              alt="Logo SansCroquettesFixes"
+              width={48}
+              height={48}
+              className="size-10 md:size-12 border-2 border-secondary rounded-full hover:scale-110 transition-transform duration-300"
+            />
+            <span className="text-lg md:text-xl font-bold tracking-tight">
+              Sans Croquettes Fixes
+            </span>
           </Link>
           <ul className="hidden xl:flex flex-row gap-3">
             {links.map((link) =>

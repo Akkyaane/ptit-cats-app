@@ -1,7 +1,15 @@
 ﻿import LoginAdoptantForm from "@/components/adoptant/LoginAdoptantForm";
 import Navbar from "@/components/Navbar";
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ redirect?: string }>;
+}) {
+  const params = await searchParams;
+  // Valide que le redirect est interne (pas d'open redirect)
+  const redirectTo =
+    params.redirect?.startsWith("/") ? params.redirect : undefined;
   return (
     <div className="min-h-screen bg-secondary">
       <header className="bg-tertiary">
@@ -16,7 +24,7 @@ export default function LoginPage() {
               <h1 className="text-2xl md:text-3xl font-bold ">Se connecter</h1>
               <div className="w-12 h-1 bg-tertiary rounded-full"></div>
             </div>
-            <LoginAdoptantForm />
+            <LoginAdoptantForm redirectTo={redirectTo} />
           </div>
         </div>
       </main>

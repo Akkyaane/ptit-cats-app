@@ -2,13 +2,14 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import LogoutButton from "@/components/adoptant/LogoutButton";
-import AdoptantProfileForm from "@/components/adoptant/AdoptantProfileForm";
+import ProfileTabs from "@/components/adoptant/ProfileTabs";
 import { getAdoptantById } from "@/app/adoptant/update/action";
+import { getAdoptionRequestsByAdoptant } from "@/app/adoptant/adoption-request/action";
 
 export default async function AdoptantProfilePage({
   searchParams,
 }: {
-  searchParams: Promise<{ created?: string; updated?: string }>;
+  searchParams: Promise<{ created?: string; updated?: string; requested?: string; tab?: string }>;
 }) {
   const cookieStore = await cookies();
   const adoptantId = cookieStore.get("adoptant_id")?.value;
@@ -19,11 +20,24 @@ export default async function AdoptantProfilePage({
     redirect("/login");
   }
 
-  const adoptant = await getAdoptantById(adoptantId);
+  const [adoptant, adoptionRequests] = await Promise.all([
+    getAdoptantById(adoptantId),
+    getAdoptionRequestsByAdoptant(adoptantId),
+  ]);
 
-  if (!adoptant) {
-    redirect("/login");
-  }
+  if (!adoptant) redirect("/login");
+
+  const initialTab: "profil" | "demandes" =
+    params.tab === "demandes" ? "demandes" : "profil";
+
+  const showBanner =
+    params.created === "true" || params.updated === "true" || params.requested === "true";
+
+  const bannerMessage = params.requested === "true"
+    ? "Votre demande d'adoption a bien été soumise ! Nous vous contacterons prochainement."
+    : params.created === "true"
+    ? "Votre compte a bien été créé. Complétez votre profil pour faciliter le traitement de vos demandes."
+    : "Vos modifications ont bien été enregistrées.";
 
   return (
     <div className="min-h-screen bg-secondary">
@@ -32,42 +46,40 @@ export default async function AdoptantProfilePage({
           <Navbar />
         </div>
       </header>
-      <main className="max-w-[1200px] mx-auto px-4 py-16">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] items-start">
-          <section className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 md:p-8 flex flex-col gap-6">
-            <div className="flex flex-col gap-2">
-              <h1 className="text-2xl md:text-3xl font-bold">Mon profil adoptant</h1>
-              <p className="text-sm md:text-base text-quaternary/70 leading-relaxed">
-                Mettez à jour vos informations pour que l'équipe puisse vous proposer un suivi plus juste et un futur matching plus pertinent.
+
+      <main className="max-w-[1200px] mx-auto px-4 py-12 flex flex-col gap-6">
+
+        {/* Bannière succès */}
+        {showBanner && (
+          <div className="rounded-2xl bg-green-50 border border-green-200 px-6 py-4 text-sm text-green-800 font-medium">
+            {bannerMessage}
+          </div>
+        )}
+
+        {/* En-tête profil */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="size-12 rounded-full bg-primary flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
+              {adoptant.firstName.charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <p className="font-bold text-lg leading-tight">
+                {adoptant.firstName} {adoptant.name}
               </p>
-              <div className="w-12 h-1 bg-tertiary rounded-full" />
+              <p className="text-sm text-quaternary/60">{adoptant.email}</p>
             </div>
-
-            {(params.created || params.updated) && (
-              <div className="rounded-xl bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-800">
-                {params.created
-                  ? "Votre compte a bien été créé. Vous pouvez ajuster vos informations si besoin."
-                  : "Vos modifications ont bien été enregistrées."}
-              </div>
-            )}
-
-            <AdoptantProfileForm adoptant={adoptant} />
-          </section>
-
-          <aside className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 md:p-8 flex flex-col gap-5 sticky top-28">
-            <div className="flex flex-col gap-2">
-              <h2 className="text-xl font-bold">Compte</h2>
-              <p className="text-sm text-quaternary/70">
-                Gardez vos coordonnées à jour pour faciliter les échanges.
-              </p>
-            </div>
-            <div className="rounded-xl bg-tertiary/10 px-4 py-3 text-sm text-quaternary/80">
-              <p className="font-bold text-quaternary">{adoptant.firstName} {adoptant.name}</p>
-              <p>{adoptant.email}</p>
-            </div>
+          </div>
+          <div className="sm:w-44">
             <LogoutButton />
-          </aside>
+          </div>
         </div>
+
+        {/* Tabs + contenu */}
+        <ProfileTabs
+          adoptant={adoptant}
+          adoptionRequests={adoptionRequests}
+          initialTab={initialTab}
+        />
       </main>
     </div>
   );

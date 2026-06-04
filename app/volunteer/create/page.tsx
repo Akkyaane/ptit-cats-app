@@ -1,8 +1,12 @@
-﻿import CreateVolunteerForm from "@/components/volunteer/CreateVolunteerForm";
+﻿import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import CreateVolunteerForm from "@/components/volunteer/CreateVolunteerForm";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 
-export default function CreateVolunteerPage() {
+export default async function CreateVolunteerPage() {
+  const cookieStore = await cookies();
+  if (cookieStore.get("user_role")?.value !== "Admin") redirect("/");
   return (
     <div className="min-h-screen bg-secondary">
       <header className="bg-tertiary">

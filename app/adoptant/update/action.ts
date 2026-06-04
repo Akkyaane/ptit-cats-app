@@ -52,20 +52,19 @@ export async function updateAdoptant(
   }
 
   try {
+    // Contournement temporaire : on exclut l'email du payload s'il n'a pas changé.
+    // Le back Strapi ne gère pas encore correctement la self-exclusion (erreur 500 / 400).
     const currentResponse = await fetch(
       `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoptants/${documentId}`,
       {
         cache: "no-store",
-        headers: {
-          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
-        },
+        headers: { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` },
       }
     );
-
     const updateData = { ...payload.data };
     if (currentResponse.ok) {
       const currentJson = await currentResponse.json();
-      const currentEmail = currentJson?.data?.email;
+      const currentEmail: string | undefined = currentJson?.data?.email;
       if (
         typeof currentEmail === "string" &&
         typeof updateData.email === "string" &&

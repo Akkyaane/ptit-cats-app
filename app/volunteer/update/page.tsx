@@ -1,4 +1,6 @@
-﻿import { getAllBenevoles } from "@/app/volunteer/update/action";
+﻿import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { getAllBenevoles } from "@/app/volunteer/update/action";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 
@@ -18,6 +20,9 @@ const roleColors: Record<string, string> = {
 };
 
 export default async function VolunteerListPage() {
+  const cookieStore = await cookies();
+  if (cookieStore.get("user_role")?.value !== "Admin") redirect("/");
+
   const benevoles: Benevole[] = await getAllBenevoles();
 
   return (

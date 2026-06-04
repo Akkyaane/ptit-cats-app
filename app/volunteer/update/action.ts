@@ -1,5 +1,8 @@
 "use server";
 
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
 export async function getAllBenevoles() {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/volunteers`,
@@ -75,4 +78,56 @@ export async function deleteBenevole(documentId: string) {
   if (!response.ok) return { error: "Erreur lors de la suppression" };
 
   return { success: true };
+}
+
+export async function changeVolunteerPassword(documentId: string, formData: FormData) {
+  const newPassword = formData.get("newPassword") as string;
+  const confirmPassword = formData.get("confirmPassword") as string;
+
+  if (!newPassword || !confirmPassword) {
+    return { error: "Tous les champs sont requis." };
+  }
+  if (newPassword !== confirmPassword) {
+    return { error: "Les mots de passe ne correspondent pas." };
+  }
+  if (newPassword.length < 6) {
+    return { error: "Le mot de passe doit contenir au moins 6 caractères." };
+  }
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/volunteers/${documentId}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
+      },
+      body: JSON.stringify({ data: { password: newPassword } }),
+    }
+  );
+
+  if (!response.ok) return { error: "Erreur lors de la mise à jour du mot de passe." };
+
+  return { success: true };
+}
+
+export async function deleteOwnVolunteerAccount(documentId: string) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/volunteers/${documentId}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
+      },
+    }
+  );
+
+  if (!response.ok) return { error: "Erreur lors de la suppression." };
+
+  const cookieStore = await cookies();
+  cookieStore.delete("volunteer_id");
+  cookieStore.delete("user_role");
+  cookieStore.delete("jwt");
+
+  redirect("/");
 }
