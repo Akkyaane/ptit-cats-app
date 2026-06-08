@@ -1,6 +1,4 @@
-﻿import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import Button from "@/components/ui/Button";
+﻿import Button from "@/components/ui/Button";
 import AdoptionPostCarousel from "@/components/adoptionListing/ALCarousel";
 import HeadingPrimary from "@/components/ui/HeadingPrimary";
 import HeadingSecondary from "@/components/ui/HeadingSecondary";
@@ -10,10 +8,10 @@ import Image from "next/image";
 import IAdoptionListing from "@/interfaces/IAdoptionListing";
 import Statistics from "@/components/Statistics";
 
-async function getSome(): Promise<IAdoptionListing[]> {
+async function getLastAdoptionListings(): Promise<IAdoptionListing[]> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/adoption-listings/first`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/adoption-listings/last`,
       {
         next: { revalidate: 60 },
       },
@@ -21,7 +19,7 @@ async function getSome(): Promise<IAdoptionListing[]> {
 
     if (!res.ok) {
       console.error(
-        `[adoption-listings/first] getSome: ${res.status} - ${res.statusText} - ${await res.text()}`,
+        `[adoption-listings/last] getLastAdoptionListings: ${res.status} - ${res.statusText} - ${await res.text()}`,
       );
 
       return [];
@@ -31,23 +29,22 @@ async function getSome(): Promise<IAdoptionListing[]> {
 
     return data.data ?? [];
   } catch (err) {
-    console.error(`[adoption-listings/first] getSome: ${err}`);
+    console.error(`[adoption-listings/last] getLastAdoptionListings: ${err}`);
 
     return [];
   }
 }
 
 export default async function Index() {
-  const adoptionListings = await getSome();
+  const adoptionListings = await getLastAdoptionListings();
 
   return (
     <>
       <header className="bg-[url('/assets/img/background-1.jpg')] bg-center">
         <div className="container">
-          <Navbar />
           <section
             aria-label="Présentation"
-            className="flex flex-col items-start justify-center gap-6 py-24 md:py-32 max-w-2xl md:max-w-3xl lg:py-48 lg:max-w-4xl"
+            className="flex flex-col items-start gap-6 py-24 md:py-32 max-w-2xl md:max-w-3xl lg:py-48 lg:max-w-4xl"
           >
             <HeadingPrimary>
               Chaque animal porte une histoire. <br /> Et si vous écriviez la
@@ -261,8 +258,6 @@ export default async function Index() {
           </div>
         </section>
       </main>
-      <Footer />
-      <Button up={true} />
     </>
   );
 }

@@ -14,4 +14,5 @@ export default interface IAdoptionListing {
   isDuo: boolean;
   price: number;
   animals: IAnimal[];
+  entityStatus: "draft" | "published" | "adoption pending" | "on hold" | "adoption completed" | "archived";
 }

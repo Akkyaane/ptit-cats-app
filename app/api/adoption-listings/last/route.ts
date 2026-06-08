@@ -5,8 +5,7 @@ export async function GET() {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoption-listings?sort=createdAt:desc&pagination[pageSize]=6&populate=*`,
       {
-        headers: { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` },
-        next: { revalidate: 5 },
+        headers: { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` }
       },
     );
 

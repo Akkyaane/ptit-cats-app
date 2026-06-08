@@ -1,6 +1,4 @@
-﻿import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
-import ALCard from "@/components/adoptionListing/ALCard";
+﻿import ALCard from "@/components/adoptionListing/ALCard";
 import Button from "@/components/ui/Button";
 import HeadingPrimary from "@/components/ui/HeadingPrimary";
 import HeadingSecondary from "@/components/ui/HeadingSecondary";
@@ -38,24 +36,14 @@ export default async function displayAll() {
 
   return (
     <div>
-      <header className="bg-[url('/assets/img/background-1.jpg')]">
-        <section className="container relative">
-          <img
-            src="/assets/img/icone-10.svg"
-            alt=""
-            aria-hidden="true"
-            className="hidden lg:block absolute top-20 right-8 xl:right-24 w-72 xl:w-96"
-          />
-          <Navbar />
-          <div className="flex flex-col items-center justify-center gap-6 py-16 md:py-24 lg:py-40">
-            <HeadingPrimary>Nos chats à l'adoption</HeadingPrimary>
-          </div>
+      <header className="bg-tertiary h-28">
+        <section className="container hidden">
+            <HeadingPrimary>Nos annonces d'adoption</HeadingPrimary>
         </section>
-        <Button up={true} />
       </header>
 
       <main>
-        <section className="container flex flex-col gap-12">
+        <section className="container flex flex-col gap-12 items-center">
           <HeadingSecondary headingVariant="primary" underlineVariant="primary">
             Nos annonces d'adoption
           </HeadingSecondary>
@@ -78,14 +66,14 @@ export default async function displayAll() {
                   isDuo={adoptionListing.isDuo}
                   price={adoptionListing.price}
                   animals={adoptionListing.animals}
+                  entityStatus={adoptionListing.entityStatus}
                 />
               ))}
             </div>
           )}
+          <Button href="/adoption-listings/create">Ajouter une annonce</Button>
         </section>
       </main>
-
-      <Footer />
     </div>
   );
 }

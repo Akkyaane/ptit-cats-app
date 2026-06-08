@@ -5,14 +5,12 @@ import GalleryWithLightbox from "@/components/adoptionListing/GalleryWithLightbo
 import calculateAge from "@/utils/dateHelper";
 import HeadingSecondary from "@/components/ui/HeadingSecondary";
 import IAdoptionListing from "@/interfaces/IAdoptionListing";
+import HeadingPrimary from "@/components/ui/HeadingPrimary";
 
 async function getOne(documentId: string): Promise<IAdoptionListing> {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/adoption-listings/${documentId}`,
-      {
-        next: { revalidate: 60 },
-      },
     );
 
     if (!res.ok) {
@@ -76,18 +74,15 @@ export default async function displayOne(params: { params: { slug: string } }) {
   const allRequirements = Array.from(
     new Map(
       adoptionListing.animals
-        .flatMap((a) => a.animal_requirements)
+        .flatMap((a) => a.animal_requirements ?? [])
+        .filter((r) => r !== undefined)
         .map((r) => [r.label, r]),
     ).values(),
   );
 
   return (
     <>
-      <header className="bg-tertiary py-6">
-        <div className="container">
-          <Navbar />
-        </div>
-      </header>
+      <header className="bg-tertiary h-28"></header>
 
       <main className="flex flex-col gap-12 md:gap-16 lg:gap-24">
         <section className="container flex flex-col gap-6 py-16 md:py-24">
@@ -163,7 +158,9 @@ export default async function displayOne(params: { params: { slug: string } }) {
                         </span>
                         <span
                           className={
-                            allDone ? "text-gray-700" : "text-gray-400 line-through"
+                            allDone
+                              ? "text-gray-700"
+                              : "text-gray-400 line-through"
                           }
                         >
                           {value}(s)
@@ -174,20 +171,23 @@ export default async function displayOne(params: { params: { slug: string } }) {
                 </ul>
               </div>
 
-              {allRequirements.length > 0 && (
+              {allRequirements && allRequirements.length > 0 && (
                 <div className="py-5 border-b border-gray-100">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-quaternary/50 mb-3">
                     Conditions d'adoption
                   </p>
                   <ul className="flex flex-wrap gap-2">
-                    {allRequirements.map((req) => (
-                      <li
-                        key={req.documentId}
-                        className="text-xs bg-primary/10 text-primary font-semibold px-3 py-1.5 rounded-xl"
-                      >
-                        {req.label}
-                      </li>
-                    ))}
+                    {allRequirements.map(
+                      (req) =>
+                        req && (
+                          <li
+                            key={req.documentId}
+                            className="text-xs bg-primary/10 text-primary font-semibold px-3 py-1.5 rounded-xl"
+                          >
+                            {req.label}
+                          </li>
+                        ),
+                    )}
                   </ul>
                 </div>
               )}
@@ -246,7 +246,10 @@ export default async function displayOne(params: { params: { slug: string } }) {
             {adoptionListing.animals.map((animal) => {
               const idx = adoptionListing.animals.indexOf(animal);
               return (
-                <div key={animal.name} className="rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div
+                  key={animal.name}
+                  className="rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+                >
                   <div className="px-6 py-5 bg-gradient-to-r from-primary/5 to-tertiary/20 border-b border-gray-100 flex items-center gap-3 flex-wrap">
                     <div className="flex flex-col gap-0.5">
                       <span className="text-lg font-bold tracking-tight text-quaternary">
@@ -272,7 +275,10 @@ export default async function displayOne(params: { params: { slug: string } }) {
                           Soins
                         </p>
                         {care.map(({ key, value }) => (
-                          <div key={key} className="flex items-center gap-2 text-sm">
+                          <div
+                            key={key}
+                            className="flex items-center gap-2 text-sm"
+                          >
                             <span
                               className={`inline-flex items-center justify-center w-4 h-4 rounded text-[10px] font-bold flex-shrink-0 ${
                                 animal[key as keyof typeof animal]
@@ -333,23 +339,43 @@ export default async function displayOne(params: { params: { slug: string } }) {
                       </span>
                     </div>
 
-                    {animal.animal_requirements.length > 0 && (
-                      <div className="flex flex-col gap-2 pt-4 border-t border-gray-100">
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-quaternary/50 mb-1">
-                          Conditions d'adoption
-                        </p>
-                        <ul className="flex flex-wrap gap-2">
-                          {animal.animal_requirements.map((req) => (
-                            <li
-                              key={req.documentId}
-                              className="text-xs bg-primary/10 text-primary font-semibold px-3 py-1.5 rounded-xl"
-                            >
-                              {req.label}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
+                    {animal.animal_personality_traits &&
+                      animal.animal_personality_traits.length > 0 && (
+                        <div className="flex flex-col gap-2 pt-4 border-t border-gray-100">
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-quaternary/50 mb-1">
+                            Traits de personnalité
+                          </p>
+                          <ul className="flex flex-wrap gap-2">
+                            {animal.animal_personality_traits.map((req) => (
+                              <li
+                                key={req.documentId}
+                                className="text-xs bg-primary/10 text-primary font-semibold px-3 py-1.5 rounded-xl"
+                              >
+                                {req.label}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                    {animal.animal_requirements &&
+                      animal.animal_requirements.length > 0 && (
+                        <div className="flex flex-col gap-2 pt-4 border-t border-gray-100">
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-quaternary/50 mb-1">
+                            Conditions d'adoption
+                          </p>
+                          <ul className="flex flex-wrap gap-2">
+                            {animal.animal_requirements.map((req) => (
+                              <li
+                                key={req.documentId}
+                                className="text-xs bg-primary/10 text-primary font-semibold px-3 py-1.5 rounded-xl"
+                              >
+                                {req.label}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                   </div>
                 </div>
               );
@@ -364,10 +390,22 @@ export default async function displayOne(params: { params: { slug: string } }) {
           <Button href="/contact" variant="primary" size="lg">
             Je suis intéressé·e
           </Button>
+          <Button
+            href={`/adoption-listings/update/${adoptionListing.documentId}`}
+            variant="primary"
+            size="lg"
+          >
+            Modifier l'annonce
+          </Button>
+          <Button
+            href={`/adoption-listings/delete/${adoptionListing.documentId}`}
+            variant="primary"
+            size="lg"
+          >
+            Supprimer l'annonce
+          </Button>
         </div>
       </main>
-
-      <Footer />
     </>
   );
 }

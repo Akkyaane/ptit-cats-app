@@ -6,10 +6,9 @@ export async function GET(request: Request, params: any) {
   
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoption-listings/${documentId}?populate[animals][populate]=animal_requirements&populate=media`,
+      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoption-listings/${documentId}?populate[animals][populate]=animal_requirements&populate[animals][populate]=animal_personality_traits&populate=media`,
       {
-        headers: { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` },
-        next: { revalidate: 5 },
+        headers: { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` }
       },
     );
 

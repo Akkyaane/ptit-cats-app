@@ -26,7 +26,6 @@ export default function Donation() {
             height={384}
             className="hidden lg:block absolute top-20 right-8 xl:right-24 w-72 xl:w-96"
           />
-          <Navbar />
           <div className="flex flex-col items-center justify-center gap-6 py-16 md:py-24 lg:py-40">
             <HeadingPrimary>Nous soutenir</HeadingPrimary>
           </div>
@@ -109,9 +108,6 @@ export default function Donation() {
           </div>
         </section>
       </main>
-
-      <Footer />
-      <Button up={true} />
     </>
   );
 }

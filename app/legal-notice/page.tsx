@@ -24,7 +24,6 @@ export default function LegalNotice() {
             aria-hidden="true"
             className="hidden lg:block absolute top-20 right-8 xl:right-24 w-72 xl:w-96"
           />
-          <Navbar />
           <div className="flex flex-col items-center justify-center gap-6 py-16 md:py-24 lg:py-40">
             <HeadingPrimary>Mentions légales</HeadingPrimary>
           </div>
@@ -316,8 +315,6 @@ export default function LegalNotice() {
           </p>
         </section>
       </main>
-      <Footer />
-      <Button up={true} />
     </div>
   );
 }

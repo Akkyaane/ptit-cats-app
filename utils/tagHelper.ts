@@ -3,6 +3,7 @@ import IAnimal from "@/interfaces/IAnimal";
 export default function buildTags(
   animals: IAnimal[],
   attributes: Record<string, string>,
+  isDuo: boolean,
 ) {
   const tags = [];
 
@@ -15,6 +16,8 @@ export default function buildTags(
       value.includes("ans") && parseInt(value, 10) >= 10 ? tags.push("Senior") : null;
     }
   });
+
+  isDuo ? tags.push("Duo") : null;
 
   return tags;
 }

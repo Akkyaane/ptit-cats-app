@@ -3,14 +3,14 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/animal-requirements?populate=*`,
+      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/animal-personality-traits?populate=*`,
       { headers: { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` } },
     );
 
     if (!res.ok) {
       return NextResponse.json(
         {
-          error: `[animal-requirements] API GET: ${res.status} - ${res.statusText} - ${await res.text()}`,
+          error: `[animal-personality-traits] API GET: ${res.status} - ${res.statusText} - ${await res.text()}`,
         },
         { status: res.status },
       );
@@ -24,7 +24,7 @@ export async function GET() {
     );
   } catch (err) {
     return NextResponse.json(
-      { error: `[animal-requirements] API GET: ${String(err)}` },
+      { error: `[animal-personality-traits] API GET: ${String(err)}` },
       { status: 500 },
     );
   }

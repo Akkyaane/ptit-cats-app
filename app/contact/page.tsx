@@ -35,7 +35,6 @@ export default function Contact() {
             height={384}
             className="hidden lg:block absolute top-20 right-8 xl:right-24 w-72 xl:w-96"
           />
-          <Navbar />
           <div className="flex flex-col items-center justify-center gap-4 py-16 md:py-24 lg:py-40">
             <HeadingPrimary>Nous contacter</HeadingPrimary>
             <p className="text-secondary text-center max-w-2xl text-base md:text-lg">
@@ -213,9 +212,6 @@ export default function Contact() {
           </section>
         </div>
       </main>
-
-      <Footer />
-      <Button up={true} />
     </>
   );
 }

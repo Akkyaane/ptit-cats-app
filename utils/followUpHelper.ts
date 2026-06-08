@@ -8,14 +8,14 @@ export default function buildFollowUp(animals: IAnimal[], isDuo: boolean) {
     plural: string;
     singular: string;
   }[] = [
-    { key: "isDewormed", plural: "✓ Déparasités", singular: "✓ Déparasité" },
-    { key: "isVaccinated", plural: "✓ Vaccinés", singular: "✓ Vacciné" },
+    { key: "isDewormed", plural: "Déparasités", singular: "Déparasité" },
+    { key: "isVaccinated", plural: "Vaccinés", singular: "Vacciné" },
     {
       key: "isSterilizedOrCastrated",
-      plural: "✓ Stérilisés / Castrés",
-      singular: "✓ Stérilisé / Castré",
+      plural: "Stérilisés / Castrés",
+      singular: "Stérilisé / Castré",
     },
-    { key: "isIdentified", plural: "✓ Identifiés", singular: "✓ Identifié" },
+    { key: "isIdentified", plural: "Identifiés", singular: "Identifié" },
   ];
 
   fields.forEach(({ key, plural, singular }) => {

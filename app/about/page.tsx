@@ -10,7 +10,6 @@ export default function About() {
     <>
       <header className="bg-[url('/assets/img/background-2.jpg')] bg-center bg-cover">
         <div className="container relative">
-          <Navbar />
           <div className="flex flex-col items-center justify-center gap-6 py-16 md:py-24 lg:py-40">
             <HeadingPrimary>À propos de nous</HeadingPrimary>
           </div>
@@ -307,8 +306,6 @@ export default function About() {
           </div>
         </section>
       </main>
-      <Footer />
-      <Button up={true} />
     </>
   );
 }

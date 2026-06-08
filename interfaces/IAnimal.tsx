@@ -1,5 +1,6 @@
 import IAnimalRequirement from "./IAnimalRequirement";
 import IAdoptionListing from "./IAdoptionListing";
+import IAnimalPersonalityTrait from "./IAnimalPersonalityTrait";
 
 export default interface IAnimal {
   documentId: string;
@@ -15,6 +16,8 @@ export default interface IAnimal {
   childAffinity: "yes" | "no" | "unknown";
   livingEnvironmentType: "apartment" | "house" | "other";
   isAtypical: boolean;
-  animal_requirements: IAnimalRequirement[];
+  animal_personality_traits?: IAnimalPersonalityTrait[];
+  animal_requirements?: IAnimalRequirement[];
   adoption_listing: IAdoptionListing;
+  entityStatus: "in shelter" | "in foster care" | "under medical care" | "adopted";
 }

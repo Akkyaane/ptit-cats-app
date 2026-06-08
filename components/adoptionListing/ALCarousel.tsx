@@ -8,9 +8,7 @@ interface ALCarouselProps {
   items: IAdoptionListing[];
 }
 
-export default function ALCarousel({
-  items,
-}: ALCarouselProps) {
+export default function ALCarousel({ items }: ALCarouselProps) {
   const [emblaRef, emblaApi] = EmblaCarousel();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
@@ -46,6 +44,7 @@ export default function ALCarousel({
         <div className="flex gap-2">
           {items.map((adoptionListing: IAdoptionListing) => (
             <div
+              key={adoptionListing.documentId}
               className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_33.333%] min-w-0 box-border p-4"
             >
               <AdoptionListingCard
@@ -59,6 +58,7 @@ export default function ALCarousel({
                 isDuo={adoptionListing.isDuo}
                 price={adoptionListing.price}
                 animals={adoptionListing.animals}
+                entityStatus={adoptionListing.entityStatus}
               />
             </div>
           ))}

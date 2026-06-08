@@ -1,5 +1,8 @@
 ﻿import type { Metadata } from "next";
 import "./globals.css";
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
+import Button from "@/components/ui/Button";
 
 export const metadata: Metadata = {
   title: "Sans Croquettes Fixes",
@@ -17,7 +20,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body>{children}</body>
+      <body className="min-h-screen flex flex-col">
+        <Navbar />
+        <div className="flex-1">{children}</div>
+        <Footer />
+        <Button up={true} />
+      </body>
     </html>
   );
 }

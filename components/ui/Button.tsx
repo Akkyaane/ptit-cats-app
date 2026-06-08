@@ -38,7 +38,7 @@ export default function Button({
   }, [up]);
 
   const baseStyle =
-    "text-secondary font-bold rounded-xl border-2 hover:bg-secondary/40 backdrop-blur-sm transition-colors duration-200 text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+    "text-secondary font-bold rounded-xl border-2 hover:bg-secondary/40 backdrop-blur-sm transition-colors duration-200 text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary w-fit";
 
   const variants = {
     primary: "bg-primary border-primary hover:text-primary",
