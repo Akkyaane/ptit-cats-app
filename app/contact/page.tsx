@@ -1,11 +1,8 @@
 ﻿"use client";
 import { useState } from "react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import HeadingPrimary from "@/components/ui/HeadingPrimary";
 import HeadingSecondary from "@/components/ui/HeadingSecondary";
 import FormInput from "@/components/ui/FormInput";
-import Button from "@/components/ui/Button";
 import Image from "next/image";
 
 type FormStatus = "idle" | "submitting" | "success" | "error";

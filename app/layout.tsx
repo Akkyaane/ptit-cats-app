@@ -21,8 +21,10 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className="min-h-screen flex flex-col">
-        <Navbar />
-        <div className="flex-1">{children}</div>
+        <header>
+          <Navbar />
+        </header>
+        <main className="flex-1">{children}</main>
         <Footer />
         <Button up={true} />
       </body>

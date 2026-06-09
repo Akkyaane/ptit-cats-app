@@ -1,6 +1,4 @@
-﻿import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import HeadingPrimary from "@/components/ui/HeadingPrimary";
+﻿import HeadingPrimary from "@/components/ui/HeadingPrimary";
 import HeadingSecondary from "@/components/ui/HeadingSecondary";
 import Button from "@/components/ui/Button";
 import Image from "next/image";

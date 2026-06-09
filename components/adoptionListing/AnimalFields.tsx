@@ -2,24 +2,11 @@
 
 import IAnimalRequirement from "@/interfaces/IAnimalRequirement";
 import IAnimalPersonalityTrait from "@/interfaces/IAnimalPersonalityTrait";
+import IAnimal from "@/interfaces/IAnimal";
+import Input from "../ui/Input";
+import Select from "../ui/Select";
 
-export type AnimalDraft = {
-  name: string;
-  sex: "male" | "female";
-  birthDate: string;
-  isDewormed: boolean;
-  isVaccinated: boolean;
-  isSterilizedOrCastrated: boolean;
-  isIdentified: boolean;
-  isAtypical: boolean;
-  dogAffinity: "yes" | "no" | "unknown";
-  catAffinity: "yes" | "no" | "unknown";
-  childAffinity: "yes" | "no" | "unknown";
-  livingEnvironmentType: "apartment" | "house" | "other";
-  animal_requirements: IAnimalRequirement[];
-  animal_personality_traits: IAnimalPersonalityTrait[];
-  entityStatus: "in shelter" | "in foster care" | "under medical care" | "adopted";
-};
+export type AnimalDraft = Omit<IAnimal, "documentId" | "adoption_listing">;
 
 export function defaultAnimalDraft(): AnimalDraft {
   return {
@@ -30,11 +17,11 @@ export function defaultAnimalDraft(): AnimalDraft {
     isVaccinated: false,
     isSterilizedOrCastrated: false,
     isIdentified: false,
-    isAtypical: false,
     dogAffinity: "unknown",
     catAffinity: "unknown",
     childAffinity: "unknown",
     livingEnvironmentType: "apartment",
+    isAtypical: false,
     animal_requirements: [],
     animal_personality_traits: [],
     entityStatus: "in shelter",
@@ -60,20 +47,27 @@ export default function AnimalFields({
   animalPersonalityTraits = [],
   canRemove = true,
 }: Props) {
-  const update = (field: keyof AnimalDraft, val: unknown) =>
+  const update = <K extends keyof AnimalDraft>(
+    field: K,
+    val: AnimalDraft[K],
+  ) => {
     onChange({ [field]: val } as Partial<AnimalDraft>);
+  };
 
   const fieldClass =
     "w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 transition-colors duration-200 bg-white";
   const labelClass = "text-sm font-bold";
 
-  const availableRequirements = animalRequirements.filter(
-    (r) => !value.animal_requirements.some((s) => s.documentId === r.documentId),
+  const requirements = animalRequirements.filter(
+    (r) =>
+      !value.animal_requirements.some((s) => s.documentId === r.documentId),
   );
 
-  const availableTraits = animalPersonalityTraits.filter(
+  const personalityTraits = animalPersonalityTraits.filter(
     (t) =>
-      !value.animal_personality_traits.some((s) => s.documentId === t.documentId),
+      !value.animal_personality_traits.some(
+        (s) => s.documentId === t.documentId,
+      ),
   );
 
   const addRequirement = (documentId: string) => {
@@ -103,7 +97,9 @@ export default function AnimalFields({
   const removeTrait = (documentId: string) => {
     update(
       "animal_personality_traits",
-      value.animal_personality_traits.filter((t) => t.documentId !== documentId),
+      value.animal_personality_traits.filter(
+        (t) => t.documentId !== documentId,
+      ),
     );
   };
 
@@ -127,76 +123,66 @@ export default function AnimalFields({
         )}
       </div>
 
-      {/* Name */}
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>
-          Nom <span className="text-primary">*</span>
-        </label>
-        <input
-          type="text"
-          required
-          value={value.name}
-          onChange={(e) => update("name", e.target.value)}
-          className={fieldClass}
-          placeholder="Ex : Milo"
+      <Input
+        type="text"
+        name="name"
+        value={value.name}
+        required={true}
+        labelName="Nom"
+        onChange={(e) => update("name", e.target.value)}
+      />
+
+      <div className="grid grid-cols-2 gap-4">
+        <Select
+          name="sex"
+          value={value.sex}
+          options={[
+            { key: "male", value: "male" },
+            { key: "female", value: "female" },
+          ]}
+          translatedOptions={{
+            male: "Mâle",
+            female: "Femelle",
+          }}
+          required={true}
+          labelName="Sexe"
+          onChange={(e) => update("sex", e.target.value as AnimalDraft["sex"])}
+        />
+
+        <Input
+          type="date"
+          name="birthDate"
+          value={value.birthDate}
+          required={true}
+          labelName="Date de naissance"
+          onChange={(e) => update("birthDate", e.target.value)}
         />
       </div>
 
-      {/* Sex + BirthDate */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="flex flex-col gap-1">
-          <label className={labelClass}>Sexe</label>
-          <select
-            value={value.sex}
-            onChange={(e) =>
-              update("sex", e.target.value as AnimalDraft["sex"])
-            }
-            className={fieldClass}
-          >
-            <option value="male">Mâle</option>
-            <option value="female">Femelle</option>
-          </select>
-        </div>
-        <div className="flex flex-col gap-1">
-          <label className={labelClass}>Date de naissance</label>
-          <input
-            type="date"
-            value={value.birthDate}
-            onChange={(e) => update("birthDate", e.target.value)}
-            className={fieldClass}
-          />
-        </div>
-      </div>
-
-      {/* Health checkboxes */}
       <div className="flex flex-col gap-2">
-        <span className={labelClass}>Santé</span>
+        <span className={labelClass}>Soins</span>
         <div className="grid grid-cols-2 gap-2">
           {(
             [
-              ["isDewormed", "Déparasité(e)"],
-              ["isVaccinated", "Vacciné(e)"],
-              ["isSterilizedOrCastrated", "Stérilisé(e) / castré(e)"],
-              ["isIdentified", "Identifié(e)"],
+              ["isDewormed", "Déparasité"],
+              ["isVaccinated", "Vacciné"],
+              ["isSterilizedOrCastrated", "Stérilisé / Castré"],
+              ["isIdentified", "Identifié"],
             ] as [keyof AnimalDraft, string][]
           ).map(([field, label]) => (
-            <label
+            <Input
               key={field}
-              className="flex items-center gap-2 cursor-pointer select-none"
-            >
-              <input
-                type="checkbox"
-                checked={value[field] as boolean}
-                onChange={(e) => update(field, e.target.checked)}
-                className="w-4 h-4 accent-primary shrink-0"
-              />
-              <span className="text-sm">{label}</span>
-            </label>
+              type="checkbox"
+              name={field}
+              checked={value[field] as boolean}
+              required={false}
+              labelName={label}
+              onChange={(e) => update(field, e.target.checked)}
+            />
           ))}
         </div>
       </div>
 
-      {/* Affinities */}
       <div className="flex flex-col gap-2">
         <span className={labelClass}>Affinités</span>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -207,93 +193,111 @@ export default function AnimalFields({
               ["childAffinity", "Avec les enfants"],
             ] as [keyof AnimalDraft, string][]
           ).map(([field, label]) => (
-            <div key={field} className="flex flex-col gap-1">
-              <label className="text-xs font-bold text-quaternary/70">
-                {label}
-              </label>
-              <select
-                value={value[field] as string}
-                onChange={(e) => update(field, e.target.value)}
-                className={fieldClass}
-              >
-                <option value="yes">Oui</option>
-                <option value="no">Non</option>
-                <option value="unknown">Inconnu</option>
-              </select>
-            </div>
+            <Select
+              key={field}
+              name={field}
+              value={value[field] as string}
+              options={[
+                { key: "yes", value: "yes" },
+                { key: "no", value: "no" },
+                { key: "unknown", value: "unknown" },
+              ]}
+              translatedOptions={{
+                yes: "Oui",
+                no: "Non",
+                unknown: "Inconnu",
+              }}
+              required={true}
+              labelName={label}
+              onChange={(e) =>
+                update(field, e.target.value as AnimalDraft[typeof field])
+              }
+            />
           ))}
         </div>
       </div>
 
-      {/* Living environment */}
       <div className="flex flex-col gap-1">
-        <label className={labelClass}>Environnement de vie</label>
-        <select
+        <Select
+          name="livingEnvironmentType"
           value={value.livingEnvironmentType}
+          options={[
+            { key: "apartment", value: "apartment" },
+            { key: "house", value: "house" },
+            { key: "other", value: "other" },
+          ]}
+          translatedOptions={{
+            apartment: "Appartement",
+            house: "Maison",
+            other: "Autre",
+          }}
+          required={true}
+          labelName="Environnement de vie"
           onChange={(e) =>
             update(
               "livingEnvironmentType",
               e.target.value as AnimalDraft["livingEnvironmentType"],
             )
           }
-          className={fieldClass}
-        >
-          <option value="apartment">Appartement</option>
-          <option value="house">Maison</option>
-          <option value="other">Autre</option>
-        </select>
+        />
       </div>
 
-      {/* isAtypical */}
-      <label className="flex items-center gap-2 cursor-pointer select-none">
-        <input
-          type="checkbox"
-          checked={value.isAtypical}
-          onChange={(e) => update("isAtypical", e.target.checked)}
-          className="w-4 h-4 accent-primary shrink-0"
-        />
-        <span className="text-sm font-bold">Animal atypique</span>
-      </label>
+      <Input
+        type="checkbox"
+        name="isAtypical"
+        checked={value.isAtypical}
+        required={false}
+        labelName="Atypique (handicap, soins particuliers, etc.)"
+        onChange={(e) => update("isAtypical", e.target.checked)}
+      />
 
-      {/* Entity status */}
       <div className="flex flex-col gap-1">
-        <label className={labelClass}>Statut</label>
-        <select
+        <Select
+          name="entityStatus"
           value={value.entityStatus}
+          options={[
+            { key: "in shelter", value: "in shelter" },
+            { key: "in foster care", value: "in foster care" },
+            { key: "under medical care", value: "under medical care" },
+            { key: "adopted", value: "adopted" },
+          ]}
+          translatedOptions={{
+            "in shelter": "En refuge",
+            "in foster care": "En famille d'accueil",
+            "under medical care": "En soins médicaux",
+            adopted: "Adopté",
+          }}
+          required={true}
+          labelName="Statut"
           onChange={(e) =>
             update(
               "entityStatus",
               e.target.value as AnimalDraft["entityStatus"],
             )
           }
-          className={fieldClass}
-        >
-          <option value="in shelter">En refuge</option>
-          <option value="in foster care">En famille d&apos;accueil</option>
-          <option value="under medical care">Soins médicaux</option>
-          <option value="adopted">Adopté(e)</option>
-        </select>
+        />
       </div>
 
-      {/* Requirements multi-select */}
       <div className="flex flex-col gap-2">
-        <label className={labelClass}>Exigences particulières</label>
-        {availableRequirements.length > 0 && (
-          <select
+        {requirements.length > 0 && (
+          <Select
+            name="requirements"
             value=""
+            options={requirements.map((r) => ({
+              key: r.documentId,
+              value: r.documentId,
+            }))}
+            translatedOptions={requirements.reduce((acc, r) => {
+              acc[r.documentId] = r.label;
+              return acc;
+            }, {} as Record<string, string>)}
+            required={false}
+            labelName="Conditions d'adoption"
             onChange={(e) => {
               addRequirement(e.target.value);
               e.currentTarget.value = "";
             }}
-            className={fieldClass}
-          >
-            <option value="">Ajouter une exigence…</option>
-            {availableRequirements.map((r) => (
-              <option key={r.documentId} value={r.documentId}>
-                {r.label}
-              </option>
-            ))}
-          </select>
+          />
         )}
         {value.animal_requirements.length > 0 && (
           <div className="flex flex-wrap gap-2">
@@ -317,30 +321,32 @@ export default function AnimalFields({
         )}
         {animalRequirements.length === 0 && (
           <p className="text-sm text-quaternary/60 italic">
-            Aucune exigence disponible.
+            La liste des conditions d'adoption est vide.
           </p>
         )}
       </div>
 
       {/* Personality traits multi-select */}
       <div className="flex flex-col gap-2">
-        <label className={labelClass}>Traits de personnalité</label>
-        {availableTraits.length > 0 && (
-          <select
+        {personalityTraits.length > 0 && (
+          <Select 
+            name="personalityTraits"
             value=""
+            options={personalityTraits.map((t) => ({
+              key: t.documentId,
+              value: t.documentId,
+            }))}
+            translatedOptions={personalityTraits.reduce((acc, t) => {
+              acc[t.documentId] = t.label;
+              return acc;
+            }, {} as Record<string, string>)}
+            required={false}
+            labelName="Traits de caractère"
             onChange={(e) => {
               addTrait(e.target.value);
               e.currentTarget.value = "";
             }}
-            className={fieldClass}
-          >
-            <option value="">Ajouter un trait…</option>
-            {availableTraits.map((t) => (
-              <option key={t.documentId} value={t.documentId}>
-                {t.label}
-              </option>
-            ))}
-          </select>
+          />
         )}
         {value.animal_personality_traits.length > 0 && (
           <div className="flex flex-wrap gap-2">
@@ -364,7 +370,7 @@ export default function AnimalFields({
         )}
         {animalPersonalityTraits.length === 0 && (
           <p className="text-sm text-quaternary/60 italic">
-            Aucun trait disponible.
+            La liste des traits de caractère est vide.
           </p>
         )}
       </div>

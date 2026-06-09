@@ -2,9 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import HeadingPrimary from "@/components/ui/HeadingPrimary";
 import { AnimalDraft, defaultAnimalDraft } from "@/components/adoptionListing/AnimalFields";
 import AdoptionListingForm, {
@@ -222,23 +219,7 @@ export default function CreateAdoptionListing() {
 
   return (
     <div>
-      <header className="bg-[url('/assets/img/background-2.jpg')]">
-        <div className="container relative">
-          <Image
-            src="/assets/img/icone-10.svg"
-            alt=""
-            aria-hidden="true"
-            width={384}
-            height={384}
-            className="hidden lg:block absolute top-20 right-8 xl:right-24 w-72 xl:w-96"
-          />
-          <div className="flex flex-col items-center justify-center gap-6 py-16 md:py-24 lg:py-40">
-            <HeadingPrimary>Créer une annonce</HeadingPrimary>
-          </div>
-        </div>
-      </header>
-
-      <main>
+        <HeadingPrimary>Créer une annonce</HeadingPrimary>
         <AdoptionListingForm
           mode="create"
           step={step}
@@ -256,7 +237,6 @@ export default function CreateAdoptionListing() {
           isSaving={isLoading}
           error={error}
         />
-      </main>
     </div>
   );
 }

@@ -1,7 +1,4 @@
-﻿import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import Button from "@/components/ui/Button";
-import HeadingPrimary from "@/components/ui/HeadingPrimary";
+﻿import HeadingPrimary from "@/components/ui/HeadingPrimary";
 
 export default function LegalNotice() {
   const sectionBaseClass =

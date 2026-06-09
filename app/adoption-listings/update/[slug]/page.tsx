@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import HeadingPrimary from "@/components/ui/HeadingPrimary";
 import { AnimalDraft, defaultAnimalDraft } from "@/components/adoptionListing/AnimalFields";
 import AdoptionListingForm, {

@@ -1,11 +1,8 @@
-﻿import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import Button from "@/components/ui/Button";
+﻿import Button from "@/components/ui/Button";
 import GalleryWithLightbox from "@/components/adoptionListing/GalleryWithLightbox";
 import calculateAge from "@/utils/dateHelper";
 import HeadingSecondary from "@/components/ui/HeadingSecondary";
 import IAdoptionListing from "@/interfaces/IAdoptionListing";
-import HeadingPrimary from "@/components/ui/HeadingPrimary";
 
 async function getOne(documentId: string): Promise<IAdoptionListing> {
   try {
