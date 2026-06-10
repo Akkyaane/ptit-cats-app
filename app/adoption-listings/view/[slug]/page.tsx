@@ -1,8 +1,8 @@
 ﻿import Button from "@/components/ui/Button";
 import GalleryWithLightbox from "@/components/adoptionListing/GalleryWithLightbox";
 import calculateAge from "@/utils/dateHelper";
-import HeadingSecondary from "@/components/ui/HeadingSecondary";
 import IAdoptionListing from "@/interfaces/IAdoptionListing";
+import Heading from "@/components/ui/Heading";
 
 async function getOne(documentId: string): Promise<IAdoptionListing> {
   try {
@@ -212,13 +212,10 @@ export default async function displayOne(params: { params: { slug: string } }) {
 
         <section className="bg-quaternary py-16 md:py-24">
           <div className="container flex flex-col gap-12 items-center text-center">
-            <HeadingSecondary
-              headingVariant="secondary"
-              underlineVariant="primary"
-            >
+            <Heading type="h2" headingVariant="secondary" underlineVariant="tertiary">
               Quelques mots sur{" "}
               {adoptionListing.animals.map((animal) => animal.name).join(" & ")}
-            </HeadingSecondary>
+            </Heading>
             <div className="flex flex-col gap-4 text-left text-secondary">
               {adoptionListing.longDescription
                 .split("\n\n")
@@ -232,11 +229,11 @@ export default async function displayOne(params: { params: { slug: string } }) {
         </section>
 
         <section className="container py-16 md:py-24 flex flex-col gap-12">
-          <HeadingSecondary headingVariant="primary" underlineVariant="primary">
+          <Heading type="h2" headingVariant="quaternary" underlineVariant="tertiary">
             {adoptionListing.animals.length > 1
               ? "Profil des compagnons"
               : "Profil du compagnon"}
-          </HeadingSecondary>
+          </Heading>
           <div
             className={`${adoptionListing.animals.length > 1 ? "grid grid-cols-1 md:grid-cols-2 gap-6" : "grid grid-cols-1 max-w-xl mx-auto w-full"}`}
           >

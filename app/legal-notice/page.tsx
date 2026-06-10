@@ -1,4 +1,4 @@
-﻿import HeadingPrimary from "@/components/ui/HeadingPrimary";
+﻿import Heading from "@/components/ui/Heading";
 
 export default function LegalNotice() {
   const sectionBaseClass =
@@ -22,7 +22,7 @@ export default function LegalNotice() {
             className="hidden lg:block absolute top-20 right-8 xl:right-24 w-72 xl:w-96"
           />
           <div className="flex flex-col items-center justify-center gap-6 py-16 md:py-24 lg:py-40">
-            <HeadingPrimary>Mentions légales</HeadingPrimary>
+            <Heading type="h1" headingVariant="secondary">Mentions légales</Heading>
           </div>
         </div>
       </header>

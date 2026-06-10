@@ -1,20 +1,16 @@
 ﻿import Button from "@/components/ui/Button";
 import AdoptionPostCarousel from "@/components/adoptionListing/ALCarousel";
-import HeadingPrimary from "@/components/ui/HeadingPrimary";
-import HeadingSecondary from "@/components/ui/HeadingSecondary";
 import ArticleCard from "@/components/ArticleCard";
 import Card from "@/components/ui/Card";
 import Image from "next/image";
 import IAdoptionListing from "@/interfaces/IAdoptionListing";
 import Statistics from "@/components/Statistics";
+import Heading from "@/components/ui/Heading";
 
 async function getLastAdoptionListings(): Promise<IAdoptionListing[]> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/adoption-listings/last`,
-      {
-        next: { revalidate: 60 },
-      },
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/adoption-listings/last`
     );
 
     if (!res.ok) {
@@ -46,10 +42,7 @@ export default async function Index() {
             aria-label="Présentation"
             className="flex flex-col items-start gap-6 py-24 md:py-32 max-w-2xl md:max-w-3xl lg:py-48 lg:max-w-4xl"
           >
-            <HeadingPrimary>
-              Chaque animal porte une histoire. <br /> Et si vous écriviez la
-              suite avec lui ?
-            </HeadingPrimary>
+            <Heading type="h1" headingVariant="secondary">Chaque animal porte une histoire. <br /> Et si vous écriviez la suite avec lui ?</Heading>
             <p className="text-lg md:text-xl lg:text-2xl text-secondary/90 leading-relaxed max-w-lg md:max-w-xl lg:max-w-2xl">
               Découvrez nos compagnons à quatre pattes qui attendent de
               rencontrer leur humain pour la vie.
@@ -71,9 +64,9 @@ export default async function Index() {
           aria-label="Nos dernières annonces d'adoption"
           className="container flex flex-col gap-12"
         >
-          <HeadingSecondary headingVariant="primary" underlineVariant="primary">
+          <Heading type="h2" headingVariant="quaternary" underlineVariant="tertiary">
             Nos dernières annonces d'adoption
-          </HeadingSecondary>
+          </Heading>
           {adoptionListings.length === 0 ? (
             <p className="text-center text-lg">
               Aucun chat n'est disponible pour le moment.
@@ -91,9 +84,9 @@ export default async function Index() {
           aria-label="Qui sommes-nous ?"
           className="container flex flex-col gap-12"
         >
-          <HeadingSecondary headingVariant="primary" underlineVariant="primary">
+          <Heading type="h2" headingVariant="primary" underlineVariant="primary">
             Qui sommes-nous ?
-          </HeadingSecondary>
+          </Heading>
           <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-6 lg:gap-8">
             <div className="flex flex-col gap-6">
               <div className="space-y-4 md:space-y-6 leading-relaxed text-base md:text-lg ">
@@ -164,9 +157,9 @@ export default async function Index() {
           aria-label="Nos derniers articles"
           className="container flex flex-col gap-12"
         >
-          <HeadingSecondary headingVariant="primary" underlineVariant="primary">
+          <Heading type="h2" headingVariant="primary" underlineVariant="primary">
             Nos derniers articles
-          </HeadingSecondary>
+          </Heading>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
             <ArticleCard
               imageUrl="/assets/articles/article-1.jpg"
@@ -208,12 +201,9 @@ export default async function Index() {
               />
             </div>
             <div className="bg-quaternary px-6 py-12 md:px-16 md:py-32 rounded-xl flex flex-col gap-12 items-center justify-center">
-              <HeadingSecondary
-                headingVariant="secondary"
-                underlineVariant="primary"
-              >
+              <Heading type="h2" headingVariant="secondary" underlineVariant="tertiary">
                 Les félins de l'ombre
-              </HeadingSecondary>
+              </Heading>
               <p className="text-xl md:text-2xl text-center md:text-left leading-relaxed text-secondary">
                 En 2025, à l’occasion de nos 10 ans, nous nous lançons dans une
                 toute nouvelle aventure : la création d’un{" "}
@@ -240,12 +230,9 @@ export default async function Index() {
         >
           <div className="container py-16 md:py-24">
             <div className="flex flex-col items-center justify-center gap-8">
-              <HeadingSecondary
-                headingVariant="primary"
-                underlineVariant="secondary"
-              >
+              <Heading type="h2" headingVariant="quaternary" underlineVariant="primary">
                 Comment vous remercier ?
-              </HeadingSecondary>
+              </Heading>
 
               <p className="text-lg md:text-xl max-w-4xl text-center">
                 Depuis 2015, grâce à votre aide, notre association a pu apporter

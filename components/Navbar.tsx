@@ -55,12 +55,19 @@ export default function Navbar() {
   return (
     <nav
       className={`fixed inset-x-0 top-0 z-50 w-full transition-colors duration-200 text-secondary ${
-        isScrolled ? "bg-tertiary" : "bg-transparent"
+        ["/", "/distribution", "/about", "/donation"].includes(pathname)
+          ? isScrolled
+            ? "bg-tertiary"
+            : "bg-transparent"
+          : "bg-tertiary"
       }`}
     >
       <div className="container mx-auto py-4 relative">
         <div className="flex flex-row items-center justify-between">
-          <a href="/" className="flex flex-row items-center gap-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary rounded-sm">
+          <a
+            href="/"
+            className="flex flex-row items-center gap-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary rounded-sm"
+          >
             <Image
               src="/assets/img/logo.png"
               alt="Logo SansCroquettesFixes"

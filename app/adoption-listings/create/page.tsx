@@ -2,14 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import HeadingPrimary from "@/components/ui/HeadingPrimary";
-import { AnimalDraft, defaultAnimalDraft } from "@/components/adoptionListing/AnimalFields";
-import AdoptionListingForm, {
+import {
+  AnimalDraft,
+  defaultAnimalDraft,
+} from "@/components/adoptionListing/AnimalFormFields";
+import ALForm, {
   AnimalEntry,
   ListingDraft,
 } from "@/components/adoptionListing/ALForm";
 import IAnimalRequirement from "@/interfaces/IAnimalRequirement";
 import IAnimalPersonalityTrait from "@/interfaces/IAnimalPersonalityTrait";
+import Heading from "@/components/ui/Heading";
 
 function defaultListing(): ListingDraft {
   return {
@@ -19,7 +22,7 @@ function defaultListing(): ListingDraft {
     longDescription: "",
     price: 0,
     newMediaFiles: [],
-    existingMediaIds: [],
+    existingMedia: [],
   };
 }
 
@@ -193,6 +196,20 @@ export default function CreateAdoptionListing() {
     }
   };
 
+  const handleRemoveNewFile = (index: number) => {
+    setListing((prev) => ({
+      ...prev,
+      newMediaFiles: prev.newMediaFiles.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleRemoveExistingMedia = (id: number) => {
+    setListing((prev) => ({
+      ...prev,
+      existingMedia: prev.existingMedia.filter((m) => m.id !== id),
+    }));
+  };
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setIsLoading(true);
@@ -218,9 +235,15 @@ export default function CreateAdoptionListing() {
   }
 
   return (
-    <div>
-        <HeadingPrimary>Créer une annonce</HeadingPrimary>
-        <AdoptionListingForm
+    <div className="layout-header-spacing">
+      <div className="container">
+        <header>
+          <Heading type="h2" headingVariant="quaternary">
+            Créer une annonce
+          </Heading>
+        </header>
+
+        <ALForm
           mode="create"
           step={step}
           setStep={setStep}
@@ -233,10 +256,13 @@ export default function CreateAdoptionListing() {
           listing={listing}
           onListingChange={handleListingChange}
           onFilesChange={handleFilesChange}
+          onRemoveNewFile={handleRemoveNewFile}
+          onRemoveExistingMedia={handleRemoveExistingMedia}
           onSubmit={handleSubmit}
           isSaving={isLoading}
           error={error}
         />
+      </div>
     </div>
   );
 }

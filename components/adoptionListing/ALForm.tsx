@@ -1,15 +1,17 @@
 ﻿"use client";
 
-import AnimalFields, { AnimalDraft } from "@/components/adoptionListing/AnimalFields";
-import HeadingSecondary from "@/components/ui/HeadingSecondary";
+import AnimalFormFields, {
+  AnimalDraft,
+} from "@/components/adoptionListing/AnimalFormFields";
 import IAnimalPersonalityTrait from "@/interfaces/IAnimalPersonalityTrait";
 import IAnimalRequirement from "@/interfaces/IAnimalRequirement";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
+import Heading from "../ui/Heading";
+import Input from "../ui/Input";
+import Button from "../ui/Button";
+import Textarea from "../ui/Textarea";
 
 export type AnimalEntry = AnimalDraft & {
   _key: string;
-  /** undefined = animal à créer ; string = documentId existant */
   documentId?: string;
 };
 
@@ -20,64 +22,10 @@ export type ListingDraft = {
   longDescription: string;
   price: number;
   newMediaFiles: File[];
-  existingMediaIds: number[];
+  existingMedia: { id: number; url: string }[];
 };
 
-// ─── UI constants ─────────────────────────────────────────────────────────────
-
-export const inputClass =
-  "w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 transition-colors duration-200 bg-white";
-export const labelClass = "text-sm font-bold";
-export const req = (
-  <span aria-hidden="true" className="text-primary font-bold">
-    {" "}*
-  </span>
-);
-
-// ─── StepIndicator ────────────────────────────────────────────────────────────
-
-function StepIndicator({ step }: { step: 1 | 2 }) {
-  const steps = [
-    { num: 1, label: "L'animal" },
-    { num: 2, label: "L'annonce" },
-  ];
-
-  return (
-    <div className="flex items-center justify-center gap-2 py-6">
-      {steps.map(({ num, label }, i) => (
-        <div key={num} className="flex items-center gap-2">
-          {i > 0 && (
-            <div
-              className={`w-12 h-0.5 rounded-full transition-colors duration-300 ${step >= num ? "bg-primary" : "bg-tertiary/50"}`}
-            />
-          )}
-          <div className="flex flex-col items-center gap-1">
-            <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-all duration-300 ${
-                step === num
-                  ? "bg-primary text-white border-primary shadow-md"
-                  : step > num
-                    ? "bg-tertiary text-quaternary border-tertiary"
-                    : "bg-white text-quaternary/40 border-tertiary/40"
-              }`}
-            >
-              {step > num ? "✓" : num}
-            </div>
-            <span
-              className={`text-xs font-bold transition-colors duration-300 ${step >= num ? "text-quaternary" : "text-quaternary/40"}`}
-            >
-              {label}
-            </span>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// ─── Props ────────────────────────────────────────────────────────────────────
-
-type Props = {
+type ALFormProps = {
   mode: "create" | "update";
   step: 1 | 2;
   setStep: (step: 1 | 2) => void;
@@ -88,16 +36,18 @@ type Props = {
   requirements: IAnimalRequirement[];
   traits: IAnimalPersonalityTrait[];
   listing: ListingDraft;
-  onListingChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onListingChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => void;
   onFilesChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onRemoveNewFile: (index: number) => void;
+  onRemoveExistingMedia: (id: number) => void;
   onSubmit: (e: React.FormEvent) => void;
   isSaving: boolean;
   error: string | null;
 };
 
-// ─── Component ────────────────────────────────────────────────────────────────
-
-export default function AdoptionListingForm({
+export default function ALForm({
   mode,
   step,
   setStep,
@@ -110,56 +60,65 @@ export default function AdoptionListingForm({
   listing,
   onListingChange,
   onFilesChange,
+  onRemoveNewFile,
+  onRemoveExistingMedia,
   onSubmit,
   isSaving,
   error,
-}: Props) {
+}: ALFormProps) {
   return (
-    <div className="container flex flex-col gap-4">
-      <StepIndicator step={step} />
-
+    <div className="container flex flex-col gap-6">
       {error && (
-        <div className="max-w-2xl mx-auto w-full px-4 py-3 rounded-xl bg-primary/10 border border-primary/30 text-primary font-bold text-sm">
+        <div className="max-w-2xl mx-auto w-full px-4 py-3 rounded-xl bg-primary/10 border-2 border-primary text-primary font-bold text-sm">
           {error}
         </div>
       )}
 
-      {/* ── Step 1 : Animals ── */}
       {step === 1 && (
         <form
           onSubmit={(e) => {
             e.preventDefault();
             setStep(2);
           }}
-          className="flex flex-col gap-8 pb-12"
         >
-          <section className="flex flex-col gap-8">
-            <HeadingSecondary headingVariant="primary" underlineVariant="primary">
-              Qui est l&apos;animal concerné ?
-            </HeadingSecondary>
+          <section className="flex flex-col gap-6">
+            <div
+              className={`flex flex-col gap-4 ${isDuo ? "w-fit" : "max-w-3xl mx-auto w-full"}`}
+            >
+              <Heading
+                type="h3"
+                headingVariant="quaternary"
+                underlineVariant="tertiary"
+              >
+                {step} - {isDuo ? "Profil des animaux" : "Profil de l'animal"}
+              </Heading>
 
-            {/* Duo toggle */}
-            <div className="flex justify-center">
-              <label className="flex items-center gap-3 px-6 py-4 rounded-2xl border-2 border-tertiary bg-white cursor-pointer select-none hover:border-primary transition-colors duration-200 shadow-sm">
-                <input
+              <div className="flex flex-col gap-2 border-2 border-tertiary rounded-xl p-4">
+                <div className="flex flex-col gap-1">
+                  <span className="text-sm md:text-base font-bold">
+                    Adoption en duo
+                  </span>
+                  <p className="text-sm text-quaternary/80">
+                    Veuillez cocher la case si l'annonce concerne un duo
+                    d'animaux.
+                  </p>
+                </div>
+                <Input
                   type="checkbox"
+                  name="isDuo"
                   checked={isDuo}
+                  required={false}
+                  labelName="Duo"
                   onChange={(e) => toggleDuo(e.target.checked)}
-                  className="w-5 h-5 accent-primary"
                 />
-                <span className="font-bold">Adoption en duo</span>
-                <span className="text-sm text-quaternary/60">
-                  (deux animaux pour la même annonce)
-                </span>
-              </label>
+              </div>
             </div>
 
-            {/* Animal cards */}
             <div
-              className={`grid gap-8 ${isDuo ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1 max-w-2xl mx-auto w-full"}`}
+              className={`grid gap-6 ${isDuo ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1 max-w-3xl mx-auto w-full"}`}
             >
               {animals.map((animal, i) => (
-                <AnimalFields
+                <AnimalFormFields
                   key={animal._key}
                   index={i + 1}
                   value={animal}
@@ -171,182 +130,168 @@ export default function AdoptionListingForm({
               ))}
             </div>
 
-            <div className={`flex justify-end ${isDuo ? "" : "max-w-2xl mx-auto w-full"}`}>
-              <button
-                type="submit"
-                className="px-8 py-3 rounded-xl bg-primary text-white font-bold hover:bg-quaternary transition-colors duration-200"
-              >
+            <div
+              className={`flex justify-end ${isDuo ? "" : "max-w-3xl mx-auto w-full"}`}
+            >
+              <Button type="submit" variant="primary" size="md">
                 Suivant →
-              </button>
+              </Button>
             </div>
           </section>
         </form>
       )}
 
-      {/* ── Step 2 : Listing ── */}
       {step === 2 && (
-        <form onSubmit={onSubmit} className="flex flex-col gap-8 pb-12">
-          <section className="flex flex-col gap-8">
-            <HeadingSecondary headingVariant="primary" underlineVariant="primary">
-              L&apos;annonce d&apos;adoption
-            </HeadingSecondary>
+        <form onSubmit={onSubmit}>
+          <section className="flex flex-col gap-6">
+            <div
+              className={`flex flex-col gap-4 ${isDuo ? "w-fit" : "max-w-3xl mx-auto w-full"}`}
+            >
+              <Heading
+                type="h3"
+                headingVariant="quaternary"
+                underlineVariant="tertiary"
+              >
+                {step} - Détails de l'annonce
+              </Heading>
+            </div>
 
-            <div className="flex flex-col gap-6 w-full max-w-2xl mx-auto">
-              {isDuo && (
-                <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-tertiary/20 border border-tertiary text-sm font-bold text-quaternary">
-                  <span>🐱</span>
-                  <span>Adoption en duo — 2 animaux associés</span>
-                </div>
-              )}
-
-              {/* Title */}
+            <div className="flex flex-col gap-6 w-full max-w-3xl mx-auto">
+              <Input
+                type="text"
+                name="title"
+                value={listing.title}
+                required={true}
+                labelName="Titre"
+                onChange={onListingChange}
+              />
+              <Input
+                type="text"
+                name="slogan"
+                value={listing.slogan}
+                required={false}
+                labelName="Slogan"
+                onChange={onListingChange}
+              />
               <div className="flex flex-col gap-1">
-                <label htmlFor="title" className={labelClass}>
-                  Titre{req}
-                </label>
-                <input
-                  id="title"
-                  name="title"
-                  type="text"
-                  value={listing.title}
-                  onChange={onListingChange}
-                  required
-                  className={inputClass}
-                  placeholder="Ex : Milo cherche une famille aimante"
-                />
-              </div>
-
-              {/* Slogan */}
-              <div className="flex flex-col gap-1">
-                <label htmlFor="slogan" className={labelClass}>
-                  Slogan
-                </label>
-                <input
-                  id="slogan"
-                  name="slogan"
-                  type="text"
-                  value={listing.slogan}
-                  onChange={onListingChange}
-                  className={inputClass}
-                  placeholder="Ex : Un petit bout de tendresse à adopter"
-                />
-              </div>
-
-              {/* Short description */}
-              <div className="flex flex-col gap-1">
-                <label htmlFor="shortDescription" className={labelClass}>
-                  Description courte{req}
-                </label>
-                <textarea
-                  id="shortDescription"
+                <Textarea
                   name="shortDescription"
+                  rows={4}
                   value={listing.shortDescription}
+                  required={true}
+                  labelName="Description courte"
                   onChange={onListingChange}
-                  required
-                  rows={3}
-                  className={`${inputClass} resize-none`}
-                  placeholder="Quelques mots pour présenter l'annonce…"
                 />
+                <p className="text-sm text-quaternary/80">
+                  Cette description sera affichée sur la carte de l'annonce.
+                </p>
               </div>
-
-              {/* Long description */}
               <div className="flex flex-col gap-1">
-                <label htmlFor="longDescription" className={labelClass}>
-                  Description longue{req}
-                </label>
-                <textarea
-                  id="longDescription"
+                <Textarea
                   name="longDescription"
+                  rows={12}
                   value={listing.longDescription}
+                  required={true}
+                  labelName="Description longue"
                   onChange={onListingChange}
-                  required
-                  rows={7}
-                  className={`${inputClass} resize-none`}
-                  placeholder="Décrivez l'animal en détail, son caractère, son histoire…"
                 />
+                <p className="text-sm text-quaternary/80">
+                  Cette description sera affichée sur la page de l'annonce.
+                </p>
               </div>
 
-              {/* Existing media (update only) */}
-              {mode === "update" && listing.existingMediaIds.length > 0 && (
-                <div className="flex flex-col gap-1">
-                  <span className={labelClass}>
-                    Photos actuelles ({listing.existingMediaIds.length})
+              {listing.existingMedia.length > 0 && (
+                <div className="flex flex-col gap-2">
+                  <span className="font-bold text-sm md:text-base">
+                    Médias actuels ({listing.existingMedia.length})
                   </span>
-                  <p className="text-xs text-quaternary/60">
-                    Les photos existantes sont conservées. Ajoutez de nouvelles photos ci-dessous pour les compléter.
-                  </p>
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                    {listing.existingMedia.map((m) => (
+                      <div
+                        key={m.id}
+                        className="relative aspect-square rounded-xl overflow-hidden group"
+                      >
+                        <img
+                          src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${m.url}`}
+                          alt=""
+                          className="w-full h-full object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => onRemoveExistingMedia(m.id)}
+                          className="absolute top-1 right-1 bg-white/80 hover:bg-white text-primary font-bold text-xs rounded-lg px-1.5 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                        >
+                          Supprimer
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 
-              {/* New media */}
               <div className="flex flex-col gap-2">
-                <label htmlFor="media" className={labelClass}>
-                  {mode === "update" ? "Ajouter des photos" : "Photos"}
-                </label>
-                <input
-                  id="media"
+                <Input
                   type="file"
-                  accept=".jpg,.jpeg,.png,.webp"
-                  multiple
+                  name="media"
+                  accept=".jpg,.jpeg,.png,.webp,.mp4"
+                  multiple={true}
                   onChange={onFilesChange}
-                  className="w-full text-sm file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-2 file:border-tertiary file:bg-white file:text-sm file:font-bold file:text-quaternary hover:file:bg-tertiary/20 transition-colors duration-200"
+                  required={false}
+                  labelName="Ajouter des médias"
                 />
-                <p className="text-xs text-quaternary/60">
-                  Formats acceptés : JPG, JPEG, PNG, WEBP
+                <p className="text-sm text-quaternary/80">
+                  Formats acceptés : JPG, JPEG, PNG, WEBP, MP4
                 </p>
                 {listing.newMediaFiles.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mt-1">
+                  <div className="flex flex-wrap gap-2">
                     {listing.newMediaFiles.map((f, i) => (
                       <span
                         key={i}
-                        className="text-xs px-2 py-1 rounded-lg bg-tertiary/20 border border-tertiary font-bold text-quaternary"
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-primary text-secondary text-sm font-bold"
                       >
                         {f.name}
+                        <button
+                          type="button"
+                          onClick={() => onRemoveNewFile(i)}
+                          className="text-secondary font-bold leading-none"
+                          aria-label={`Supprimer ${f.name}`}
+                        >
+                          ×
+                        </button>
                       </span>
                     ))}
                   </div>
                 )}
               </div>
 
-              {/* Price */}
-              <div className="flex flex-col gap-1">
-                <label htmlFor="price" className={labelClass}>
-                  Prix (€){req}
-                </label>
-                <input
-                  id="price"
-                  name="price"
-                  type="number"
-                  value={listing.price}
-                  onChange={onListingChange}
-                  required
-                  min={0}
-                  className={inputClass}
-                />
-              </div>
+              <Input
+                type="number"
+                name="price"
+                value={listing.price}
+                min={0}
+                onChange={onListingChange}
+                required={true}
+                labelName="Prix (€)"
+              />
 
-              {/* Actions */}
-              <div className="flex items-center justify-between gap-4">
-                <button
+              <div className="flex items-center justify-between">
+                <Button
                   type="button"
+                  variant="secondary"
+                  size="md"
                   onClick={() => setStep(1)}
-                  className="px-8 py-3 rounded-xl border-2 border-quaternary text-quaternary font-bold hover:bg-quaternary hover:text-white transition-colors duration-200"
                 >
                   ← Retour
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
+                  variant="primary"
+                  size="md"
                   disabled={isSaving}
-                  className="px-8 py-3 rounded-xl bg-primary text-white font-bold hover:bg-quaternary transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isSaving
-                    ? mode === "create"
-                      ? "Création en cours…"
-                      : "Enregistrement…"
-                    : mode === "create"
-                      ? "Créer l'annonce"
-                      : "Enregistrer les modifications"}
-                </button>
+                  {" "}
+                  {isSaving ? "Enregistrement..." : "Enregistrer"}
+                </Button>
               </div>
             </div>
           </section>

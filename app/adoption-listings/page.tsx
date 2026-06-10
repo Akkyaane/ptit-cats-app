@@ -1,7 +1,6 @@
 ﻿import ALCard from "@/components/adoptionListing/ALCard";
 import Button from "@/components/ui/Button";
-import HeadingPrimary from "@/components/ui/HeadingPrimary";
-import HeadingSecondary from "@/components/ui/HeadingSecondary";
+import Heading from "@/components/ui/Heading";
 import IAdoptionListing from "@/interfaces/IAdoptionListing";
 
 async function getAll(): Promise<IAdoptionListing[] | []> {
@@ -35,15 +34,13 @@ export default async function displayAll() {
     <div>
       <header className="bg-tertiary h-28">
         <section className="container hidden">
-            <HeadingPrimary>Nos annonces d'adoption</HeadingPrimary>
+          <Heading type="h1" headingVariant="secondary">Nos annonces d'adoption</Heading>
         </section>
       </header>
 
       <main>
         <section className="container flex flex-col gap-12 items-center">
-          <HeadingSecondary headingVariant="primary" underlineVariant="primary">
-            Nos annonces d'adoption
-          </HeadingSecondary>
+          <Heading type="h2" headingVariant="quaternary" underlineVariant="tertiary">Nos annonces d'adoption</Heading>
 
           {adoptionListings.length === 0 ? (
             <p className="text-center text-lg">

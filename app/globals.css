@@ -28,3 +28,8 @@ body {
   margin: 0 auto;
   padding: 2rem 1.75rem;
 }
+
+
+.layout-header-spacing {
+  padding-top: 112px;
+}

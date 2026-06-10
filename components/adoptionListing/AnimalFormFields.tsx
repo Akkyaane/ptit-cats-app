@@ -1,8 +1,8 @@
 ﻿"use client";
 
+import IAnimal from "@/interfaces/IAnimal";
 import IAnimalRequirement from "@/interfaces/IAnimalRequirement";
 import IAnimalPersonalityTrait from "@/interfaces/IAnimalPersonalityTrait";
-import IAnimal from "@/interfaces/IAnimal";
 import Input from "../ui/Input";
 import Select from "../ui/Select";
 
@@ -28,7 +28,7 @@ export function defaultAnimalDraft(): AnimalDraft {
   };
 }
 
-interface Props {
+interface AnimalFormFieldsProps {
   index: number;
   value: AnimalDraft;
   onChange: (data: Partial<AnimalDraft>) => void;
@@ -38,7 +38,7 @@ interface Props {
   canRemove?: boolean;
 }
 
-export default function AnimalFields({
+export default function AnimalFormFields({
   index,
   value,
   onChange,
@@ -46,17 +46,13 @@ export default function AnimalFields({
   animalRequirements = [],
   animalPersonalityTraits = [],
   canRemove = true,
-}: Props) {
+}: AnimalFormFieldsProps) {
   const update = <K extends keyof AnimalDraft>(
     field: K,
     val: AnimalDraft[K],
   ) => {
     onChange({ [field]: val } as Partial<AnimalDraft>);
   };
-
-  const fieldClass =
-    "w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 transition-colors duration-200 bg-white";
-  const labelClass = "text-sm font-bold";
 
   const requirements = animalRequirements.filter(
     (r) =>
@@ -71,9 +67,11 @@ export default function AnimalFields({
   );
 
   const addRequirement = (documentId: string) => {
-    const req = animalRequirements.find((r) => r.documentId === documentId);
-    if (!req) return;
-    update("animal_requirements", [...value.animal_requirements, req]);
+    const requirement = animalRequirements.find(
+      (r) => r.documentId === documentId,
+    );
+    if (!requirement) return;
+    update("animal_requirements", [...value.animal_requirements, requirement]);
   };
 
   const removeRequirement = (documentId: string) => {
@@ -104,13 +102,10 @@ export default function AnimalFields({
   };
 
   return (
-    <fieldset className="border-2 border-tertiary rounded-2xl p-6 flex flex-col gap-5 bg-white shadow-sm">
+    <fieldset className="flex flex-col gap-6">
       <div className="flex justify-between items-center">
-        <legend className="text-base font-bold flex items-center gap-2">
-          <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-primary text-white text-sm font-bold">
-            {index}
-          </span>
-          Animal {index}
+        <legend className="font-bold flex items-center gap-2">
+          Animal n°{index}
         </legend>
         {canRemove && onRemove && (
           <button
@@ -132,7 +127,7 @@ export default function AnimalFields({
         onChange={(e) => update("name", e.target.value)}
       />
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Select
           name="sex"
           value={value.sex}
@@ -153,14 +148,20 @@ export default function AnimalFields({
           type="date"
           name="birthDate"
           value={value.birthDate}
-          required={true}
+          required={false}
           labelName="Date de naissance"
           onChange={(e) => update("birthDate", e.target.value)}
         />
       </div>
 
       <div className="flex flex-col gap-2">
-        <span className={labelClass}>Soins</span>
+        <div className="flex flex-col gap-1">
+          <span className="text-sm md:text-base font-bold">Soins</span>
+          <p className="text-sm text-quaternary/80">
+            Veuillez cocher les cases correspondantes aux soins reçus par
+            l'animal.
+          </p>
+        </div>
         <div className="grid grid-cols-2 gap-2">
           {(
             [
@@ -184,8 +185,26 @@ export default function AnimalFields({
       </div>
 
       <div className="flex flex-col gap-2">
-        <span className={labelClass}>Affinités</span>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="flex flex-col gap-1">
+          <span className="text-sm md:text-base font-bold">Particularités</span>
+          <p className="text-sm text-quaternary/80">
+            Veuillez cocher la case si l'animal présente des particularités
+            (handicap, soins particuliers, etc.).
+          </p>
+        </div>
+        <Input
+          type="checkbox"
+          name="isAtypical"
+          checked={value.isAtypical}
+          required={false}
+          labelName="Atypique"
+          onChange={(e) => update("isAtypical", e.target.checked)}
+        />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <span className="text-sm md:text-base font-bold">Affinités</span>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {(
             [
               ["dogAffinity", "Avec les chiens"],
@@ -217,66 +236,28 @@ export default function AnimalFields({
         </div>
       </div>
 
-      <div className="flex flex-col gap-1">
-        <Select
-          name="livingEnvironmentType"
-          value={value.livingEnvironmentType}
-          options={[
-            { key: "apartment", value: "apartment" },
-            { key: "house", value: "house" },
-            { key: "other", value: "other" },
-          ]}
-          translatedOptions={{
-            apartment: "Appartement",
-            house: "Maison",
-            other: "Autre",
-          }}
-          required={true}
-          labelName="Environnement de vie"
-          onChange={(e) =>
-            update(
-              "livingEnvironmentType",
-              e.target.value as AnimalDraft["livingEnvironmentType"],
-            )
-          }
-        />
-      </div>
-
-      <Input
-        type="checkbox"
-        name="isAtypical"
-        checked={value.isAtypical}
-        required={false}
-        labelName="Atypique (handicap, soins particuliers, etc.)"
-        onChange={(e) => update("isAtypical", e.target.checked)}
+      <Select
+        name="livingEnvironmentType"
+        value={value.livingEnvironmentType}
+        options={[
+          { key: "apartment", value: "apartment" },
+          { key: "house", value: "house" },
+          { key: "other", value: "other" },
+        ]}
+        translatedOptions={{
+          apartment: "Appartement",
+          house: "Maison",
+          other: "Autre",
+        }}
+        required={true}
+        labelName="Environnement de vie"
+        onChange={(e) =>
+          update(
+            "livingEnvironmentType",
+            e.target.value as AnimalDraft["livingEnvironmentType"],
+          )
+        }
       />
-
-      <div className="flex flex-col gap-1">
-        <Select
-          name="entityStatus"
-          value={value.entityStatus}
-          options={[
-            { key: "in shelter", value: "in shelter" },
-            { key: "in foster care", value: "in foster care" },
-            { key: "under medical care", value: "under medical care" },
-            { key: "adopted", value: "adopted" },
-          ]}
-          translatedOptions={{
-            "in shelter": "En refuge",
-            "in foster care": "En famille d'accueil",
-            "under medical care": "En soins médicaux",
-            adopted: "Adopté",
-          }}
-          required={true}
-          labelName="Statut"
-          onChange={(e) =>
-            update(
-              "entityStatus",
-              e.target.value as AnimalDraft["entityStatus"],
-            )
-          }
-        />
-      </div>
 
       <div className="flex flex-col gap-2">
         {requirements.length > 0 && (
@@ -287,10 +268,13 @@ export default function AnimalFields({
               key: r.documentId,
               value: r.documentId,
             }))}
-            translatedOptions={requirements.reduce((acc, r) => {
-              acc[r.documentId] = r.label;
-              return acc;
-            }, {} as Record<string, string>)}
+            translatedOptions={requirements.reduce(
+              (acc, r) => {
+                acc[r.documentId] = r.label;
+                return acc;
+              },
+              {} as Record<string, string>,
+            )}
             required={false}
             labelName="Conditions d'adoption"
             onChange={(e) => {
@@ -304,13 +288,13 @@ export default function AnimalFields({
             {value.animal_requirements.map((r) => (
               <span
                 key={r.documentId}
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary/30 text-quaternary text-sm font-bold border border-tertiary"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-primary text-secondary text-sm font-bold"
               >
                 {r.label}
                 <button
                   type="button"
                   onClick={() => removeRequirement(r.documentId)}
-                  className="text-primary hover:text-quaternary font-bold leading-none"
+                  className="text-secondary font-bold leading-none"
                   aria-label={`Retirer ${r.label}`}
                 >
                   ×
@@ -319,27 +303,30 @@ export default function AnimalFields({
             ))}
           </div>
         )}
-        {animalRequirements.length === 0 && (
-          <p className="text-sm text-quaternary/60 italic">
-            La liste des conditions d'adoption est vide.
+        {animalRequirements.length == 0 && (
+          <p className="text-sm text-quaternary/80 italic">
+            Aucune condition d'adoption disponible. Veuillez alimenter la liste
+            à partir du dashboard.
           </p>
         )}
       </div>
 
-      {/* Personality traits multi-select */}
       <div className="flex flex-col gap-2">
         {personalityTraits.length > 0 && (
-          <Select 
+          <Select
             name="personalityTraits"
             value=""
             options={personalityTraits.map((t) => ({
               key: t.documentId,
               value: t.documentId,
             }))}
-            translatedOptions={personalityTraits.reduce((acc, t) => {
-              acc[t.documentId] = t.label;
-              return acc;
-            }, {} as Record<string, string>)}
+            translatedOptions={personalityTraits.reduce(
+              (acc, t) => {
+                acc[t.documentId] = t.label;
+                return acc;
+              },
+              {} as Record<string, string>,
+            )}
             required={false}
             labelName="Traits de caractère"
             onChange={(e) => {
@@ -353,13 +340,13 @@ export default function AnimalFields({
             {value.animal_personality_traits.map((t) => (
               <span
                 key={t.documentId}
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-bold border border-primary/30"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-primary text-secondary text-sm font-bold"
               >
                 {t.label}
                 <button
                   type="button"
                   onClick={() => removeTrait(t.documentId)}
-                  className="text-primary hover:text-quaternary font-bold leading-none"
+                  className="text-secondary font-bold leading-none"
                   aria-label={`Retirer ${t.label}`}
                 >
                   ×
@@ -369,11 +356,34 @@ export default function AnimalFields({
           </div>
         )}
         {animalPersonalityTraits.length === 0 && (
-          <p className="text-sm text-quaternary/60 italic">
-            La liste des traits de caractère est vide.
+          <p className="text-sm text-quaternary/80">
+            Aucun trait de caractère disponible. Veuillez alimenter la liste à
+            partir du dashboard.
           </p>
         )}
       </div>
+
+      <Select
+        name="entityStatus"
+        value={value.entityStatus}
+        options={[
+          { key: "in shelter", value: "in shelter" },
+          { key: "in foster care", value: "in foster care" },
+          { key: "under medical care", value: "under medical care" },
+          { key: "adopted", value: "adopted" },
+        ]}
+        translatedOptions={{
+          "in shelter": "En refuge",
+          "in foster care": "En famille d'accueil",
+          "under medical care": "En soins médicaux",
+          adopted: "Adopté",
+        }}
+        required={true}
+        labelName="Statut"
+        onChange={(e) =>
+          update("entityStatus", e.target.value as AnimalDraft["entityStatus"])
+        }
+      />
     </fieldset>
   );
 }

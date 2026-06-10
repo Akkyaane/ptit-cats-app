@@ -1,7 +1,6 @@
 ﻿import Image from "next/image";
-import HeadingPrimary from "@/components/ui/HeadingPrimary";
-import HeadingSecondary from "@/components/ui/HeadingSecondary";
 import Button from "@/components/ui/Button";
+import Heading from "@/components/ui/Heading";
 
 export default function Donation() {
   const items = [
@@ -25,18 +24,18 @@ export default function Donation() {
             className="hidden lg:block absolute top-20 right-8 xl:right-24 w-72 xl:w-96"
           />
           <div className="flex flex-col items-center justify-center gap-6 py-16 md:py-24 lg:py-40">
-            <HeadingPrimary>Nous soutenir</HeadingPrimary>
+            <Heading type="h1" headingVariant="secondary">
+              Nous soutenir
+            </Heading>
           </div>
         </div>
       </header>
 
       <main className="container flex flex-col gap-12 md:gap-16 lg:gap-24">
         <section aria-label="Faites un don pour nos pensionnaires" className="p-8 md:p-10 flex flex-col gap-12">
-          <HeadingSecondary
-            headingVariant="primary"
-            underlineVariant="primary"
-            children="Faites un don pour nos pensionnaires"
-          />
+          <Heading type="h2" headingVariant="quaternary" underlineVariant="tertiary">
+            Faites un don pour nos pensionnaires
+          </Heading>
           <div className="md:text-lg leading-relaxed md:leading-8 flex flex-col gap-6 ">
             <p>
               Soutenez notre projet en faisant un don : chaque contribution,
@@ -59,11 +58,9 @@ export default function Donation() {
         </section>
 
         <section aria-label="Et les dons matériels ?" className="p-4 md:p-8 flex flex-col gap-12">
-          <HeadingSecondary
-            headingVariant="primary"
-            underlineVariant="primary"
-            children="Et les dons matériels ?"
-          />
+          <Heading type="h2" headingVariant="quaternary" underlineVariant="tertiary">
+            Et les dons matériels ?
+          </Heading>
           <div className="md:text-lg leading-relaxed md:leading-8 flex flex-col gap-6">
             <p>
               Vous avez du matériel inutilisé ou en bon état que vous souhaitez

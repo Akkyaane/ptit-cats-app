@@ -1,6 +1,5 @@
-﻿import Image from "next/image";
-import HeadingPrimary from "@/components/ui/HeadingPrimary";
-import HeadingSecondary from "@/components/ui/HeadingSecondary";
+﻿import Heading from "@/components/ui/Heading";
+import Image from "next/image";
 
 export default function Distribution() {
   return (
@@ -16,19 +15,26 @@ export default function Distribution() {
             className="hidden lg:block absolute top-20 right-8 xl:right-24 w-72 xl:w-96"
           />
           <div className="flex flex-col items-center justify-center gap-6 py-16 md:py-24 lg:py-40">
-            <HeadingPrimary>Distribution de croquettes</HeadingPrimary>
+            <Heading type="h1" headingVariant="secondary">
+              Distribution de croquettes
+            </Heading>
           </div>
         </div>
       </header>
 
       <main className="relative bg-secondary">
         <div className="container relative flex flex-col gap-12 md:gap-16 lg:gap-24">
-          <section aria-label="Notre mission" className="px-6 py-8 md:px-8 md:py-10 lg:px-10">
-            <HeadingSecondary
-              headingVariant="primary"
-              underlineVariant="primary"
-              children="Notre mission"
-            />
+          <section
+            aria-label="Notre mission"
+            className="px-6 py-8 md:px-8 md:py-10 lg:px-10"
+          >
+            <Heading
+              type="h2"
+              headingVariant="quaternary"
+              underlineVariant="tertiary"
+            >
+              Notre mission
+            </Heading>
 
             <div className="mt-8 space-y-8 md:space-y-10">
               <p className="border-l-4 border-primary bg-primary/5 px-4 md:px-6 py-3 md:py-4 rounded-r-xl font-semibold text-base md:text-lg">
@@ -54,16 +60,24 @@ export default function Distribution() {
             </div>
           </section>
 
-          <section aria-label="Informations pratiques" className="px-6 py-8 md:px-8 md:py-10 lg:px-10">
-            <HeadingSecondary
-              headingVariant="primary"
-              underlineVariant="primary"
-              children="Informations pratiques"
-            />
+          <section
+            aria-label="Informations pratiques"
+            className="px-6 py-8 md:px-8 md:py-10 lg:px-10"
+          >
+            <Heading
+              type="h2"
+              headingVariant="quaternary"
+              underlineVariant="tertiary"
+            >
+              Informations pratiques
+            </Heading>
 
             <ol className="mt-8 flex flex-col divide-y divide-primary/10 rounded-xl overflow-hidden list-none">
               <li className="flex items-start gap-5 px-6 py-6">
-                <span aria-hidden="true" className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-secondary text-sm font-bold flex items-center justify-center mt-0.5">
+                <span
+                  aria-hidden="true"
+                  className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-secondary text-sm font-bold flex items-center justify-center mt-0.5"
+                >
                   1
                 </span>
                 <div>
@@ -82,7 +96,10 @@ export default function Distribution() {
               </li>
 
               <li className="flex items-start gap-5 px-6 py-6">
-                <span aria-hidden="true" className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-secondary text-sm font-bold flex items-center justify-center mt-0.5">
+                <span
+                  aria-hidden="true"
+                  className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-secondary text-sm font-bold flex items-center justify-center mt-0.5"
+                >
                   2
                 </span>
                 <div>
@@ -92,7 +109,10 @@ export default function Distribution() {
                   <p className="text-sm md:text-base leading-relaxed">
                     Avant votre première venue, merci de nous contacter via
                     notre page de{" "}
-                    <a href="/contact" className="text-primary underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-sm">
+                    <a
+                      href="/contact"
+                      className="text-primary underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary rounded-sm"
+                    >
                       contact
                     </a>
                     . Nos bénévoles évalueront ensuite les besoins de vos
@@ -102,7 +122,10 @@ export default function Distribution() {
               </li>
 
               <li className="flex items-start gap-5 px-6 py-6">
-                <span aria-hidden="true" className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-secondary text-sm font-bold flex items-center justify-center mt-0.5">
+                <span
+                  aria-hidden="true"
+                  className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-secondary text-sm font-bold flex items-center justify-center mt-0.5"
+                >
                   3
                 </span>
                 <div>
@@ -125,7 +148,10 @@ export default function Distribution() {
               </li>
 
               <li className="flex items-start gap-5 px-6 py-6">
-                <span aria-hidden="true" className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-secondary text-sm font-bold flex items-center justify-center mt-0.5">
+                <span
+                  aria-hidden="true"
+                  className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-secondary text-sm font-bold flex items-center justify-center mt-0.5"
+                >
                   4
                 </span>
                 <div>

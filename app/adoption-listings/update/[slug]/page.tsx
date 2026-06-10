@@ -3,19 +3,22 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import HeadingPrimary from "@/components/ui/HeadingPrimary";
-import { AnimalDraft, defaultAnimalDraft } from "@/components/adoptionListing/AnimalFields";
-import AdoptionListingForm, {
+import {
+  AnimalDraft,
+  defaultAnimalDraft,
+} from "@/components/adoptionListing/AnimalFormFields";
+import ALForm, {
   AnimalEntry,
   ListingDraft,
 } from "@/components/adoptionListing/ALForm";
 import IAnimalRequirement from "@/interfaces/IAnimalRequirement";
 import IAnimalPersonalityTrait from "@/interfaces/IAnimalPersonalityTrait";
 import IAdoptionListing from "@/interfaces/IAdoptionListing";
+import Heading from "@/components/ui/Heading";
 
-// ─── helpers ──────────────────────────────────────────────────────────────────
-
-function animalToEntry(animal: IAdoptionListing["animals"][number]): AnimalEntry {
+function animalToEntry(
+  animal: IAdoptionListing["animals"][number],
+): AnimalEntry {
   return {
     _key: crypto.randomUUID(),
     documentId: animal.documentId,
@@ -36,9 +39,6 @@ function animalToEntry(animal: IAdoptionListing["animals"][number]): AnimalEntry
     animal_personality_traits: animal.animal_personality_traits ?? [],
   };
 }
-
-// ─── API calls ────────────────────────────────────────────────────────────────
-
 async function fetchListing(documentId: string): Promise<IAdoptionListing> {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/adoption-listings/${documentId}`,
@@ -107,12 +107,16 @@ async function createAnimal(draft: AnimalDraft): Promise<string> {
       body: JSON.stringify(payload),
     },
   );
-  if (!res.ok) throw new Error(`[animals/create] ${res.status} - ${await res.text()}`);
+  if (!res.ok)
+    throw new Error(`[animals/create] ${res.status} - ${await res.text()}`);
   const data = await res.json();
   return data.data.documentId as string;
 }
 
-async function updateAnimal(documentId: string, draft: AnimalDraft): Promise<void> {
+async function updateAnimal(
+  documentId: string,
+  draft: AnimalDraft,
+): Promise<void> {
   const payload = {
     documentId,
     name: draft.name,
@@ -141,7 +145,8 @@ async function updateAnimal(documentId: string, draft: AnimalDraft): Promise<voi
       body: JSON.stringify(payload),
     },
   );
-  if (!res.ok) throw new Error(`[animals/update] ${res.status} - ${await res.text()}`);
+  if (!res.ok)
+    throw new Error(`[animals/update] ${res.status} - ${await res.text()}`);
 }
 
 async function deleteAnimal(documentId: string): Promise<void> {
@@ -153,7 +158,8 @@ async function deleteAnimal(documentId: string): Promise<void> {
       body: JSON.stringify({ documentId }),
     },
   );
-  if (!res.ok) throw new Error(`[animals/delete] ${res.status} - ${await res.text()}`);
+  if (!res.ok)
+    throw new Error(`[animals/delete] ${res.status} - ${await res.text()}`);
 }
 
 async function updateListing(
@@ -163,7 +169,10 @@ async function updateListing(
   isDuo: boolean,
   newMediaIds: number[],
 ): Promise<void> {
-  const allMediaIds = [...listing.existingMediaIds, ...newMediaIds];
+  const allMediaIds = [
+    ...listing.existingMedia.map((m) => m.id),
+    ...newMediaIds,
+  ];
   const payload = {
     documentId,
     title: listing.title,
@@ -183,10 +192,11 @@ async function updateListing(
       body: JSON.stringify(payload),
     },
   );
-  if (!res.ok) throw new Error(`[adoption-listings/update] ${res.status} - ${await res.text()}`);
+  if (!res.ok)
+    throw new Error(
+      `[adoption-listings/update] ${res.status} - ${await res.text()}`,
+    );
 }
-
-// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function UpdateAdoptionListing({
   params,
@@ -206,7 +216,7 @@ export default function UpdateAdoptionListing({
     longDescription: "",
     price: 0,
     newMediaFiles: [],
-    existingMediaIds: [],
+    existingMedia: [],
   });
   const [requirements, setRequirements] = useState<IAnimalRequirement[]>([]);
   const [traits, setTraits] = useState<IAnimalPersonalityTrait[]>([]);
@@ -234,7 +244,9 @@ export default function UpdateAdoptionListing({
         const entries = fetchedListing.animals.map(animalToEntry);
         setAnimals(entries);
         setOriginalAnimalIds(
-          fetchedListing.animals.map((a) => a.documentId).filter(Boolean) as string[],
+          fetchedListing.animals
+            .map((a) => a.documentId)
+            .filter(Boolean) as string[],
         );
 
         setListing({
@@ -244,10 +256,13 @@ export default function UpdateAdoptionListing({
           longDescription: fetchedListing.longDescription ?? "",
           price: fetchedListing.price ?? 0,
           newMediaFiles: [],
-          existingMediaIds:
+          existingMedia:
             fetchedListing.media
-              ?.map((m) => (m.id ? Number(m.id) : NaN))
-              .filter((n) => !isNaN(n)) ?? [],
+              ?.map((m) => (m.id ? { id: Number(m.id), url: m.url } : null))
+              .filter(
+                (m): m is { id: number; url: string } =>
+                  m !== null && !isNaN(m.id),
+              ) ?? [],
         });
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
@@ -295,6 +310,20 @@ export default function UpdateAdoptionListing({
     }
   };
 
+  const handleRemoveNewFile = (index: number) => {
+    setListing((prev) => ({
+      ...prev,
+      newMediaFiles: prev.newMediaFiles.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleRemoveExistingMedia = (id: number) => {
+    setListing((prev) => ({
+      ...prev,
+      existingMedia: prev.existingMedia.filter((m) => m.id !== id),
+    }));
+  };
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setIsSaving(true);
@@ -324,7 +353,13 @@ export default function UpdateAdoptionListing({
 
       const newMediaIds = await uploadMedia(listing.newMediaFiles);
 
-      await updateListing(documentId, listing, animalDocumentIds, isDuo, newMediaIds);
+      await updateListing(
+        documentId,
+        listing,
+        animalDocumentIds,
+        isDuo,
+        newMediaIds,
+      );
 
       router.push(`/adoption-listings/view/${documentId}`);
     } catch (err) {
@@ -343,42 +378,36 @@ export default function UpdateAdoptionListing({
   }
 
   return (
-    <div>
-      <header className="bg-[url('/assets/img/background-2.jpg')]">
-        <div className="container relative">
-          <Image
-            src="/assets/img/icone-10.svg"
-            alt=""
-            aria-hidden="true"
-            width={384}
-            height={384}
-            className="hidden lg:block absolute top-20 right-8 xl:right-24 w-72 xl:w-96"
-          />
-          <div className="flex flex-col items-center justify-center gap-6 py-16 md:py-24 lg:py-40">
-            <HeadingPrimary>Modifier l'annonce</HeadingPrimary>
-          </div>
-        </div>
-      </header>
+    <div className="layout-header-spacing">
+      <div className="container">
+        <header>
+          <Heading type="h2" headingVariant="quaternary">
+            Modifier l'annonce
+          </Heading>
+        </header>
 
-      <main>
-        <AdoptionListingForm
-          mode="update"
-          step={step}
-          setStep={setStep}
-          isDuo={isDuo}
-          toggleDuo={toggleDuo}
-          animals={animals}
-          updateAnimal={updateAnimalEntry}
-          requirements={requirements}
-          traits={traits}
-          listing={listing}
-          onListingChange={handleListingChange}
-          onFilesChange={handleFilesChange}
-          onSubmit={handleSubmit}
-          isSaving={isSaving}
-          error={error}
-        />
-      </main>
+        <main>
+          <ALForm
+            mode="update"
+            step={step}
+            setStep={setStep}
+            isDuo={isDuo}
+            toggleDuo={toggleDuo}
+            animals={animals}
+            updateAnimal={updateAnimalEntry}
+            requirements={requirements}
+            traits={traits}
+            listing={listing}
+            onListingChange={handleListingChange}
+            onFilesChange={handleFilesChange}
+            onRemoveNewFile={handleRemoveNewFile}
+            onRemoveExistingMedia={handleRemoveExistingMedia}
+            onSubmit={handleSubmit}
+            isSaving={isSaving}
+            error={error}
+          />
+        </main>
+      </div>
     </div>
   );
 }

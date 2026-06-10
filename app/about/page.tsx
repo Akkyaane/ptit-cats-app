@@ -1,7 +1,6 @@
-﻿import HeadingPrimary from "@/components/ui/HeadingPrimary";
-import HeadingSecondary from "@/components/ui/HeadingSecondary";
-import Button from "@/components/ui/Button";
+﻿import Button from "@/components/ui/Button";
 import Image from "next/image";
+import Heading from "@/components/ui/Heading";
 
 export default function About() {
   return (
@@ -9,7 +8,9 @@ export default function About() {
       <header className="bg-[url('/assets/img/background-2.jpg')] bg-center bg-cover">
         <div className="container relative">
           <div className="flex flex-col items-center justify-center gap-6 py-16 md:py-24 lg:py-40">
-            <HeadingPrimary>À propos de nous</HeadingPrimary>
+            <Heading type="h1" headingVariant="secondary">
+              À propos de nous
+            </Heading>
           </div>
         </div>
       </header>
@@ -54,12 +55,9 @@ export default function About() {
 
         <section className="bg-quaternary" aria-label="Notre vision">
           <div className="container flex flex-col gap-6 py-16 md:py-24">
-            <HeadingSecondary
-              headingVariant="secondary"
-              underlineVariant="primary"
-            >
+            <Heading type="h2" headingVariant="secondary" underlineVariant="tertiary">
               Notre vision
-            </HeadingSecondary>
+            </Heading>
             <p className="leading-loose text-lg mx-auto max-w-4xl text-secondary">
               Chez Sans Croquettes Fixes, nous croyons que la protection animale
               passe aussi par la solidarité humaine. C'est pourquoi nous
@@ -73,9 +71,9 @@ export default function About() {
         </section>
 
         <section className="container flex flex-col gap-12" aria-label="Nos actions" >
-          <HeadingSecondary headingVariant="primary" underlineVariant="primary">
+          <Heading type="h2" headingVariant="quaternary" underlineVariant="tertiary">
             Nos actions
-          </HeadingSecondary>
+          </Heading>
           <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
             <article className="rounded-xl border border-gray-100 p-6 flex flex-col items-center gap-4">
               <Image
@@ -153,9 +151,10 @@ export default function About() {
           </div>
         </section>
         <section className="container flex flex-col gap-12" aria-label="Les débuts de Sans Croquettes Fixes" >
-          <HeadingSecondary headingVariant="primary" underlineVariant="primary">
+
+          <Heading type="h2" headingVariant="quaternary" underlineVariant="tertiary">
             Les débuts de Sans Croquettes Fixes
-          </HeadingSecondary>
+          </Heading>
           <div className="leading-loose text-lg mx-auto max-w-4xl flex flex-col gap-6">
             <p>
               Tout a commencé en 2015 à la suite d’échanges avec des
@@ -192,9 +191,9 @@ export default function About() {
         </section>
 
         <section className="container flex flex-col gap-12 ">
-          <HeadingSecondary headingVariant="primary" underlineVariant="primary">
+          <Heading type="h2" headingVariant="quaternary" underlineVariant="tertiary">
             Derrière chaque sauvetage, une rencontre inoubliable
-          </HeadingSecondary>
+          </Heading>
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
             <article className="overflow-hidden rounded-xl border border-gray-200 flex flex-row shadow-sm">
               <div className="min-h-48 sm:min-h-0 flex-1 relative">
@@ -287,12 +286,9 @@ export default function About() {
 
         <section className="bg-tertiary/10 " aria-label="Vous avez besoin d'aide ?">
           <div className="container flex flex-col items-center gap-6 py-16 md:py-24">
-            <HeadingSecondary
-              headingVariant="primary"
-              underlineVariant="primary"
-            >
+            <Heading type="h2" headingVariant="quaternary" underlineVariant="tertiary">
               Vous avez besoin d'aide ?
-            </HeadingSecondary>
+            </Heading>
             <p className="text-lg max-w-3xl text-center">
               Vous faites face à une situation compliquée et vous avez besoin
               d'un coup de main pour prendre soin de vos animaux ? Vous êtes

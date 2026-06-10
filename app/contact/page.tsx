@@ -1,9 +1,8 @@
 ﻿"use client";
 import { useState } from "react";
-import HeadingPrimary from "@/components/ui/HeadingPrimary";
-import HeadingSecondary from "@/components/ui/HeadingSecondary";
 import FormInput from "@/components/ui/FormInput";
 import Image from "next/image";
+import Heading from "@/components/ui/Heading";
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
@@ -33,7 +32,7 @@ export default function Contact() {
             className="hidden lg:block absolute top-20 right-8 xl:right-24 w-72 xl:w-96"
           />
           <div className="flex flex-col items-center justify-center gap-4 py-16 md:py-24 lg:py-40">
-            <HeadingPrimary>Nous contacter</HeadingPrimary>
+            <Heading type="h1" headingVariant="secondary">Nous contacter</Heading>
             <p className="text-secondary text-center max-w-2xl text-base md:text-lg">
               Une question sur une adoption, le bénévolat ou la distribution de
               croquettes ? <br /> Nous vous répondons sous 48h.
@@ -48,12 +47,9 @@ export default function Contact() {
             aria-label="Formulaire de contact"
             className="py-8 md:py-10 flex flex-col gap-12"
           >
-            <HeadingSecondary
-              headingVariant="primary"
-              underlineVariant="primary"
-            >
+            <Heading type="h2" headingVariant="quaternary" underlineVariant="tertiary">
               Envoyez-nous un message
-            </HeadingSecondary>
+            </Heading>
 
             <div
               role="status"

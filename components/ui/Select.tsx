@@ -18,8 +18,8 @@ export default function Select({
   onChange,
 }: SelectProps) {
   return (
-    <div className="flex flex-col gap-1">
-      <label htmlFor={name} className="text-sm font-bold">
+    <div className="flex flex-col gap-2">
+      <label htmlFor={name} className="text-sm md:text-base font-bold">
         {labelName} {required && <span className="text-primary">*</span>}
       </label>
 
@@ -29,7 +29,7 @@ export default function Select({
         required={required}
         value={value}
         onChange={onChange}
-        className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 transition-colors duration-200 bg-white"
+        className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200"
       >
         <option value="" hidden>Sélectionner une option</option>
         {options.map((option) => (

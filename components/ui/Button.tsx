@@ -11,21 +11,25 @@ const scrollToTop = () => {
 };
 
 type ButtonProps = {
-  children?: React.ReactNode;
+  type?: "button" | "submit";
   variant?: "primary" | "secondary";
-  size?: "sm" | "lg";
+  size?: "sm" | "md" | "lg";
   href?: string;
   up?: boolean;
+  disabled?: boolean;
   onClick?: () => void;
+  children?: React.ReactNode;
 };
 
 export default function Button({
-  children,
+  type = "button",
   variant = "primary",
   size = "lg",
   href,
   up,
+  disabled = false,
   onClick,
+  children,
 }: ButtonProps) {
   const [isScrolledDown, setIsScrolledDown] = useState(false);
 
@@ -47,6 +51,7 @@ export default function Button({
 
   const sizes = {
     sm: "px-3 py-2",
+    md: "px-4 py-3",
     lg: "px-6 py-4",
   };
 
@@ -87,8 +92,16 @@ export default function Button({
     );
   }
 
+  if (type === "submit") {
+    return (
+      <button type="submit" className={className}>
+        {children}
+      </button>
+    );
+  }
+
   return (
-    <button type="button" onClick={onClick} className={className}>
+    <button type="button" onClick={onClick} className={className} disabled={disabled}>
       {children}
     </button>
   );
