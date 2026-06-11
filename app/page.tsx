@@ -69,7 +69,7 @@ export default async function Index() {
           </Heading>
           {adoptionListings.length === 0 ? (
             <p className="text-center text-lg">
-              Aucun chat n'est disponible pour le moment.
+              Aucun animal n'est disponible pour le moment.
             </p>
           ) : (
             <AdoptionPostCarousel items={adoptionListings} />

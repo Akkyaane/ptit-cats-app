@@ -1,5 +1,7 @@
 ﻿import type { Metadata } from "next";
 import "./globals.css";
+import "@blocknote/core/fonts/inter.css";
+import "@blocknote/mantine/style.css";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Button from "@/components/ui/Button";

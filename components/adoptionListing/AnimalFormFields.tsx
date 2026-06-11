@@ -304,7 +304,7 @@ export default function AnimalFormFields({
           </div>
         )}
         {animalRequirements.length == 0 && (
-          <p className="text-sm text-quaternary/80 italic">
+          <p className="text-sm text-quaternary/80">
             Aucune condition d'adoption disponible. Veuillez alimenter la liste
             à partir du dashboard.
           </p>

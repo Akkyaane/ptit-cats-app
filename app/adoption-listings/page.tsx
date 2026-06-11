@@ -44,7 +44,7 @@ export default async function displayAll() {
 
           {adoptionListings.length === 0 ? (
             <p className="text-center text-lg">
-              Aucun chat n'est disponible pour le moment.
+              Aucun animal n'est disponible pour le moment.
             </p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
