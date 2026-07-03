@@ -28,6 +28,8 @@ async function deleteAnimal(documentId: string): Promise<void> {
     throw new Error(`[animals/delete] ${res.status} - ${await res.text()}`);
 }
 
+
+
 async function deleteListing(documentId: string): Promise<void> {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/adoption-listings/delete`,

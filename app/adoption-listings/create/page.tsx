@@ -244,7 +244,6 @@ export default function CreateAdoptionListing() {
         </header>
 
         <ALForm
-          mode="create"
           step={step}
           setStep={setStep}
           isDuo={isDuo}

@@ -1,7 +1,9 @@
 "use client";
 
+import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
+import { useEffect } from "react";
 
 async function uploadFile(file: File) {
   const body = new FormData();
@@ -17,10 +19,31 @@ async function uploadFile(file: File) {
   );
 }
 
-export default function Editor() {
-  const editor = useCreateBlockNote({
-    uploadFile
+type EditorProps = {
+  initialContent?: PartialBlock[];
+  onChange?: (blocks: PartialBlock[]) => void;
+  editable?: boolean;
+};
+
+export default function Editor({ initialContent, onChange, editable = true }: EditorProps) {
+  const editor: BlockNoteEditor = useCreateBlockNote({
+    uploadFile,
+    initialContent: initialContent && initialContent.length > 0 ? initialContent : undefined,
   });
 
-  return <BlockNoteView editor={editor} />;
+  useEffect(() => {
+    if (!onChange) return;
+
+    const unsubscribe = editor.onChange(() => {
+      onChange(editor.document as PartialBlock[]);
+    });
+
+    return () => unsubscribe();
+  }, [editor, onChange]);
+
+  return (
+    <div>
+      <BlockNoteView editor={editor} editable={editable} theme="light" />
+    </div>
+  );
 }

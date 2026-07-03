@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
+export async function PUT(
+  req: NextRequest,
+  params: { params: Promise<{ slug: string }> },
+) {
+  const { slug } = await params.params;
+
   try {
     const body = await req.json();
 
@@ -10,13 +15,12 @@ export async function POST(req: NextRequest) {
         typeof body.content === "string"
           ? body.content
           : JSON.stringify(body.content),
-      publicationDate: body.publicationDate ?? new Date().toISOString(),
     };
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/articles`,
+      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/articles/${slug}`,
       {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
@@ -27,7 +31,7 @@ export async function POST(req: NextRequest) {
 
     if (!res.ok) {
       return NextResponse.json(
-        { error: `[articles/create] API POST: ${res.status} - ${res.statusText} - ${await res.text()}` },
+        { error: `[articles/update/${slug}] API PUT: ${res.status} - ${res.statusText} - ${await res.text()}` },
         { status: res.status },
       );
     }
@@ -36,7 +40,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, data: data.data }, { status: 200 });
   } catch (err) {
     return NextResponse.json(
-      { error: `[articles/create] API POST: ${String(err)}` },
+      { error: `[articles/update/${slug}] API PUT: ${String(err)}` },
       { status: 500 },
     );
   }

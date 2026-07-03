@@ -1,0 +1,124 @@
+"use client";
+
+import { useState } from "react";
+import { PartialBlock } from "@blocknote/core";
+import DynamicEditor from "@/components/blocknote/DynamicEditor";
+import Select from "@/components/ui/Select";
+import Button from "@/components/ui/Button";
+import Heading from "@/components/ui/Heading";
+import { CATEGORY_OPTIONS, CATEGORY_LABELS } from "@/utils/articleHelper";
+
+export type ArticleDraft = {
+  publicationDate: Date;
+  category: string;
+  content: PartialBlock[];
+};
+
+type ArticleFormProps = {
+  initialDraft?: ArticleDraft;
+  onSubmit: (draft: ArticleDraft) => Promise<void>;
+  isSaving: boolean;
+  error: string | null;
+  submitLabel: string;
+  heading: string;
+  onCancel: () => void;
+};
+
+const INITIAL_CONTENT: PartialBlock[] = [
+  { type: "heading", content: "Titre de l'article", props: { level: 1 } } as PartialBlock,
+  { type: "paragraph", content: "Rédigez votre introduction ici…" } as PartialBlock,
+];
+
+export default function ArticleForm({
+  initialDraft,
+  onSubmit,
+  isSaving,
+  error,
+  submitLabel,
+  heading,
+  onCancel,
+}: ArticleFormProps) {
+  const [category, setCategory] = useState(initialDraft?.category ?? "news");
+  const [blocks, setBlocks] = useState<PartialBlock[]>(
+    initialDraft?.content ?? INITIAL_CONTENT,
+  );
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    await onSubmit({
+      publicationDate: initialDraft?.publicationDate ?? new Date(),
+      category,
+      content: blocks,
+    });
+  }
+
+  return (
+    <div className="container flex flex-col gap-6">
+      <div className="max-w-3xl mx-auto w-full flex flex-col gap-6">
+        <Heading type="h2" headingVariant="quaternary" underlineVariant="tertiary">
+          {heading}
+        </Heading>
+
+        {error && (
+          <div className="px-4 py-3 rounded-xl bg-primary/10 border-2 border-primary text-primary font-bold text-sm">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-6">
+          {/* Catégorie */}
+          <div className="flex flex-col gap-4 border-2 border-tertiary rounded-xl p-6">
+            <Select
+              name="category"
+              value={category}
+              options={[...CATEGORY_OPTIONS]}
+              translatedOptions={CATEGORY_LABELS}
+              required={true}
+              labelName="Catégorie"
+              onChange={(e) => setCategory(e.target.value)}
+            />
+          </div>
+
+          {/* Éditeur de contenu */}
+          <div className="flex flex-col gap-3 border-2 border-tertiary rounded-xl p-6">
+            <div className="flex flex-col gap-1">
+              <span className="text-sm md:text-base font-bold">
+                Contenu <span className="text-primary">*</span>
+              </span>
+              <p className="text-sm text-quaternary/80">
+                Commencez par un titre (Heading 1), puis rédigez votre article.
+                Les images insérées dans l'éditeur seront incluses dans l'article.
+              </p>
+            </div>
+            <DynamicEditor
+              initialContent={initialDraft?.content ?? INITIAL_CONTENT}
+              onChange={setBlocks}
+              editable={!isSaving}
+            />
+          </div>
+
+          {/* Actions */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-2">
+            <Button
+              type="button"
+              variant="secondary"
+              size="md"
+              onClick={onCancel}
+              disabled={isSaving}
+            >
+              Annuler
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              size="md"
+              disabled={isSaving}
+            >
+              {isSaving ? "Enregistrement…" : submitLabel}
+            </Button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}

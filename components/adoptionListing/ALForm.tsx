@@ -26,7 +26,6 @@ export type ListingDraft = {
 };
 
 type ALFormProps = {
-  mode: "create" | "update";
   step: 1 | 2;
   setStep: (step: 1 | 2) => void;
   isDuo: boolean;
@@ -48,7 +47,6 @@ type ALFormProps = {
 };
 
 export default function ALForm({
-  mode,
   step,
   setStep,
   isDuo,
@@ -145,7 +143,7 @@ export default function ALForm({
         <form onSubmit={onSubmit}>
           <section className="flex flex-col gap-6">
             <div
-              className={`flex flex-col gap-4 ${isDuo ? "w-fit" : "max-w-3xl mx-auto w-full"}`}
+              className={`flex flex-col gap-4 max-w-3xl mx-auto w-full`}
             >
               <Heading
                 type="h3"
