@@ -44,6 +44,7 @@ type ALFormProps = {
   onSubmit: (e: React.FormEvent) => void;
   isSaving: boolean;
   error: string | null;
+  backHref?: string;
 };
 
 export default function ALForm({
@@ -63,6 +64,7 @@ export default function ALForm({
   onSubmit,
   isSaving,
   error,
+  backHref,
 }: ALFormProps) {
   return (
     <div className="container flex flex-col gap-6">
@@ -129,8 +131,15 @@ export default function ALForm({
             </div>
 
             <div
-              className={`flex justify-end ${isDuo ? "" : "max-w-3xl mx-auto w-full"}`}
+              className={`flex justify-between ${isDuo ? "" : "max-w-3xl mx-auto w-full"}`}
             >
+              {backHref ? (
+                <Button href={backHref} variant="secondary" size="md">
+                  ← Retour
+                </Button>
+              ) : (
+                <div />
+              )}
               <Button type="submit" variant="primary" size="md">
                 Suivant →
               </Button>

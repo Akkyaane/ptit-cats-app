@@ -6,7 +6,7 @@ import DynamicEditor from "@/components/blocknote/DynamicEditor";
 import Select from "@/components/ui/Select";
 import Button from "@/components/ui/Button";
 import Heading from "@/components/ui/Heading";
-import { CATEGORY_OPTIONS, CATEGORY_LABELS } from "@/utils/articleHelper";
+import { CATEGORY_OPTIONS, CATEGORY_LABELS } from "@/helpers/articleHelper";
 
 export type ArticleDraft = {
   publicationDate: Date;
@@ -26,7 +26,7 @@ type ArticleFormProps = {
 
 const INITIAL_CONTENT: PartialBlock[] = [
   { type: "heading", content: "Titre de l'article", props: { level: 1 } } as PartialBlock,
-  { type: "paragraph", content: "Rédigez votre introduction ici…" } as PartialBlock,
+  { type: "paragraph", content: "Commencer à écrire…" } as PartialBlock,
 ];
 
 export default function ArticleForm({
@@ -54,7 +54,7 @@ export default function ArticleForm({
 
   return (
     <div className="container flex flex-col gap-6">
-      <div className="max-w-3xl mx-auto w-full flex flex-col gap-6">
+      <div className="max-w-3xl mx-auto w-full flex flex-col gap-8">
         <Heading type="h2" headingVariant="quaternary" underlineVariant="tertiary">
           {heading}
         </Heading>
@@ -65,9 +65,9 @@ export default function ArticleForm({
           </div>
         )}
 
-        <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-6">
+        <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-8">
           {/* Catégorie */}
-          <div className="flex flex-col gap-4 border-2 border-tertiary rounded-xl p-6">
+          <div className="max-w-xs">
             <Select
               name="category"
               value={category}
@@ -79,23 +79,15 @@ export default function ArticleForm({
             />
           </div>
 
+          {/* Séparateur */}
+          <div className="h-px bg-tertiary/50" />
+
           {/* Éditeur de contenu */}
-          <div className="flex flex-col gap-3 border-2 border-tertiary rounded-xl p-6">
-            <div className="flex flex-col gap-1">
-              <span className="text-sm md:text-base font-bold">
-                Contenu <span className="text-primary">*</span>
-              </span>
-              <p className="text-sm text-quaternary/80">
-                Commencez par un titre (Heading 1), puis rédigez votre article.
-                Les images insérées dans l'éditeur seront incluses dans l'article.
-              </p>
-            </div>
-            <DynamicEditor
-              initialContent={initialDraft?.content ?? INITIAL_CONTENT}
-              onChange={setBlocks}
-              editable={!isSaving}
-            />
-          </div>
+          <DynamicEditor
+            initialContent={initialDraft?.content ?? INITIAL_CONTENT}
+            onChange={setBlocks}
+            editable={!isSaving}
+          />
 
           {/* Actions */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-2">

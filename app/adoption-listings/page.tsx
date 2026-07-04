@@ -1,5 +1,5 @@
-﻿import ALCard from "@/components/adoptionListing/ALCard";
-import Button from "@/components/ui/Button";
+﻿import ALFilteredList from "@/components/adoptionListing/ALFilteredList";
+import Breadcrumb from "@/components/Breadcrumb";
 import Heading from "@/components/ui/Heading";
 import IAdoptionListing from "@/interfaces/IAdoptionListing";
 
@@ -32,13 +32,10 @@ export default async function displayAll() {
 
   return (
     <div>
-      <header className="bg-tertiary h-28">
-        <section className="container hidden">
-          <Heading type="h1" headingVariant="secondary">Nos annonces d'adoption</Heading>
-        </section>
-      </header>
+      <header className="bg-tertiary h-28" />
 
       <main>
+        <Breadcrumb />
         <section className="container flex flex-col gap-12 items-center">
           <Heading type="h2" headingVariant="quaternary" underlineVariant="tertiary">Nos annonces d'adoption</Heading>
 
@@ -47,25 +44,8 @@ export default async function displayAll() {
               Aucun animal n'est disponible pour le moment.
             </p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {adoptionListings.map((adoptionListing: IAdoptionListing) => (
-                <ALCard
-                  key={adoptionListing.documentId}
-                  documentId={adoptionListing.documentId}
-                  title={adoptionListing.title}
-                  slogan={adoptionListing.slogan}
-                  shortDescription={adoptionListing.shortDescription}
-                  longDescription={adoptionListing.longDescription}
-                  media={adoptionListing.media}
-                  isDuo={adoptionListing.isDuo}
-                  price={adoptionListing.price}
-                  animals={adoptionListing.animals}
-                  entityStatus={adoptionListing.entityStatus}
-                />
-              ))}
-            </div>
+            <ALFilteredList listings={adoptionListings} />
           )}
-          <Button href="/adoption-listings/create">Ajouter une annonce</Button>
         </section>
       </main>
     </div>

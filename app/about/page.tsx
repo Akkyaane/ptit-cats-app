@@ -1,11 +1,12 @@
 ﻿import Button from "@/components/ui/Button";
+import Breadcrumb from "@/components/Breadcrumb";
 import Image from "next/image";
 import Heading from "@/components/ui/Heading";
 
 export default function About() {
   return (
     <>
-      <header className="bg-[url('/assets/img/background-2.jpg')] bg-center bg-cover">
+      <header className="bg-[url('/assets/img/backgrounds/background-2.jpg')] bg-cover">
         <div className="container relative">
           <div className="flex flex-col items-center justify-center gap-6 py-16 md:py-24 lg:py-40">
             <Heading type="h1" headingVariant="secondary">
@@ -16,6 +17,7 @@ export default function About() {
       </header>
 
       <main className="flex flex-col gap-12 md:gap-16 lg:gap-24">
+        <Breadcrumb />
         <section className="container flex flex-col gap-12" aria-label="A propos de nous" >
           <blockquote className="mx-auto max-w-2xl text-center">
             <span
@@ -77,7 +79,7 @@ export default function About() {
           <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
             <article className="rounded-xl border border-gray-100 p-6 flex flex-col items-center gap-4">
               <Image
-                src="/assets/img/icone-1.png"
+                src="/assets/img/icons/icon-1.png"
                 alt="Prise en charge"
                 width={64}
                 height={64}
@@ -92,7 +94,7 @@ export default function About() {
 
             <article className="rounded-xl border border-gray-100 p-6 flex flex-col items-center gap-4">
               <Image
-                src="/assets/img/icone-2.png"
+                src="/assets/img/icons/icon-2.png"
                 alt="Distribution"
                 width={64}
                 height={64}
@@ -106,7 +108,7 @@ export default function About() {
 
             <article className="rounded-xl border border-gray-100 p-6 flex flex-col items-center gap-4">
               <Image
-                src="/assets/img/icone-3.png"
+                src="/assets/img/icons/icon-3.png"
                 alt="Stérilisation"
                 width={64}
                 height={64}
@@ -121,7 +123,7 @@ export default function About() {
 
             <article className="rounded-xl border border-gray-100 p-6 flex flex-col items-center gap-4">
               <Image
-                src="/assets/img/icone-4.png"
+                src="/assets/img/icons/icon-4.png"
                 alt="Accompagnement"
                 width={64}
                 height={64}
@@ -136,7 +138,7 @@ export default function About() {
 
             <article className="rounded-xl border border-gray-100 p-6 flex flex-col items-center gap-4">
               <Image
-                src="/assets/img/icone-5.png"
+                src="/assets/img/icons/icon-5.png"
                 alt="Sensibilisation"
                 width={64}
                 height={64}
@@ -198,7 +200,7 @@ export default function About() {
             <article className="overflow-hidden rounded-xl border border-gray-200 flex flex-row shadow-sm">
               <div className="min-h-48 sm:min-h-0 flex-1 relative">
                 <Image
-                  src="/assets/animals/animal-6.jpg"
+                  src="/assets/img/animals/mambo.jpg"
                   alt="Mambo"
                   fill
                   sizes="(max-width: 768px) 50vw, 25vw"
@@ -219,7 +221,7 @@ export default function About() {
             <article className="overflow-hidden rounded-xl border border-gray-200 flex flex-row shadow-sm">
               <div className="min-h-48 sm:min-h-0 flex-1 relative">
                 <Image
-                  src="/assets/animals/animal-7.jpg"
+                  src="/assets/img/animals/puppy.jpg"
                   alt="Puppy"
                   fill
                   sizes="(max-width: 768px) 50vw, 25vw"
@@ -241,7 +243,7 @@ export default function About() {
             <article className="overflow-hidden rounded-xl border border-gray-200 flex flex-row shadow-sm">
               <div className="min-h-48 sm:min-h-0 flex-1 relative">
                 <Image
-                  src="/assets/animals/animal-8.jpeg"
+                  src="/assets/img/animals/kiki.jpeg"
                   alt="Kiki"
                   fill
                   sizes="(max-width: 768px) 50vw, 25vw"
@@ -263,7 +265,7 @@ export default function About() {
             <article className="overflow-hidden rounded-xl border border-gray-200 flex flex-row shadow-sm">
               <div className="min-h-48 sm:min-h-0 flex-1 relative">
                 <Image
-                  src="/assets/animals/animal-9.jpg"
+                  src="/assets/img/animals/pepinette.jpg"
                   alt="Pépinette"
                   fill
                   sizes="(max-width: 768px) 50vw, 25vw"

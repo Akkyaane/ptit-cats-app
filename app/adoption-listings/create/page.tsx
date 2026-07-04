@@ -12,6 +12,7 @@ import ALForm, {
 } from "@/components/adoptionListing/ALForm";
 import IAnimalRequirement from "@/interfaces/IAnimalRequirement";
 import IAnimalPersonalityTrait from "@/interfaces/IAnimalPersonalityTrait";
+import Breadcrumb from "@/components/Breadcrumb";
 import Heading from "@/components/ui/Heading";
 
 function defaultListing(): ListingDraft {
@@ -237,6 +238,7 @@ export default function CreateAdoptionListing() {
   return (
     <div className="layout-header-spacing">
       <div className="container">
+        <Breadcrumb />
         <header>
           <Heading type="h2" headingVariant="quaternary">
             Créer une annonce
@@ -260,6 +262,7 @@ export default function CreateAdoptionListing() {
           onSubmit={handleSubmit}
           isSaving={isLoading}
           error={error}
+          backHref="/adoption-listings"
         />
       </div>
     </div>

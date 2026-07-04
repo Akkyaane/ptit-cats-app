@@ -2,7 +2,8 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import ArticleForm, { ArticleDraft } from "@/components/blog/ArticleForm";
+import ArticleForm, { ArticleDraft } from "@/components/article/ArticleForm";
+import Breadcrumb from "@/components/Breadcrumb";
 
 async function createArticle(draft: ArticleDraft): Promise<void> {
   const res = await fetch(
@@ -44,6 +45,9 @@ export default function CreateArticlePage() {
 
   return (
     <div className="layout-header-spacing">
+      <div className="container">
+        <Breadcrumb />
+      </div>
       <ArticleForm
         heading="Écrire un article"
         submitLabel="Publier"

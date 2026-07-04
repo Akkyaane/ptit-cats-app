@@ -25,8 +25,7 @@ export default async function RegisterCompletePage({
               <div className="w-12 h-1 bg-tertiary rounded-full"></div>
             </div>
             <p className="text-quaternary/80 leading-relaxed">
-              Voulez-vous compléter votre profil pour que nous puissions vous
-              trouver le chat parfait ?
+              Souhaitez-vous compléter votre profil pour faciliter la démarche d'adoption ?
             </p>
             <div className="flex flex-col gap-3">
               <Link

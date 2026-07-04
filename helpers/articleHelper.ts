@@ -40,13 +40,18 @@ export function extractTitle(blocks: PartialBlock[]): string {
 }
 
 export function extractDescription(blocks: PartialBlock[]): string {
-  const para = blocks.find((b) => b.type === "paragraph");
+  const para = blocks.find(
+    (b) =>
+      b.type === "paragraph" &&
+      (b.content as InlineContent[])?.some(
+        (c) => c.type === "text" && (c.text ?? "").trim().length > 0,
+      ),
+  );
   if (!para?.content) return "";
   return (para.content as InlineContent[])
     .filter((c) => c.type === "text")
     .map((c) => c.text ?? "")
-    .join("")
-    .slice(0, 160);
+    .join("");
 }
 
 export function extractImageUrl(blocks: PartialBlock[]): string | undefined {

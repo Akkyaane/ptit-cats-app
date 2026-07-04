@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import IArticle from "@/interfaces/IArticle";
 import Heading from "@/components/ui/Heading";
 import Button from "@/components/ui/Button";
-import { extractTitle } from "@/utils/articleHelper";
+import { extractTitle } from "@/helpers/articleHelper";
 
 async function fetchArticle(documentId: string): Promise<IArticle> {
   const res = await fetch(

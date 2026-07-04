@@ -26,7 +26,9 @@ export default function RootLayout({
         <header>
           <Navbar />
         </header>
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">
+          {children}
+        </main>
         <Footer />
         <Button up={true} />
       </body>

@@ -1,6 +1,7 @@
 ﻿import Button from "@/components/ui/Button";
+import Breadcrumb from "@/components/Breadcrumb";
 import GalleryWithLightbox from "@/components/adoptionListing/GalleryWithLightbox";
-import calculateAge from "@/utils/dateHelper";
+import calculateAge from "@/helpers/dateHelper";
 import IAdoptionListing from "@/interfaces/IAdoptionListing";
 import Heading from "@/components/ui/Heading";
 
@@ -79,28 +80,52 @@ export default async function displayOne(params: { params: { slug: string } }) {
 
   return (
     <>
-      <header className="bg-tertiary h-28"></header>
+      <header className="bg-tertiary h-28" />
 
       <main className="flex flex-col gap-12 md:gap-16 lg:gap-24">
-        <section className="container flex flex-col gap-6 py-16 md:py-24">
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-3xl md:text-4xl font-bold leading-tight">
-                {adoptionListing.animals
-                  .map((animal) => animal.name)
-                  .join(" & ")}
-              </h1>
-              {adoptionListing.isDuo && (
-                <span className="text-xs font-bold bg-primary text-secondary px-3 py-1 rounded-xl shadow-sm">
-                  Duo
-                </span>
+        <Breadcrumb />
+        <section className="container flex flex-col gap-6 py-8 md:py-12">
+          <div className="flex items-start justify-between gap-4 flex-wrap">
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-3 flex-wrap">
+                <h1 className="text-3xl md:text-4xl font-bold leading-tight">
+                  {adoptionListing.animals
+                    .map((animal) => animal.name)
+                    .join(" & ")}
+                </h1>
+                {adoptionListing.isDuo && (
+                  <span className="text-xs font-bold bg-primary text-secondary px-3 py-1 rounded-xl shadow-sm">
+                    Duo
+                  </span>
+                )}
+              </div>
+              {adoptionListing.slogan && (
+                <p className="text-base md:text-lg text-quaternary/80">
+                  {adoptionListing.slogan}
+                </p>
               )}
             </div>
-            {adoptionListing.slogan && (
-              <p className="text-base md:text-lg text-quaternary/80">
-                {adoptionListing.slogan}
-              </p>
-            )}
+
+            {/* Top action buttons – right side */}
+            <div className="flex flex-row flex-wrap gap-2 shrink-0">
+              <Button href="/adoption-listings" variant="secondary" size="sm">
+                ← Retour
+              </Button>
+              <Button
+                href={`/adoption-listings/update/${adoptionListing.documentId}`}
+                variant="primary"
+                size="sm"
+              >
+                Modifier
+              </Button>
+              <Button
+                href={`/adoption-listings/delete/${adoptionListing.documentId}`}
+                variant="primary"
+                size="sm"
+              >
+                Supprimer
+              </Button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] xl:grid-cols-[1fr_520px] gap-6 lg:gap-10 items-start">
@@ -389,14 +414,14 @@ export default async function displayOne(params: { params: { slug: string } }) {
             variant="primary"
             size="lg"
           >
-            Modifier l'annonce
+            Modifier
           </Button>
           <Button
             href={`/adoption-listings/delete/${adoptionListing.documentId}`}
             variant="primary"
             size="lg"
           >
-            Supprimer l'annonce
+            Supprimer
           </Button>
         </div>
       </main>

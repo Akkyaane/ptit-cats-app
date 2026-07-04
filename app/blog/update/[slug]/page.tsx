@@ -3,7 +3,8 @@
 import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import IArticle from "@/interfaces/IArticle";
-import ArticleForm, { ArticleDraft } from "@/components/blog/ArticleForm";
+import Breadcrumb from "@/components/Breadcrumb";
+import ArticleForm, { ArticleDraft } from "@/components/article/ArticleForm";
 
 async function fetchArticle(documentId: string): Promise<IArticle> {
   const res = await fetch(
@@ -105,6 +106,9 @@ export default function UpdateArticlePage({
 
   return (
     <div className="layout-header-spacing">
+      <div className="container">
+        <Breadcrumb />
+      </div>
       <ArticleForm
         heading="Modifier l'article"
         submitLabel="Enregistrer"

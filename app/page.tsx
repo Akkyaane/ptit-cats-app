@@ -1,11 +1,17 @@
 ﻿import Button from "@/components/ui/Button";
 import AdoptionPostCarousel from "@/components/adoptionListing/ALCarousel";
-import ArticleCard from "@/components/ArticleCard";
+import ArticleCard from "@/components/article/ArticleCard";
 import Card from "@/components/ui/Card";
 import Image from "next/image";
 import IAdoptionListing from "@/interfaces/IAdoptionListing";
+import IArticle from "@/interfaces/IArticle";
 import Statistics from "@/components/Statistics";
 import Heading from "@/components/ui/Heading";
+import {
+  extractTitle,
+  extractDescription,
+  extractImageUrl,
+} from "@/helpers/articleHelper";
 
 async function getLastAdoptionListings(): Promise<IAdoptionListing[]> {
   try {
@@ -31,12 +37,37 @@ async function getLastAdoptionListings(): Promise<IAdoptionListing[]> {
   }
 }
 
+async function getLastArticles(): Promise<IArticle[]> {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/articles`,
+    );
+
+    if (!res.ok) {
+      console.error(
+        `[articles] getLastArticles: ${res.status} - ${res.statusText} - ${await res.text()}`,
+      );
+
+      return [];
+    }
+
+    const data = await res.json();
+
+    return (data.data ?? []).slice(0, 3);
+  } catch (err) {
+    console.error(`[articles] getLastArticles: ${err}`);
+
+    return [];
+  }
+}
+
 export default async function Index() {
   const adoptionListings = await getLastAdoptionListings();
+  const lastArticles = await getLastArticles();
 
   return (
     <>
-      <header className="bg-[url('/assets/img/background-1.jpg')] bg-center">
+      <header className="bg-[url('/assets/img/backgrounds/background-1.jpg')] bg-center">
         <div className="container">
           <section
             aria-label="Présentation"
@@ -84,7 +115,7 @@ export default async function Index() {
           aria-label="Qui sommes-nous ?"
           className="container flex flex-col gap-12"
         >
-          <Heading type="h2" headingVariant="primary" underlineVariant="primary">
+          <Heading type="h2" headingVariant="quaternary" underlineVariant="tertiary">
             Qui sommes-nous ?
           </Heading>
           <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-6 lg:gap-8">
@@ -123,7 +154,7 @@ export default async function Index() {
             <div className="relative">
               <div className="relative rounded-xl w-full h-[800px] md:h-[600px] md:w-[500px] lg:mx-auto overflow-hidden">
                 <Image
-                  src="/assets/img/background-5.jpg"
+                  src="/assets/img/backgrounds/background-5.jpg"
                   alt="Photo de chats Sans Croquettes Fixes"
                   fill
                   className="object-cover rounded-xl"
@@ -132,19 +163,19 @@ export default async function Index() {
               </div>
               <div className="absolute inset-x-4 -bottom-12 md:bottom-4 grid gap-4 grid-cols-1 lg:grid-cols-3 text-center w-fit ml-auto">
                 <Card
-                  imageUrl="/assets/img/icone-7.png"
+                  imageUrl="/assets/img/icons/icon-6.png"
                   title="Faire un don"
                   description="Pour financer les soins de nos compagnons, nous avons
  besoin de dons."
                 />
                 <Card
-                  imageUrl="/assets/img/icone-9.png"
+                  imageUrl="/assets/img/icons/icon-8.png"
                   title="Devenir un foyer d'accueil"
                   description="Nos compagnons sont hébergés temporairement dans des
  familles d'accueil avant d'être adoptés."
                 />
                 <Card
-                  imageUrl="/assets/img/icone-8.png"
+                  imageUrl="/assets/img/icons/icon-7.png"
                   title="Devenir bénévole"
                   description="Toutes nos actions sont rendues possibles grâce à nos
  bénévoles."
@@ -157,31 +188,38 @@ export default async function Index() {
           aria-label="Nos derniers articles"
           className="container flex flex-col gap-12"
         >
-          <Heading type="h2" headingVariant="primary" underlineVariant="primary">
+          <Heading type="h2" headingVariant="quaternary" underlineVariant="tertiary">
             Nos derniers articles
           </Heading>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-            <ArticleCard
-              imageUrl="/assets/articles/article-1.jpg"
-              title="Un lieu pour les chats oubliés : l'appel aux dons de Sans Croquettes Fixes"
-              date="25 juillet 2025"
-              description="À l'abri des regards, certains chats errants n'ont plus aucune solution : trop âgés, malades ou trop craintifs pour être adoptés. C'est pour eux que l'association Sans Croquettes Fixes lance le projet Les Félins de l'Ombre..."
-              link=""
-            />
-            <ArticleCard
-              imageUrl="/assets/articles/article-2.jpg"
-              title="Sans Croquettes Fixes : les distributions continuent même pendant l'été"
-              date="25 juillet 2025"
-              description="Même en plein cœur de l'été, l'association Sans Croquettes Fixes ne baisse pas les bras. Chaque semaine, ses bénévoles poursuivent leurs distributions de nourriture..."
-              link=""
-            />
-            <ArticleCard
-              imageUrl="/assets/articles/article-3.jpg"
-              title="Comment protéger son chat du soleil ?"
-              date="25 juillet 2025"
-              description="Lorsque les températures montent, votre chat aussi peut souffrir du soleil. Contrairement à une idée reçue, son pelage ne le protège pas toujours totalement..."
-              link=""
-            />
+            {lastArticles.length === 0 ? (
+              <p className="col-span-3 text-center text-lg">
+                Aucun article disponible pour le moment.
+              </p>
+            ) : (
+              lastArticles.map((article) => {
+                const title = extractTitle(article.content);
+                const description = extractDescription(article.content);
+                const imageUrl = extractImageUrl(article.content);
+                const date = new Date(
+                  article.publicationDate,
+                ).toLocaleDateString("fr-FR", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                });
+                return (
+                  <ArticleCard
+                    key={article.documentId}
+                    title={title}
+                    date={date}
+                    description={description}
+                    imageUrl={imageUrl}
+                    link={`/blog/view/${article.documentId}`}
+                  />
+                );
+              })
+            )}
           </div>
           <div className="flex flex-col sm:flex-row justify-center">
             <Button href="/blog" variant="primary" size="lg">
@@ -193,7 +231,7 @@ export default async function Index() {
           <div className="grid md:grid-cols-[0.95fr_1.05fr] items-center">
             <div className="relative hidden md:block rounded-tl-xl rounded-bl-xl md:h-[500px] overflow-hidden">
               <Image
-                src="/assets/img/background-4.jpg"
+                src="/assets/img/backgrounds/background-4.jpg"
                 alt="Les félins de l'ombre"
                 fill
                 className="object-cover"

@@ -1,6 +1,7 @@
 ﻿"use client";
 import { useState } from "react";
 import FormInput from "@/components/ui/FormInput";
+import Breadcrumb from "@/components/Breadcrumb";
 import Image from "next/image";
 import Heading from "@/components/ui/Heading";
 
@@ -21,10 +22,10 @@ export default function Contact() {
 
   return (
     <>
-      <header className="bg-[url('/assets/img/background-1.jpg')]">
+      <header className="bg-[url('/assets/img/backgrounds/background-1.jpg')]">
         <div className="container relative">
           <Image
-            src="/assets/img/icone-10.svg"
+            src="/assets/img/icons/icon-9.svg"
             alt=""
             aria-hidden="true"
             width={384}
@@ -42,6 +43,7 @@ export default function Contact() {
       </header>
 
       <main>
+        <Breadcrumb />
         <div className="container flex flex-col gap-12 md:gap-16 lg:gap-24">
           <section
             aria-label="Formulaire de contact"

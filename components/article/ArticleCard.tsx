@@ -38,7 +38,7 @@ export default function ArticleCard({
           </a>
         </h3>
         <p className="text-sm text-quaternary/70">{date}</p>
-        <p className="font-sans text-sm leading-6">{description}</p>
+        <p className="font-sans text-sm leading-6 line-clamp-3">{description}</p>
         <a
           href={link || undefined}
           className="text-primary hover:underline font-bold"

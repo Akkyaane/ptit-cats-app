@@ -20,18 +20,19 @@ export default function Navbar() {
   const userType = volunteerId ? "volunteer" : adoptantId ? "adoptant" : null;
   const userId = volunteerId ?? adoptantId;
   const pathname = usePathname();
-  const links = [
+  type NavLink = { href: string; label: string; variant?: "primary" | "secondary" };
+  const links: NavLink[] = [
     { href: "/", label: "Accueil" },
     { href: "/adoption-listings", label: "À l'adoption" },
     { href: "/distribution", label: "Distribution" },
     { href: "/about", label: "À propos" },
     { href: "/blog", label: "Blog" },
     { href: "/contact", label: "Contact" },
-    { href: "/donation", label: "Faire un don" },
-    { href: "/login", label: "Se connecter / S'inscrire" },
-    ...(userRole === "Admin" ? [{ href: "/admin", label: "Admin" }] : []),
+    { href: "/donation", label: "Faire un don", variant: "secondary" },
+    { href: "/login", label: "Se connecter / S'inscrire", variant: "primary" },
+    ...(userRole === "Admin" ? [{ href: "/admin", label: "Admin", variant: "primary" as const }] : []),
     ...(userType && userId
-      ? [{ href: `/${userType}/view/${userId}`, label: "Mon profil" }]
+      ? [{ href: `/${userType}/view/${userId}`, label: "Mon profil", variant: "primary" as const }]
       : []),
   ];
 
@@ -55,7 +56,14 @@ export default function Navbar() {
   return (
     <nav
       className={`fixed inset-x-0 top-0 z-50 w-full transition-colors duration-200 text-secondary ${
-        ["/", "/distribution", "/about", "/donation"].includes(pathname)
+        [
+          "/",
+          "/distribution",
+          "/about",
+          "/contact",
+          "/donation",
+          "/legal-notice",
+        ].includes(pathname)
           ? isScrolled
             ? "bg-tertiary"
             : "bg-transparent"
@@ -83,14 +91,11 @@ export default function Navbar() {
             {links.map((link) =>
               pathname === link.href ? null : (
                 <li key={link.href}>
-                  {link.href === "/donation" ? (
+                  {link.variant === "secondary" ? (
                     <Button href={link.href} variant="secondary" size="sm">
                       {link.label}
                     </Button>
-                  ) : link.href === "/login" ||
-                    userRole === "Admin" ||
-                    volunteerId ||
-                    adoptantId ? (
+                  ) : link.variant === "primary" ? (
                     <Button href={link.href} variant="primary" size="sm">
                       {link.label}
                     </Button>
@@ -172,26 +177,25 @@ export default function Navbar() {
           >
             {links.map((link) =>
               pathname === link.href ? null : (
-                <li key={link.href}>
-                  {link.href === "/donation" ? (
-                    <a
+                <li className="flex flex-col gap-2" key={link.href}>
+                  {link.variant === "secondary" ? (
+                    <Button
                       href={link.href}
-                      className="block w-full text-center px-4 py-3 font-bold rounded-xl hover:bg-transparent bg-quaternary backdrop-blur-sm hover:text-quaternary transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary"
+                      variant="secondary"
+                      size="sm"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {link.label}
-                    </a>
-                  ) : link.href === "/login" ||
-                    userRole === "Admin" ||
-                    volunteerId ||
-                    adoptantId ? (
-                    <a
+                    </Button>
+                  ) : link.variant === "primary" ? (
+                    <Button
                       href={link.href}
-                      className="block w-full text-center px-4 py-3 font-bold rounded-xl hover:bg-transparent bg-primary backdrop-blur-sm hover:text-primary transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary"
+                      variant="primary"
+                      size="sm"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {link.label}
-                    </a>
+                    </Button>
                   ) : (
                     <a
                       href={link.href}

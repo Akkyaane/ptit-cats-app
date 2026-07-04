@@ -40,7 +40,7 @@ export default function ALCarousel({ items }: ALCarouselProps) {
 
   return (
     <div className="w-full">
-      <div className="overflow-hidden" ref={emblaRef}>
+      <div className="overflow-hidden select-none" ref={emblaRef}>
         <div className="flex gap-2">
           {items.map((adoptionListing: IAdoptionListing) => (
             <div

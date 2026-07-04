@@ -1,19 +1,12 @@
 ﻿import Heading from "@/components/ui/Heading";
+import Breadcrumb from "@/components/Breadcrumb";
 import Image from "next/image";
 
 export default function Distribution() {
   return (
     <div className="bg-secondary">
-      <header className="bg-[url('/assets/img/background-1.jpg')]">
-        <div className="container relative overflow-hidden">
-          <Image
-            src="/assets/img/icone-10.svg"
-            alt=""
-            aria-hidden={true}
-            width={384}
-            height={384}
-            className="hidden lg:block absolute top-20 right-8 xl:right-24 w-72 xl:w-96"
-          />
+      <header className="bg-[url('/assets/img/backgrounds/background-6.avif')] bg-cover bg-right">
+        <div className="container">
           <div className="flex flex-col items-center justify-center gap-6 py-16 md:py-24 lg:py-40">
             <Heading type="h1" headingVariant="secondary">
               Distribution de croquettes
@@ -23,6 +16,7 @@ export default function Distribution() {
       </header>
 
       <main className="relative bg-secondary">
+        <Breadcrumb />
         <div className="container relative flex flex-col gap-12 md:gap-16 lg:gap-24">
           <section
             aria-label="Notre mission"

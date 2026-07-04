@@ -1,4 +1,5 @@
 ﻿import Heading from "@/components/ui/Heading";
+import Breadcrumb from "@/components/Breadcrumb";
 
 export default function LegalNotice() {
   const sectionBaseClass =
@@ -13,10 +14,10 @@ export default function LegalNotice() {
       >
         Aller au contenu principal
       </a>
-      <header className="bg-[url('/assets/img/background-1.jpg')]">
+      <header className="bg-[url('/assets/img/backgrounds/background-1.jpg')]">
         <div className="container relative overflow-hidden">
           <img
-            src="/assets/img/icone-10.svg"
+            src="/assets/img/icons/icon-9.svg"
             alt=""
             aria-hidden="true"
             className="hidden lg:block absolute top-20 right-8 xl:right-24 w-72 xl:w-96"
@@ -31,6 +32,7 @@ export default function LegalNotice() {
         id="main-content"
         className="container flex flex-col gap-10 md:gap-16 py-12 md:py-20 text-left"
       >
+        <Breadcrumb />
         <nav
           aria-label="Sommaire des mentions légales"
           className="max-w-4xl mx-auto w-full rounded-xl border-2 border-tertiary p-6 md:p-8"

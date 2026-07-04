@@ -33,3 +33,32 @@ body {
 .layout-header-spacing {
   padding-top: 112px;
 }
+
+.bn-article-editor .bn-editor {
+  background: var(--color-secondary) !important;
+}
+
+.bn-article-editor .bn-block-outer::before,
+.bn-article-editor .bn-block-outer::after {
+  display: none !important;
+}
+
+.bn-article-editor .bn-block-outer,
+.bn-article-editor .bn-block,
+.bn-article-editor .bn-block-content {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Article view — centrage des images */
+.article-view-content [data-content-type="image"] {
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.article-view-content img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}

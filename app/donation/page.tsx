@@ -1,4 +1,5 @@
 ﻿import Image from "next/image";
+import Breadcrumb from "@/components/Breadcrumb";
 import Button from "@/components/ui/Button";
 import Heading from "@/components/ui/Heading";
 
@@ -13,10 +14,10 @@ export default function Donation() {
   ];
   return (
     <>
-      <header className="bg-[url('/assets/img/background-1.jpg')]">
+      <header className="bg-[url('/assets/img/backgrounds/background-1.jpg')]">
         <div className="container relative">
           <Image
-            src="/assets/img/icone-10.svg"
+            src="/assets/img/icons/icon-9.svg"
             alt=""
             aria-hidden={true}
             width={384}
@@ -32,6 +33,7 @@ export default function Donation() {
       </header>
 
       <main className="container flex flex-col gap-12 md:gap-16 lg:gap-24">
+        <Breadcrumb />
         <section aria-label="Faites un don pour nos pensionnaires" className="p-8 md:p-10 flex flex-col gap-12">
           <Heading type="h2" headingVariant="quaternary" underlineVariant="tertiary">
             Faites un don pour nos pensionnaires

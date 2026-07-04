@@ -1,7 +1,7 @@
 ﻿import IAdoptionListing from "@/interfaces/IAdoptionListing";
-import buildAttributes from "@/utils/attributeHelper";
-import buildTags from "@/utils/tagHelper";
-import buildFollowUp from "@/utils/followUpHelper";
+import buildAttributes from "@/helpers/attributeHelper";
+import buildTags from "@/helpers/tagHelper";
+import buildFollowUp from "@/helpers/followUpHelper";
 import Button from "../ui/Button";
 import Image from "next/image";
 
@@ -26,7 +26,7 @@ export default function ALCard({
           src={process.env.NEXT_PUBLIC_STRAPI_BASE_URL + media[0].url}
           alt={title ? `Photo de ${title}` : ""}
           fill
-          className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+          className="object-cover object-top"
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
@@ -62,14 +62,29 @@ export default function ALCard({
           <h3 className="text-lg md:text-xl font-bold text-quaternary leading-snug">{title}</h3>
           <p className="text-sm md:text-base text-quaternary/70 line-clamp-3 leading-relaxed">{shortDescription}</p>
           {followUp.length > 0 && (
-            <ul className="flex flex-row gap-x-3 gap-y-0.5 flex-wrap mt-1">
+            <div className="flex flex-row gap-1 flex-wrap mt-1">
               {followUp.map((item, index) => (
-                <li key={`${index}-${item}`} className="flex items-center gap-1 text-xs md:text-sm text-primary font-medium">
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary/60 inline-block" />
+                <span
+                  key={`${index}-${item}`}
+                  className="inline-flex items-center gap-0.5 text-[10px] bg-primary/10 text-primary font-semibold px-1.5 py-0.5 rounded-full border border-primary/20"
+                >
+                  <svg
+                    className="w-2.5 h-2.5 flex-shrink-0"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2.5}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
                   {item}
-                </li>
+                </span>
               ))}
-            </ul>
+            </div>
           )}
         </div>
         <div className="flex items-center justify-between pt-3 border-t border-quaternary/10 mt-auto">
