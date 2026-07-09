@@ -10,79 +10,38 @@ export async function createAdoptant(formData: FormData) {
     return { error: payload.error };
   }
 
+  if (!("data" in payload)) {
+    return { error: payload.error };
+  }
+
   try {
-    const { name, firstName, email, password, ...profileData } = payload.data;
+    const { name, firstName, email, password, housingType, hasGarden } = payload.data;
 
-    const existingRes = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoptants?filters[email][$eq]=${encodeURIComponent(email)}`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
-        },
-      }
-    );
-    if (existingRes.ok) {
-      const existingJson = await existingRes.json();
-      if (existingJson.data?.length > 0) {
-        return { error: "Un compte existe déjà avec cet email." };
-      }
-    }
-
-    const authResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/auth/local/register`,
+    const registerResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/auth/register/adoptant`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: email,
-          email,
-          password,
-        }),
+        body: JSON.stringify({ name, firstName, email, password, housingType, hasGarden }),
       }
     );
 
-    if (!authResponse.ok) {
-      const errorJson = await authResponse.json();
+    if (!registerResponse.ok) {
+      const errorJson = await registerResponse.json();
       const message: string = errorJson?.error?.message ?? "";
-      if (
-        message.toLowerCase().includes("email") ||
-        message.toLowerCase().includes("already taken") ||
-        message.toLowerCase().includes("username")
-      ) {
+      if (message.toLowerCase().includes("email") || message.toLowerCase().includes("déjà")) {
         return { error: "Un compte existe déjà avec cet email." };
       }
-      console.error("Auth register error:", errorJson);
+      console.error("Register error:", errorJson);
       return { error: "Erreur lors de la création du compte." };
     }
 
-    const authJson = await authResponse.json();
-    const jwt: string = authJson.jwt;
-
-    const adoptantResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoptants`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
-        },
-        body: JSON.stringify({
-          data: { name, firstName, email, ...profileData },
-        }),
-      }
-    );
-
-    if (!adoptantResponse.ok) {
-      const errorText = await adoptantResponse.text();
-      console.error("Adoptant creation error:", errorText);
-      return { error: "Compte créé mais erreur lors de la sauvegarde du profil." };
-    }
-
-    const adoptantJson = await adoptantResponse.json();
-    const documentId: string = adoptantJson.data.documentId;
+    const registerJson = await registerResponse.json();
+    const token: string = registerJson.token;
+    const documentId: string = registerJson.user.documentId;
 
     const cookieStore = await cookies();
-    cookieStore.set("jwt", jwt, {
+    cookieStore.set("jwt", token, {
       httpOnly: true,
       sameSite: "lax",
       path: "/",

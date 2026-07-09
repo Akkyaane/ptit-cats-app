@@ -11,47 +11,12 @@ export async function loginUser(formData: FormData) {
   }
 
   try {
-    const volunteerRes = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/volunteers?filters[email][$eq]=${encodeURIComponent(email)}`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
-        },
-      }
-    );
-
-    if (volunteerRes.ok) {
-      const volunteerJson = await volunteerRes.json();
-      if (volunteerJson.data?.length > 0) {
-        const volunteer = volunteerJson.data[0];
-        if (volunteer.password !== password) {
-          return { error: "Email ou mot de passe incorrect." };
-        }
-
-        const cookieStore = await cookies();
-        cookieStore.set("volunteer_id", volunteer.documentId, {
-          httpOnly: false,
-          sameSite: "lax",
-          path: "/",
-          maxAge: 60 * 60 * 24 * 7,
-        });
-        cookieStore.set("user_role", volunteer.role, {
-          httpOnly: false,
-          sameSite: "lax",
-          path: "/",
-          maxAge: 60 * 60 * 24 * 7,
-        });
-
-        return { success: true, role: volunteer.role, volunteerId: volunteer.documentId };
-      }
-    }
-
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/auth/local`,
+      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/auth/login`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ identifier: email, password }),
+        body: JSON.stringify({ email, password }),
       }
     );
 
@@ -60,34 +25,20 @@ export async function loginUser(formData: FormData) {
     }
 
     const json = await response.json();
-    const jwt: string = json.jwt;
-
-    const adoptantRes = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoptants?filters[email][$eq]=${encodeURIComponent(email)}`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
-        },
-      }
-    );
-
-    let documentId: string | null = null;
-    if (adoptantRes.ok) {
-      const adoptantJson = await adoptantRes.json();
-      if (adoptantJson.data?.length > 0) {
-        documentId = adoptantJson.data[0].documentId;
-      }
-    }
+    const token: string = json.token;
+    const type: "adoptant" | "volunteer" = json.type;
+    const user = json.user;
 
     const cookieStore = await cookies();
-    cookieStore.set("jwt", jwt, {
-      httpOnly: true,
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-    });
-    if (documentId) {
-      cookieStore.set("adoptant_id", documentId, {
+
+    if (type === "adoptant") {
+      cookieStore.set("jwt", token, {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+      cookieStore.set("adoptant_id", user.documentId, {
         httpOnly: false,
         sameSite: "lax",
         path: "/",
@@ -99,9 +50,23 @@ export async function loginUser(formData: FormData) {
         path: "/",
         maxAge: 60 * 60 * 24 * 7,
       });
+      return { success: true, role: "adoptant", documentId: user.documentId };
     }
 
-    return { success: true, documentId };
+    // volunteer / admin
+    cookieStore.set("volunteer_id", user.documentId, {
+      httpOnly: false,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
+    });
+    cookieStore.set("user_role", user.role, {
+      httpOnly: false,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
+    });
+    return { success: true, role: user.role, volunteerId: user.documentId };
   } catch (err) {
     console.error("Login error:", err);
     return { error: "Erreur serveur, veuillez réessayer." };
