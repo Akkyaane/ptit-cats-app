@@ -9,7 +9,7 @@ import {
   AdoptantFormValues,
   buildAdoptantFormData,
   adoptantDefaultValues,
-} from "@/utils/adoptantForm";
+} from "@/helpers/adoptantForm";
 
 type StepDefinition = {
   title: string;

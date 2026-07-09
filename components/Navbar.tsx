@@ -9,15 +9,22 @@ import Link from "next/link";
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const cookies = ["adoptant_id", "volunteer_id", "user_role"];
-  const getCookie = (name: string): string | null => {
-    if (typeof window === "undefined") return null;
-    const match = document.cookie.match(
-      new RegExp(`(?:^|;\\s*)${name}=([^;]*)`),
-    );
-    return match ? decodeURIComponent(match[1]) : null;
-  };
-  const [adoptantId, volunteerId, userRole] = cookies.map(getCookie);
+  const [adoptantId, setAdoptantId] = useState<string | null>(null);
+  const [volunteerId, setVolunteerId] = useState<string | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    const getCookie = (name: string): string | null => {
+      const match = document.cookie.match(
+        new RegExp(`(?:^|;\\s*)${name}=([^;]*)`),
+      );
+      return match ? decodeURIComponent(match[1]) : null;
+    };
+    setAdoptantId(getCookie("adoptant_id"));
+    setVolunteerId(getCookie("volunteer_id"));
+    setUserRole(getCookie("user_role"));
+  }, []);
+
   const userType = volunteerId ? "volunteer" : adoptantId ? "adoptant" : null;
   const userHref = volunteerId
     ? `/volunteer/view/${volunteerId}`
@@ -34,7 +41,7 @@ export default function Navbar() {
     { href: "/blog", label: "Blog" },
     { href: "/contact", label: "Contact" },
     { href: "/donation", label: "Faire un don", variant: "secondary" },
-    { href: "/login", label: "Se connecter / S'inscrire", variant: "primary" },
+    ...(!userType ? [{ href: "/login", label: "Se connecter / S'inscrire", variant: "primary" as const }] : []),
     ...(userRole === "Admin" ? [{ href: "/admin", label: "Admin", variant: "primary" as const }] : []),
     ...(userType && userHref
       ? [{ href: userHref, label: "Mon profil", variant: "primary" as const }]

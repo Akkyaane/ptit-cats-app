@@ -2,7 +2,7 @@
 
 import { IAdoptant } from "@/interfaces/IAdoptant";
 import AdoptantFormWizard from "./AdoptantFormWizard";
-import { mapAdoptantToFormValues } from "@/utils/adoptantForm";
+import { mapAdoptantToFormValues } from "@/helpers/adoptantForm";
 
 export default function AdoptantProfileForm({
   adoptant,

@@ -1,7 +1,7 @@
 "use server";
 
 import { IAdoptant } from "@/interfaces/IAdoptant";
-import { buildAdoptantPayload } from "@/utils/adoptantForm";
+import { buildAdoptantPayload } from "@/helpers/adoptantForm";
 
 export async function getAllAdoptants(): Promise<IAdoptant[]> {
   const response = await fetch(
