@@ -13,28 +13,23 @@ export async function createBenevole(formData: FormData) {
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/volunteers`,
+      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/auth/register/volunteer`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
         },
-        body: JSON.stringify({
-          data: {
-            name,
-            firstName, 
-            email,
-            password,
-            role,
-          },
-        }),
+        body: JSON.stringify({ name, firstName, email, password, role }),
       }
     );
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Strapi error:", errorText);
+      const errorJson = await response.json();
+      const message: string = errorJson?.error?.message ?? "";
+      if (message.toLowerCase().includes("email") || message.toLowerCase().includes("déjà")) {
+        return { error: "Un bénévole existe déjà avec cet email." };
+      }
+      console.error("Strapi error:", errorJson);
       return { error: "Erreur lors de la création du bénévole." };
     }
 
