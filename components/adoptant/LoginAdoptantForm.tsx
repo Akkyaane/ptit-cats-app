@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { loginUser } from "@/app/login/action";
 
-export default function LoginAdoptantForm() {
+export default function LoginAdoptantForm({ redirectTo }: { redirectTo?: string }) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -19,7 +19,15 @@ export default function LoginAdoptantForm() {
     if (result.error) {
       setError(result.error);
     } else if (result.success) {
-      router.push("/");
+      if (result.role === "adoptant" && redirectTo) {
+        router.push(redirectTo);
+      } else if (result.role === "Admin") {
+        router.push("/admin");
+      } else if (result.volunteerId) {
+        router.push(`/volunteer/view/${result.volunteerId}`);
+      } else {
+        router.push("/adoptant/profile");
+      }
     }
   }
 
@@ -33,6 +41,7 @@ export default function LoginAdoptantForm() {
           id="email"
           name="email"
           type="email"
+          autoComplete="username"
           required
           className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200"
         />

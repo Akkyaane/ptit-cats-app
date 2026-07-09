@@ -15,9 +15,28 @@ export default function ALCard({
   animals,
   entityStatus
 }: IAdoptionListing) {
-  const attributes: Record<string, string> = buildAttributes(animals);
-  const tags: string[] = buildTags(animals, attributes, isDuo);
-  const followUp: string[] = buildFollowUp(animals, isDuo);
+
+  const safeAnimals = animals ?? [];
+  const attributes: Record<string, string> = buildAttributes(safeAnimals);
+  const tags: string[] = buildTags(safeAnimals, attributes, isDuo);
+  const followUp: string[] = buildFollowUp(safeAnimals, isDuo);
+
+  if (!media?.[0]) {
+    return (
+      <div className="flex flex-col rounded-xl overflow-hidden shadow-sm border border-gray-100 h-fit">
+        <div className="w-full aspect-[4/3] bg-tertiary/20 flex items-center justify-center text-5xl">
+          🐱
+        </div>
+        <div className="flex flex-col gap-2 p-4 md:p-5">
+          <h3 className="text-lg md:text-xl font-bold">{title}</h3>
+          <p className="text-sm md:text-base">{shortDescription}</p>
+          <div className="flex items-center justify-between pt-3 border-t border-quaternary/15">
+            <p className="text-lg font-bold text-primary">{price} €</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="group flex flex-col rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-quaternary/10 h-full">

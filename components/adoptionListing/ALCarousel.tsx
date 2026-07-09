@@ -48,7 +48,6 @@ export default function ALCarousel({ items }: ALCarouselProps) {
               className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_33.333%] min-w-0 box-border p-4"
             >
               <AdoptionListingCard
-                key={adoptionListing.documentId}
                 documentId={adoptionListing.documentId}
                 title={adoptionListing.title}
                 slogan={adoptionListing.slogan}

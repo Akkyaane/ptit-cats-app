@@ -15,8 +15,10 @@ type Benevole = {
 
 export default function UpdateVolunteerForm({
   benevole,
+  canChangeRole = true,
 }: {
   benevole: Benevole;
+  canChangeRole?: boolean;
 }) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -92,23 +94,28 @@ export default function UpdateVolunteerForm({
         />
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="role" className="text-sm font-bold ">
-          Rôle
-        </label>
-        <select
-          id="role"
-          name="role"
-          defaultValue={benevole.role}
-          required
-          className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200 bg-white"
-        >
-          <option value="">-- Choisir un rôle --</option>
-          <option value="Admin">Admin</option>
-          <option value="Référent">Référent</option>
-          <option value="Responsable-adoption">Responsable-adoption</option>
-        </select>
-      </div>
+      {canChangeRole && (
+        <div className="flex flex-col gap-1">
+          <label htmlFor="role" className="text-sm font-bold ">
+            Rôle
+          </label>
+          <select
+            id="role"
+            name="role"
+            defaultValue={benevole.role}
+            required
+            className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200 bg-white"
+          >
+            <option value="">-- Choisir un rôle --</option>
+            <option value="Admin">Admin</option>
+            <option value="Référent">Référent</option>
+            <option value="Responsable-adoption">Responsable-adoption</option>
+          </select>
+        </div>
+      )}
+      {!canChangeRole && (
+        <input type="hidden" name="role" value={benevole.role} />
+      )}
 
       {error && (
         <p className="text-sm font-bold text-primary bg-primary/10 px-4 py-3 rounded-xl">

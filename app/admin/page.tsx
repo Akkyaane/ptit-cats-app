@@ -2,6 +2,7 @@
 import { redirect } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
+import LogoutButton from "@/components/adoptant/LogoutButton";
 
 export default async function AdminPage() {
   const cookieStore = await cookies();
@@ -79,6 +80,10 @@ export default async function AdminPage() {
                 </p>
               </div>
             </Link>
+          </div>
+
+          <div className="w-full max-w-xs">
+            <LogoutButton />
           </div>
         </div>
       </main>
