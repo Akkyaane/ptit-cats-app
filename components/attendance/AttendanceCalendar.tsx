@@ -9,11 +9,32 @@ const MOIS = [
   "Juillet","Août","Septembre","Octobre","Novembre","Décembre",
 ];
 
-export default function AttendanceCalendar({ attendances }: { attendances: IAttendance[] }) {
+type Benevole = {
+  id: number;
+  documentId: string;
+  name: string;
+  firstName: string;
+  role: string;
+};
+
+function toDateKey(date: Date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+export default function AttendanceCalendar({
+  attendances,
+  benevoles,
+}: {
+  attendances: IAttendance[];
+  benevoles: Benevole[];
+}) {
   const today = new Date();
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string>(toDateKey(today));
 
   function prevMonth() {
     if (currentMonth === 0) {
@@ -22,7 +43,6 @@ export default function AttendanceCalendar({ attendances }: { attendances: IAtte
     } else {
       setCurrentMonth(currentMonth - 1);
     }
-    setSelectedDate(null);
   }
 
   function nextMonth() {
@@ -32,17 +52,16 @@ export default function AttendanceCalendar({ attendances }: { attendances: IAtte
     } else {
       setCurrentMonth(currentMonth + 1);
     }
-    setSelectedDate(null);
   }
 
   const firstDay = new Date(currentYear, currentMonth, 1);
   const lastDay = new Date(currentYear, currentMonth + 1, 0);
   const totalDays = lastDay.getDate();
 
-  // Lundi = 0, Dimanche = 6
   let startOffset = firstDay.getDay() - 1;
   if (startOffset < 0) startOffset = 6;
 
+  // Absences groupées par date
   const absencesByDate: Record<string, IAttendance[]> = {};
   attendances.forEach((a) => {
     const d = a.date.slice(0, 10);
@@ -54,133 +73,189 @@ export default function AttendanceCalendar({ attendances }: { attendances: IAtte
     ...Array(startOffset).fill(null),
     ...Array.from({ length: totalDays }, (_, i) => i + 1),
   ];
-
   while (cells.length % 7 !== 0) cells.push(null);
 
-  function toKey(day: number) {
+  function toCellKey(day: number) {
     const m = String(currentMonth + 1).padStart(2, "0");
     const d = String(day).padStart(2, "0");
     return `${currentYear}-${m}-${d}`;
   }
 
-  const selectedAbsences = selectedDate ? (absencesByDate[selectedDate] ?? []) : [];
+  // Bénévoles absents ce jour
+  const absentIds = new Set(
+    (absencesByDate[selectedDate] ?? []).map((a) => a.volunteer?.documentId)
+  );
+  const absents = benevoles.filter((b) => absentIds.has(b.documentId));
+  const presents = benevoles.filter((b) => !absentIds.has(b.documentId));
+
+  const selectedDateObj = new Date(selectedDate + "T12:00:00");
+
+  const roleColors: Record<string, string> = {
+    Admin: "bg-primary/10 text-primary",
+    "Référent": "bg-tertiary/30",
+    "Responsable-adoption": "bg-quaternary/10",
+  };
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Header navigation */}
-      <div className="flex items-center justify-between">
-        <button
-          onClick={prevMonth}
-          className="px-4 py-2 rounded-xl border-2 border-tertiary font-bold hover:bg-tertiary hover:text-white transition-colors duration-200"
-        >
-          ←
-        </button>
-        <h2 className="text-xl font-bold">
-          {MOIS[currentMonth]} {currentYear}
-        </h2>
-        <button
-          onClick={nextMonth}
-          className="px-4 py-2 rounded-xl border-2 border-tertiary font-bold hover:bg-tertiary hover:text-white transition-colors duration-200"
-        >
-          →
-        </button>
-      </div>
+    <div className="flex flex-col lg:flex-row gap-6 items-start">
 
-      {/* Grille calendrier */}
-      <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
-        {/* Jours de la semaine */}
-        <div className="grid grid-cols-7 bg-tertiary/10">
-          {JOURS.map((j) => (
-            <div key={j} className="py-3 text-center text-xs font-bold text-quaternary/70">
-              {j}
-            </div>
-          ))}
+      {/* Calendrier — moitié gauche */}
+      <div className="flex flex-col gap-4 w-full lg:w-1/2">
+        {/* Navigation mois */}
+        <div className="flex items-center justify-between">
+          <button
+            onClick={prevMonth}
+            className="px-4 py-2 rounded-xl border-2 border-tertiary font-bold hover:bg-tertiary hover:text-white transition-colors duration-200"
+          >
+            ←
+          </button>
+          <h2 className="text-xl font-bold">
+            {MOIS[currentMonth]} {currentYear}
+          </h2>
+          <button
+            onClick={nextMonth}
+            className="px-4 py-2 rounded-xl border-2 border-tertiary font-bold hover:bg-tertiary hover:text-white transition-colors duration-200"
+          >
+            →
+          </button>
         </div>
 
-        {/* Cases */}
-        <div className="grid grid-cols-7 divide-x divide-y divide-gray-100">
-          {cells.map((day, i) => {
-            if (!day) {
-              return <div key={`empty-${i}`} className="h-16 bg-gray-50/50" />;
-            }
+        {/* Grille */}
+        <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+          <div className="grid grid-cols-7 bg-tertiary/10">
+            {JOURS.map((j) => (
+              <div key={j} className="py-3 text-center text-xs font-bold text-quaternary/70">
+                {j}
+              </div>
+            ))}
+          </div>
 
-            const key = toKey(day);
-            const absences = absencesByDate[key] ?? [];
-            const hasAbsences = absences.length > 0;
-            const isToday =
-              day === today.getDate() &&
-              currentMonth === today.getMonth() &&
-              currentYear === today.getFullYear();
-            const isSelected = selectedDate === key;
+          <div className="grid grid-cols-7 divide-x divide-y divide-gray-100">
+            {cells.map((day, i) => {
+              if (!day) {
+                return <div key={`empty-${i}`} className="h-14 bg-gray-50/50" />;
+              }
 
-            return (
-              <button
-                key={key}
-                onClick={() => setSelectedDate(isSelected ? null : key)}
-                className={`h-16 flex flex-col items-center justify-start pt-2 gap-1 transition-colors duration-150 relative
-                  ${isSelected ? "bg-tertiary/20" : "hover:bg-secondary/60"}
-                `}
-              >
-                <span
-                  className={`text-sm font-bold w-7 h-7 flex items-center justify-center rounded-full
-                    ${isToday ? "bg-primary text-white" : ""}
+              const key = toCellKey(day);
+              const absences = absencesByDate[key] ?? [];
+              const hasAbsences = absences.length > 0;
+              const isToday = key === toDateKey(today);
+              const isSelected = selectedDate === key;
+
+              return (
+                <button
+                  key={key}
+                  onClick={() => setSelectedDate(key)}
+                  className={`h-14 flex flex-col items-center justify-start pt-1 gap-0.5 transition-colors duration-150
+                    ${isSelected ? "bg-tertiary/20" : "hover:bg-secondary/60"}
                   `}
                 >
-                  {day}
-                </span>
-                {hasAbsences && (
-                  <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-                    {absences.length} absent{absences.length > 1 ? "s" : ""}
+                  <span
+                    className={`text-sm font-bold w-7 h-7 flex items-center justify-center rounded-full
+                      ${isToday ? "bg-primary text-white" : ""}
+                    `}
+                  >
+                    {day}
                   </span>
-                )}
-              </button>
-            );
-          })}
+                  {hasAbsences && (
+                    <span className="text-[10px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded-full leading-none">
+                      {absences.length} abs
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      {/* Détail du jour sélectionné */}
-      {selectedDate && (
-        <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
-          <h3 className="font-bold text-lg mb-4">
-            {new Date(selectedDate + "T12:00:00").toLocaleDateString("fr-FR", {
-              weekday: "long",
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })}
-          </h3>
+      {/* Liste présence/absence — moitié droite */}
+      <div className="w-full lg:w-1/2 flex flex-col gap-4">
+        <h2 className="text-xl font-bold">
+          {selectedDateObj.toLocaleDateString("fr-FR", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })}
+        </h2>
 
-          {selectedAbsences.length === 0 ? (
-            <p className="text-quaternary/60 text-sm">Aucune absence ce jour.</p>
+        {/* Absents */}
+        <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+          <div className="px-5 py-3 bg-primary/10 border-b border-primary/10">
+            <p className="font-bold text-primary text-sm">
+              Absents ({absents.length})
+            </p>
+          </div>
+          {absents.length === 0 ? (
+            <p className="px-5 py-4 text-sm text-quaternary/50">
+              Aucun absent ce jour.
+            </p>
           ) : (
-            <div className="flex flex-col gap-3">
-              {selectedAbsences.map((a) => (
-                <div
-                  key={a.id}
-                  className="flex items-center justify-between px-4 py-3 rounded-xl bg-primary/5 border border-primary/10"
-                >
-                  <div>
-                    <p className="font-bold text-sm">
-                      {a.volunteer
-                        ? `${a.volunteer.firstName} ${a.volunteer.name}`
-                        : "Bénévole inconnu"}
-                    </p>
-                    {a.reason && (
-                      <p className="text-xs text-quaternary/60 mt-0.5">
-                        Motif : {a.reason}
-                      </p>
-                    )}
+            <div className="divide-y divide-gray-100">
+              {absents.map((b) => {
+                const absence = (absencesByDate[selectedDate] ?? []).find(
+                  (a) => a.volunteer?.documentId === b.documentId
+                );
+                return (
+                  <div key={b.documentId} className="px-5 py-3 flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs flex-shrink-0">
+                        {b.firstName.charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <p className="font-bold text-sm">
+                          {b.firstName} {b.name}
+                        </p>
+                        {absence?.reason && (
+                          <p className="text-xs text-quaternary/50">
+                            {absence.reason}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <em className={`text-xs font-bold px-2 py-1 rounded-full ${roleColors[b.role] ?? "bg-gray-100"}`}>
+                      {b.role}
+                    </em>
                   </div>
-                  <span className="text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full">
-                    Absent
-                  </span>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Présents */}
+        <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+          <div className="px-5 py-3 bg-green-50 border-b border-green-100">
+            <p className="font-bold text-green-700 text-sm">
+              Présents ({presents.length})
+            </p>
+          </div>
+          {presents.length === 0 ? (
+            <p className="px-5 py-4 text-sm text-quaternary/50">
+              Aucun bénévole présent ce jour.
+            </p>
+          ) : (
+            <div className="divide-y divide-gray-100">
+              {presents.map((b) => (
+                <div key={b.documentId} className="px-5 py-3 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="size-8 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-xs flex-shrink-0">
+                      {b.firstName.charAt(0).toUpperCase()}
+                    </div>
+                    <p className="font-bold text-sm">
+                      {b.firstName} {b.name}
+                    </p>
+                  </div>
+                  <em className={`text-xs font-bold px-2 py-1 rounded-full ${roleColors[b.role] ?? "bg-gray-100"}`}>
+                    {b.role}
+                  </em>
                 </div>
               ))}
             </div>
           )}
         </div>
-      )}
+      </div>
     </div>
   );
 }

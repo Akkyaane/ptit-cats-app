@@ -2,6 +2,7 @@ import AttendanceCalendar from "@/components/attendance/AttendanceCalendar";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { IAttendance } from "@/interfaces/IAttendance";
+import { getAllBenevoles } from "@/app/volunteer/update/action";
 
 async function getAllAttendances(): Promise<IAttendance[]> {
   const res = await fetch(
@@ -17,7 +18,10 @@ async function getAllAttendances(): Promise<IAttendance[]> {
 }
 
 export default async function CalendarPage() {
-  const attendances = await getAllAttendances();
+  const [attendances, benevoles] = await Promise.all([
+    getAllAttendances(),
+    getAllBenevoles(),
+  ]);
 
   return (
     <div className="min-h-screen bg-secondary">
@@ -30,7 +34,7 @@ export default async function CalendarPage() {
         <div className="flex flex-col gap-8">
           <div className="flex flex-col items-center gap-2">
             <h1 className="text-3xl md:text-4xl font-bold">
-              Calendrier des absences
+              Tableau de présence
             </h1>
             <div className="w-16 h-1 bg-tertiary rounded-full"></div>
           </div>
@@ -42,15 +46,9 @@ export default async function CalendarPage() {
             >
               + Ajouter une absence
             </Link>
-            <Link
-              href="/attendance"
-              className="px-4 py-2 font-bold rounded-xl border-2 border-quaternary text-quaternary hover:bg-quaternary hover:text-white transition-colors duration-200 text-sm"
-            >
-              Vue tableau
-            </Link>
           </div>
 
-          <AttendanceCalendar attendances={attendances} />
+          <AttendanceCalendar attendances={attendances} benevoles={benevoles} />
 
           <div className="flex justify-center">
             <Link
