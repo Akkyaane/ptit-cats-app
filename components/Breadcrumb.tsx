@@ -13,7 +13,7 @@ const SEGMENT_LABELS: Record<string, string> = {
   login: "Connexion",
   admin: "Administration",
   volunteer: "Bénévoles",
-  adoptant: "Adoptant",
+  adopter: "Adoptants",
   view: "Voir",
   create: "Créer",
   update: "Modifier",

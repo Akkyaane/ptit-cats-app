@@ -9,7 +9,7 @@ import Link from "next/link";
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [adoptantId, setAdoptantId] = useState<string | null>(null);
+  const [adopterId, setAdopterId] = useState<string | null>(null);
   const [volunteerId, setVolunteerId] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
 
@@ -20,16 +20,16 @@ export default function Navbar() {
       );
       return match ? decodeURIComponent(match[1]) : null;
     };
-    setAdoptantId(getCookie("adoptant_id"));
+    setAdopterId(getCookie("adopter_id"));
     setVolunteerId(getCookie("volunteer_id"));
     setUserRole(getCookie("user_role"));
   }, []);
 
-  const userType = volunteerId ? "volunteer" : adoptantId ? "adoptant" : null;
+  const userType = volunteerId ? "volunteer" : adopterId ? "adopter" : null;
   const userHref = volunteerId
     ? `/volunteer/view/${volunteerId}`
-    : adoptantId
-      ? "/adoptant/profile"
+    : adopterId
+      ? "/adopter/profile"
       : null;
   const pathname = usePathname();
   type NavLink = { href: string; label: string; variant?: "primary" | "secondary" };

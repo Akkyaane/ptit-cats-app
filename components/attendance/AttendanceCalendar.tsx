@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { IAttendance } from "@/interfaces/IAttendance";
+import { IAttendance } from "@/interfaces/IAbsence";
 
 const JOURS = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
 const MOIS = [

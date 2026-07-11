@@ -2,7 +2,7 @@
 import { redirect } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
-import LogoutButton from "@/components/adoptant/LogoutButton";
+import LogoutButton from "@/components/adopter/LogoutButton";
 
 export default async function AdminPage() {
   const cookieStore = await cookies();

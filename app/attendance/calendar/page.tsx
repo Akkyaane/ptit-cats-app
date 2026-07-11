@@ -1,7 +1,7 @@
 import AttendanceCalendar from "@/components/attendance/AttendanceCalendar";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
-import { IAttendance } from "@/interfaces/IAttendance";
+import { IAttendance } from "@/interfaces/IAbsence";
 import { getAllBenevoles } from "@/app/volunteer/update/action";
 
 async function getAllAttendances(): Promise<IAttendance[]> {

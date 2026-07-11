@@ -1,7 +1,7 @@
 import UpdateAttendanceForm from "@/components/attendance/UpdateAttendanceForm";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
-import { IAttendance } from "@/interfaces/IAttendance";
+import { IAttendance } from "@/interfaces/IAbsence";
 
 async function getAttendance(documentId: string): Promise<IAttendance | null> {
   const res = await fetch(

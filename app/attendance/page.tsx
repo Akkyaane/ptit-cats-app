@@ -1,5 +1,5 @@
 import { getAllAttendances } from "@/app/attendance/action";
-import { IAttendance } from "@/interfaces/IAttendance";
+import { IAttendance } from "@/interfaces/IAbsence";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 

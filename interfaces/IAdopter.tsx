@@ -1,0 +1,42 @@
+import IAdoptionRequest from "./IAdoptionRequest";
+
+export default interface IAdopter {
+  documentId: string;
+  lastName: string;
+  firstName: string;
+  birthDate: Date;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  postalCode: string;
+  city: string;
+  employmentStatus: "full-time" | "part-time" | "job seeking" | "other";
+  employmentArrangement: "on site" | "hybrid" | "remote" | "not applicable";
+  householdType: "single" | "couple" | "family" | "shared accommodation" | "other";
+  householdComposition: number;
+  hasChildren: boolean;
+  childrenAgeGroup: "young | old | both" | "not applicable";
+  householdPresence: "always" | "often" | "sometimes" | "rarely";
+  householdAgreement: boolean;
+  disagreementDetails?: string | null;
+  housingType: "apartment" | "house" | "other";
+  housingSurface: number;
+  apartmentFloor?: number | null;
+  areWindowsSecuredOrWillBe: boolean;
+  hasBalconyOrTerrace: boolean;
+  isBalconySecured?: boolean | null;
+  hasGarden: boolean;
+  gardenSurface?: number | null;
+  fenceHeight?: number | null;
+  livingEnvironment: "urban" | "suburban" | "rural";
+  isNearBusyRoad: boolean;
+  animalCanGoOutside: boolean;
+  hasOtherAnimals: boolean;
+  otherAnimalsDetails?: string | null;
+  areOtherAnimalsSterilizedOrCastrated?: boolean | null;
+  firstAnimalOwnershipDate?: Date | null;
+  remarks?: string | null;
+  hasAcceptedResponsibility: boolean;
+  adoption_requests?: IAdoptionRequest[] | null;
+  users_permissions_user?: { id: number | string; documentId: string } | null;
+}

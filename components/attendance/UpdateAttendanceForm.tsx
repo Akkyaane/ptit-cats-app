@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { updateAttendance } from "@/app/attendance/action";
-import { IAttendance } from "@/interfaces/IAttendance";
+import { IAttendance } from "@/interfaces/IAbsence";
 
 export default function UpdateAttendanceForm({ attendance }: { attendance: IAttendance }) {
   const [error, setError] = useState<string | null>(null);

@@ -1,4 +1,4 @@
-import { cookies } from "next/headers";
+﻿import { cookies } from "next/headers";
 import Button from "@/components/ui/Button";
 import Breadcrumb from "@/components/Breadcrumb";
 import GalleryWithLightbox from "@/components/adoptionListing/GalleryWithLightbox";
@@ -33,14 +33,14 @@ export default async function displayOne(params: { params: { slug: string } }) {
 
   // Détermine le comportement du bouton "Je suis intéressé·e"
   const cookieStore = await cookies();
-  const adoptantId = cookieStore.get("adoptant_id")?.value;
+  const adopterId = cookieStore.get("adopter_id")?.value;
   const volunteerId = cookieStore.get("volunteer_id")?.value;
   const userRole = cookieStore.get("user_role")?.value;
-  const isAdoptant = Boolean(adoptantId && userRole === "adoptant");
-  const isVolunteerOrAdmin = Boolean(volunteerId || (userRole && userRole !== "adoptant"));
-  const interestHref = isAdoptant
-    ? `/adoptant/adoption-request/${documentId}`
-    : `/login?redirect=/adoptant/adoption-request/${documentId}`;
+  const isAdopter = Boolean(adopterId && userRole === "adopter");
+  const isVolunteerOrAdmin = Boolean(volunteerId || (userRole && userRole !== "adopter"));
+  const interestHref = isAdopter
+    ? `/adopter/adoption-request/${documentId}`
+    : `/login?redirect=/adopter/adoption-request/${documentId}`;
 
   const birthDates: (string | null)[] = [];
   const ages: (string | null)[] = [];
@@ -241,7 +241,7 @@ export default async function displayOne(params: { params: { slug: string } }) {
               <div className="pt-5">
                 {isVolunteerOrAdmin ? (
                   <p className="text-sm text-quaternary/50 italic text-center">
-                    Cette fonctionnalité est réservée aux adoptants.
+                    Cette fonctionnalité est réservée aux adopters.
                   </p>
                 ) : (
                   <Button href={interestHref} variant="primary" size="lg">

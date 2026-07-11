@@ -1,8 +1,9 @@
+import IAdopter from "./IAdopter";
 import IAdoptionListing from "./IAdoptionListing";
 
-export interface IAdoptionRequest {
+export default interface IAdoptionRequest {
   documentId: string;
-  status: "en_attente" | "acceptée" | "refusée";
-  createdAt: string;
-  adoptionListing: IAdoptionListing;
+  entityStatus: "on hold" | "accepted" | "refused";
+  adopter?: IAdopter | null;
+  adoption_listing?: IAdoptionListing | null;
 }

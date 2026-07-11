@@ -1,6 +1,6 @@
 "use server";
 
-import { IAttendance } from "@/interfaces/IAttendance";
+import { IAttendance } from "@/interfaces/IAbsence";
 import { revalidatePath } from "next/cache";
 
 export async function getAllAttendances(): Promise<IAttendance[]> {
