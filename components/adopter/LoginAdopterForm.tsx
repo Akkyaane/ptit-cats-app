@@ -1,9 +1,10 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { loginUser } from "@/app/auth/signin/action";
+import FormInput from "@/components/ui/FormInput";
+import Button from "@/components/ui/Button";
 
 export default function LoginAdopterForm({ redirectTo }: { redirectTo?: string }) {
   const [error, setError] = useState<string | null>(null);
@@ -11,76 +12,67 @@ export default function LoginAdopterForm({ redirectTo }: { redirectTo?: string }
   const router = useRouter();
 
   async function handleSubmit(formData: FormData) {
+    if (loading) return;
     setError(null);
     setLoading(true);
-    const result = await loginUser(formData);
+
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        identifier: formData.get("email"),
+        password: formData.get("password"),
+      }),
+    });
+    const result = await res.json();
     setLoading(false);
 
-    if (result.error) {
-      setError(result.error);
-    } else if (result.success) {
-      if (result.role === "adopter" && redirectTo) {
-        router.push(redirectTo);
-      } else if (result.role === "Admin") {
-        router.push("/admin");
-      } else if (result.volunteerId) {
-        router.push(`/volunteer/view/${result.volunteerId}`);
-      } else {
-        router.push("/adopter/profile");
-      }
+    if (!res.ok || result.error) {
+      setError(result.error ?? "Erreur serveur, veuillez réessayer.");
+      return;
+    }
+
+    if (result.type === "adopter") {
+      router.push(redirectTo ?? "/profile");
+    } else if (result.role === "admin") {
+      router.push("/admin");
+    } else {
+      router.push(`/volunteers/view/${result.documentId}`);
     }
   }
 
   return (
-    <form action={handleSubmit} className="flex flex-col gap-5">
-      <div className="flex flex-col gap-1">
-        <label htmlFor="email" className="text-sm font-bold ">
-          Email
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          autoComplete="username"
-          required
-          className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200"
-        />
-      </div>
-
-      <div className="flex flex-col gap-1">
-        <label htmlFor="password" className="text-sm font-bold ">
-          Mot de passe
-        </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          required
-          className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200"
-        />
-      </div>
+    <form action={handleSubmit} className="flex flex-col gap-6">
+      <FormInput
+        label="Email"
+        id="email"
+        name="email"
+        type="email"
+        autoComplete="username"
+        required
+      />
+      <FormInput
+        label="Mot de passe"
+        id="password"
+        name="password"
+        type="password"
+        autoComplete="current-password"
+        required
+      />
 
       {error && (
-        <p className="text-sm font-bold text-primary bg-primary/10 px-4 py-3 rounded-xl">
+        <p className="px-4 py-3 rounded-xl bg-primary/10 border-2 border-primary text-primary font-bold text-sm">
           {error}
         </p>
       )}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full px-6 py-3 font-bold rounded-xl bg-primary border-2 border-primary text-white hover:bg-primary/10 hover:text-primary transition-colors duration-200 disabled:opacity-60"
-      >
+      <Button type="submit" variant="primary" size="md" full disabled={loading}>
         {loading ? "Connexion..." : "Se connecter"}
-      </button>
+      </Button>
 
       <p className="text-center text-sm text-quaternary/70">
         Pas encore de compte ?{" "}
-        <Link
-          href="/adopter/register"
-          className="font-bold text-primary hover:underline"
-        >
+        <Link href="/auth/signup" className="font-bold text-primary hover:underline">
           S&apos;inscrire
         </Link>
       </p>

@@ -1,7 +1,7 @@
-import { IAdoptionRequest } from "@/interfaces/IAdoptionRequest";
+import IAdoptionRequest from "@/interfaces/IAdoptionRequest";
 import Image from "next/image";
 
-const statusConfig = {
+const statusConfig: Record<string, { label: string; className: string }> = {
   en_attente: {
     label: "En attente",
     className: "bg-yellow-100 text-yellow-800",
@@ -21,7 +21,7 @@ export default function AdoptionRequestCard({
 }: {
   request: IAdoptionRequest;
 }) {
-  const listing = request.adoptionListing;
+  const listing = request.adoption_listing;
   const firstMedia = listing?.media?.[0];
   const imageUrl = firstMedia
     ? firstMedia.url.startsWith("http")
@@ -29,18 +29,18 @@ export default function AdoptionRequestCard({
       : `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${firstMedia.url}`
     : null;
 
-  const status = statusConfig[request.status] ?? {
-    label: request.status,
+  const status = statusConfig[request.entityStatus] ?? {
+    label: request.entityStatus,
     className: "bg-gray-100 text-gray-600",
   };
 
   const catNames = listing?.animals?.map((a) => a.name).join(" & ") ?? listing?.title ?? "Chat";
 
-  const date = new Date(request.createdAt).toLocaleDateString("fr-FR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  // const date = new Date(request.createdAt).toLocaleDateString("fr-FR", {
+  //   day: "numeric",
+  //   month: "long",
+  //   year: "numeric",
+  // });
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col sm:flex-row gap-0">
@@ -74,7 +74,7 @@ export default function AdoptionRequestCard({
             {status.label}
           </span>
         </div>
-        <p className="text-xs text-quaternary/50">Demande soumise le {date}</p>
+        {/* <p className="text-xs text-quaternary/50">Demande soumise le {date}</p> */}
       </div>
     </div>
   );

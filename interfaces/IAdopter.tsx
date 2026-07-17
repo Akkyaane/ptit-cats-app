@@ -15,7 +15,7 @@ export default interface IAdopter {
   householdType: "single" | "couple" | "family" | "shared accommodation" | "other";
   householdComposition: number;
   hasChildren: boolean;
-  childrenAgeGroup: "young | old | both" | "not applicable";
+  childrenAgeGroup?: "young" | "old" | "both" | "not applicable" | null;
   householdPresence: "always" | "often" | "sometimes" | "rarely";
   householdAgreement: boolean;
   disagreementDetails?: string | null;

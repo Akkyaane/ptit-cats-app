@@ -65,5 +65,5 @@ export async function createAdoptionRequest(
     return { error: "Erreur lors de la création de la demande. Veuillez réessayer." };
   }
 
-  redirect("/adopter/profile?tab=demandes&requested=true");
+  redirect("/profile?tab=demandes&requested=true");
 }

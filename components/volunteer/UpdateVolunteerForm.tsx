@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { updateBenevole } from "@/app/volunteer/update/action";
+import { updateBenevole } from "@/app/volunteers/update/action";
 
 type Benevole = {
   id: number;
   documentId: string;
-  name: string;
+  lastName: string;
   firstName: string;
   email: string;
-  role: "Admin" | "Référent" | "Responsable-adoption";
+  role: "admin" | "manager" | "referent";
 };
 
 export default function UpdateVolunteerForm({
@@ -36,7 +36,7 @@ export default function UpdateVolunteerForm({
     } else {
       setSuccess(true);
       setTimeout(
-        () => router.push(`/volunteer/view/${benevole.documentId}`),
+        () => router.push(`/volunteers/view/${benevole.documentId}`),
         1500,
       );
     }
@@ -53,14 +53,14 @@ export default function UpdateVolunteerForm({
   return (
     <form action={handleSubmit} className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <label htmlFor="name" className="text-sm font-bold ">
+        <label htmlFor="lastName" className="text-sm font-bold ">
           Nom
         </label>
         <input
-          id="name"
-          name="name"
+          id="lastName"
+          name="lastName"
           type="text"
-          defaultValue={benevole.name}
+          defaultValue={benevole.lastName}
           required
           className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200"
         />
@@ -107,9 +107,9 @@ export default function UpdateVolunteerForm({
             className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200 bg-white"
           >
             <option value="">-- Choisir un rôle --</option>
-            <option value="Admin">Admin</option>
-            <option value="Référent">Référent</option>
-            <option value="Responsable-adoption">Responsable-adoption</option>
+            <option value="admin">Administrateur</option>
+            <option value="manager">Responsable</option>
+            <option value="referent">Référent</option>
           </select>
         </div>
       )}

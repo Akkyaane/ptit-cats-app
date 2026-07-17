@@ -16,6 +16,7 @@ type ButtonProps = {
   size?: "sm" | "md" | "lg";
   href?: string;
   up?: boolean;
+  full?: boolean;
   disabled?: boolean;
   onClick?: () => void;
   children?: React.ReactNode;
@@ -27,6 +28,7 @@ export default function Button({
   size = "lg",
   href,
   up,
+  full = false,
   disabled = false,
   onClick,
   children,
@@ -42,7 +44,7 @@ export default function Button({
   }, [up]);
 
   const baseStyle =
-    "text-secondary font-bold rounded-xl border-2 hover:bg-secondary/40 backdrop-blur-sm transition-colors duration-200 text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary w-full md:w-fit";
+    "inline-flex items-center justify-center text-secondary font-bold rounded-xl border-2 hover:bg-secondary/40 backdrop-blur-sm transition-colors duration-200 text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-60";
 
   const variants = {
     primary: "bg-primary border-primary hover:text-primary",
@@ -55,7 +57,8 @@ export default function Button({
     lg: "px-6 py-4",
   };
 
-  const className = `${baseStyle} ${variants[variant]} ${sizes[size]}`;
+  const widthClass = full ? "w-full" : "w-full md:w-fit";
+  const className = `${baseStyle} ${variants[variant]} ${sizes[size]} ${widthClass}`;
 
   if (href) {
     const isExternal = href.startsWith("http") || href.startsWith("//");
@@ -95,7 +98,7 @@ export default function Button({
 
   if (type === "submit") {
     return (
-      <button type="submit" className={className}>
+      <button type="submit" onClick={onClick} disabled={disabled} className={className}>
         {children}
       </button>
     );

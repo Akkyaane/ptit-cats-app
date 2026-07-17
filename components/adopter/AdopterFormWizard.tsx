@@ -3,13 +3,23 @@
 import { useMemo, useRef, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import FormInput from "@/components/ui/FormInput";
-import { createAdopter } from "@/app/auth/signup/action";
+import Heading from "@/components/ui/Heading";
+import Button from "@/components/ui/Button";
 import { updateAdopter } from "@/app/adopters/update/action";
 import {
   AdopterFormValues,
   buildAdopterFormData,
+  buildAdopterPayload,
   adopterDefaultValues,
-} from "@/components/adopter/adopterForm";
+  yesNoOptions,
+  householdTypeOptions,
+  householdPresenceOptions,
+  childrenAgeGroupOptions,
+  employmentStatusOptions,
+  employmentArrangementOptions,
+  housingTypeOptions,
+  livingEnvironmentOptions,
+} from "@/components/adopter/AdopterForm";
 
 type StepDefinition = {
   title: string;
@@ -22,109 +32,50 @@ type AdopterFormWizardProps = {
   initialValues?: Partial<AdopterFormValues>;
 };
 
+type Option = { value: string; label: string };
+
 const stepDefinitions: StepDefinition[] = [
-  {
-    title: "Compte",
-    description: "Les informations de base pour créer votre espace adopter.",
-  },
-  {
-    title: "Coordonnées",
-    description: "Les informations pour vous contacter et vérifier votre dossier.",
-  },
-  {
-    title: "Composition du foyer",
-    description: "Le contexte familial et l'organisation du quotidien.",
-  },
-  {
-    title: "Travail et rythme de vie",
-    description: "Les habitudes qui influencent l'accueil du chat.",
-  },
-  {
-    title: "Logement",
-    description: "Le cadre de vie et les sécurisations prévues.",
-  },
-  {
-    title: "Autres animaux et engagement",
-    description: "Les infos complémentaires et l'accord final.",
-  },
+  { title: "Compte", description: "Les informations de base pour créer votre espace adopter." },
+  { title: "Coordonnées", description: "Les informations pour vous contacter et vérifier votre dossier." },
+  { title: "Composition du foyer", description: "Le contexte familial et l'organisation du quotidien." },
+  { title: "Travail et rythme de vie", description: "Les habitudes qui influencent l'accueil du chat." },
+  { title: "Logement", description: "Le cadre de vie et les sécurisations prévues." },
+  { title: "Autres animaux et engagement", description: "Les infos complémentaires et l'accord final." },
 ];
 
-const selectClass = "w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200 bg-white";
-
-const yesNoOptions = [
-  { value: "", label: "-- Choisir --" },
-  { value: "oui", label: "Oui" },
-  { value: "non", label: "Non" },
-];
-
-const yesNoOtherOptions = [
-  { value: "", label: "-- Choisir --" },
-  { value: "oui", label: "Oui" },
-  { value: "non", label: "Non" },
-  { value: "autre", label: "Autre" },
-];
-
-const householdOptions = [
-  { value: "", label: "-- Choisir --" },
-  { value: "seul", label: "Seul(e)" },
-  { value: "couple", label: "En couple" },
-  { value: "colocation", label: "Colocation" },
-  { value: "autre", label: "Autre" },
-];
-
-const workOptions = [
-  { value: "", label: "-- Choisir --" },
-  { value: "temps-plein", label: "Temps plein" },
-  { value: "temps-partiel", label: "Temps partiel" },
-  { value: "teletravail", label: "Télétravail" },
-  { value: "recherche", label: "En recherche d'emploi" },
-  { value: "autre", label: "Autre" },
-];
-
-const environmentOptions = [
-  { value: "", label: "-- Choisir --" },
-  { value: "ville", label: "Ville" },
-  { value: "campagne", label: "Campagne" },
-  { value: "lotissement", label: "Lotissement" },
-  { value: "autre", label: "Autre" },
-];
-
-function ChoiceSelectField({
+function SelectField({
   id,
   label,
   value,
   onChange,
   options,
   required = false,
+  wrapperClassName,
 }: {
   id: string;
   label: string;
   value: string;
   onChange: (value: string) => void;
-  options: { value: string; label: string }[];
+  options: Option[];
   required?: boolean;
+  wrapperClassName?: string;
 }) {
   return (
-    <div className="flex flex-col gap-1">
-      <label htmlFor={id} className="text-sm font-bold">
-        {label}
-        {required && <span className="text-primary"> *</span>}
-      </label>
-      <select
-        id={id}
-        name={id}
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        required={required}
-        className={selectClass}
-      >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </div>
+    <FormInput
+      as="select"
+      id={id}
+      label={label}
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+      required={required}
+      wrapperClassName={wrapperClassName}
+    >
+      {options.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </FormInput>
   );
 }
 
@@ -140,10 +91,10 @@ function StepCard({
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
-        <h2 className="text-xl md:text-2xl font-bold">{title}</h2>
-        <p className="text-sm text-quaternary/70 leading-relaxed">
-          {description}
-        </p>
+        <Heading type="h3" headingVariant="quaternary" underlineVariant="tertiary">
+          {title}
+        </Heading>
+        <p className="text-sm text-quaternary/70 leading-relaxed">{description}</p>
       </div>
       {children}
     </div>
@@ -162,9 +113,10 @@ export default function AdopterFormWizard({
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const [values, setValues] = useState<AdopterFormValues>(() =>
-    ({ ...adopterDefaultValues, ...initialValues }),
-  );
+  const [values, setValues] = useState<AdopterFormValues>(() => ({
+    ...adopterDefaultValues,
+    ...initialValues,
+  }));
 
   const isCreateMode = mode === "create";
   const totalSteps = stepDefinitions.length;
@@ -183,11 +135,7 @@ export default function AdopterFormWizard({
 
   function goToNextStep() {
     const form = formRef.current;
-
-    if (form && !form.reportValidity()) {
-      return;
-    }
-
+    if (form && !form.reportValidity()) return;
     setStep((previous) => Math.min(previous + 1, totalSteps - 1));
   }
 
@@ -197,59 +145,94 @@ export default function AdopterFormWizard({
     setStep((previous) => Math.max(previous - 1, 0));
   }
 
-  async function submitCreateQuick() {
-    const form = formRef.current;
+  // Contrat d'inscription : create entité -> create user lié -> auto-login.
+  async function registerAdopter(): Promise<boolean> {
+    const payload = buildAdopterPayload(buildAdopterFormData(values), {
+      includePassword: true,
+    });
 
-    if (form && !form.reportValidity()) {
-      return;
+    if (!("data" in payload)) {
+      setError("error" in payload && payload.error ? payload.error : "Formulaire invalide.");
+      return false;
     }
 
-    setError(null);
-    setSuccess(null);
-    setLoading(true);
+    // 1. Création de l'entité adopter (publiée immédiatement).
+    const entityRes = await fetch("/api/adopters/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload.data),
+    });
+    const entityData = await entityRes.json();
 
-    try {
-      const formData = buildAdopterFormData(values);
-      const result = await createAdopter(formData);
-
-      if (result.error) {
-        setError(result.error);
-        return;
-      }
-
-      router.push("/adopter/profile?created=true");
-    } finally {
-      setLoading(false);
+    if (!entityRes.ok || !entityData.data?.documentId) {
+      setError(
+        typeof entityData.error === "string" && entityData.error.includes("email")
+          ? "Un compte existe déjà avec cet email."
+          : "Erreur lors de la création du compte.",
+      );
+      return false;
     }
+
+    // 2. Création du user users-permissions lié à l'entité.
+    const userRes = await fetch("/api/users/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        collection: "adopters",
+        documentId: entityData.data.documentId,
+        lastName: payload.data.lastName,
+        firstName: payload.data.firstName,
+        email: payload.data.email,
+        password: values.password,
+      }),
+    });
+
+    if (!userRes.ok) {
+      setError("Compte créé, mais l'association a échoué.");
+      return false;
+    }
+
+    // 3. Connexion automatique (pose les cookies via la route de login existante).
+    await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ identifier: payload.data.email, password: values.password }),
+    });
+
+    return true;
   }
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  // En création : finalise puis redirige selon le choix de l'utilisateur.
+  // En édition : enregistre la mise à jour du profil.
+  async function finishRegistration(target: string) {
+    const form = formRef.current;
+    if (form && !form.reportValidity()) return;
+
     setError(null);
     setSuccess(null);
     setLoading(true);
 
     try {
-      const formData = buildAdopterFormData(values);
-      const result = isCreateMode
-        ? await createAdopter(formData)
-        : await updateAdopter(documentId ?? "", formData);
+      if (isCreateMode) {
+        if (await registerAdopter()) router.push(target);
+        return;
+      }
 
+      const result = await updateAdopter(documentId ?? "", buildAdopterFormData(values));
       if (result.error) {
         setError(result.error);
         return;
       }
-
-      if (isCreateMode) {
-        router.push(`/adopters/profile?created=true`);
-        return;
-      }
-
       setSuccess("Vos informations ont bien été enregistrées.");
       router.refresh();
     } finally {
       setLoading(false);
     }
+  }
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!isCreateMode) void finishRegistration("");
   }
 
   return (
@@ -271,56 +254,48 @@ export default function AdopterFormWizard({
 
       <StepCard title={currentStep.title} description={currentStep.description}>
         {step === 0 && (
-          <div className="flex flex-col gap-4">
-            {isCreateMode && (
-              <p className="rounded-xl bg-tertiary/10 px-4 py-3 text-sm text-quaternary/80 leading-relaxed">
-                Vous pouvez créer votre compte rapidement avec ces 4 champs,
-                puis compléter le formulaire détaillé plus tard depuis votre profil.
-              </p>
-            )}
-
-            <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-2">
+            <FormInput
+              label="Nom"
+              id="lastName"
+              value={values.lastName}
+              onChange={(e) => setField("lastName", e.target.value)}
+              required
+            />
+            <FormInput
+              label="Prénom"
+              id="firstName"
+              value={values.firstName}
+              onChange={(e) => setField("firstName", e.target.value)}
+              required
+            />
+            <FormInput
+              label="Adresse e-mail"
+              id="email"
+              type="email"
+              autoComplete="email"
+              value={values.email}
+              onChange={(e) => setField("email", e.target.value)}
+              required
+              wrapperClassName="md:col-span-2"
+            />
+            {isCreateMode ? (
               <FormInput
-                label="Nom"
-                id="name"
-                value={values.name}
-                onChange={(event) => setField("name", event.target.value)}
-                required
-              />
-              <FormInput
-                label="Prénom"
-                id="firstName"
-                value={values.firstName}
-                onChange={(event) => setField("firstName", event.target.value)}
-                required
-              />
-              <FormInput
-                label="Adresse e-mail"
-                id="email"
-                type="email"
-                autoComplete="email"
-                value={values.email}
-                onChange={(event) => setField("email", event.target.value)}
+                label="Mot de passe (14 caractères min.)"
+                id="password"
+                type="password"
+                autoComplete="new-password"
+                minLength={14}
+                value={values.password}
+                onChange={(e) => setField("password", e.target.value)}
                 required
                 wrapperClassName="md:col-span-2"
               />
-              {isCreateMode ? (
-                <FormInput
-                  label="Mot de passe"
-                  id="password"
-                  type="password"
-                  autoComplete="new-password"
-                  value={values.password}
-                  onChange={(event) => setField("password", event.target.value)}
-                  required
-                  wrapperClassName="md:col-span-2"
-                />
-              ) : (
-                <p className="md:col-span-2 rounded-xl bg-tertiary/10 px-4 py-3 text-sm text-quaternary/80">
-                  Le mot de passe n&apos;est pas modifié depuis cette page.
-                </p>
-              )}
-            </div>
+            ) : (
+              <p className="md:col-span-2 rounded-xl bg-tertiary/10 px-4 py-3 text-sm text-quaternary/80">
+                Le mot de passe n&apos;est pas modifié depuis cette page.
+              </p>
+            )}
           </div>
         )}
 
@@ -331,108 +306,102 @@ export default function AdopterFormWizard({
               id="birthDate"
               type="date"
               value={values.birthDate}
-              onChange={(event) => setField("birthDate", event.target.value)}
+              onChange={(e) => setField("birthDate", e.target.value)}
+              required
             />
             <FormInput
               label="Numéro de téléphone"
-              id="phone"
+              id="phoneNumber"
               type="tel"
-              value={values.phone}
-              onChange={(event) => setField("phone", event.target.value)}
+              value={values.phoneNumber}
+              onChange={(e) => setField("phoneNumber", e.target.value)}
+              required
             />
             <FormInput
               label="Adresse postale"
               id="address"
               value={values.address}
-              onChange={(event) => setField("address", event.target.value)}
+              onChange={(e) => setField("address", e.target.value)}
+              required
               wrapperClassName="md:col-span-2"
             />
             <FormInput
               label="Code postal"
               id="postalCode"
               value={values.postalCode}
-              onChange={(event) => setField("postalCode", event.target.value)}
+              onChange={(e) => setField("postalCode", e.target.value)}
+              required
             />
             <FormInput
               label="Ville"
               id="city"
               value={values.city}
-              onChange={(event) => setField("city", event.target.value)}
+              onChange={(e) => setField("city", e.target.value)}
+              required
             />
           </div>
         )}
 
         {step === 2 && (
           <div className="grid gap-4 md:grid-cols-2">
-            <FormInput
-              as="select"
+            <SelectField
+              id="householdType"
               label="Composition du foyer"
+              value={values.householdType}
+              onChange={(v) => setField("householdType", v)}
+              options={householdTypeOptions}
+              required
+            />
+            <FormInput
+              label="Nombre de personnes au foyer"
               id="householdComposition"
+              type="number"
+              min={1}
               value={values.householdComposition}
-              onChange={(event) => setField("householdComposition", event.target.value)}
-            >
-              {householdOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </FormInput>
-
-            {values.householdComposition === "colocation" && (
-              <FormInput
-                label="Combien de colocataires ?"
-                id="roommatesCount"
-                type="number"
-                min="0"
-                value={values.roommatesCount}
-                onChange={(event) => setField("roommatesCount", event.target.value)}
-              />
-            )}
-
-            <ChoiceSelectField
+              onChange={(e) => setField("householdComposition", e.target.value)}
+              required
+            />
+            <SelectField
+              id="householdPresence"
+              label="Présence à la maison"
+              value={values.householdPresence}
+              onChange={(v) => setField("householdPresence", v)}
+              options={householdPresenceOptions}
+              required
+            />
+            <SelectField
               id="hasChildren"
               label="Avez-vous des enfants ?"
               value={values.hasChildren}
+              onChange={(v) => setField("hasChildren", v)}
               options={yesNoOptions}
-              onChange={(value) => setField("hasChildren", value)}
+              required
             />
-
-            {values.hasChildren === "oui" && (
-              <>
-                <FormInput
-                  label="Combien d'enfants ?"
-                  id="childrenCount"
-                  type="number"
-                  min="0"
-                  value={values.childrenCount}
-                  onChange={(event) => setField("childrenCount", event.target.value)}
-                />
-                <FormInput
-                  as="textarea"
-                  label="Quels âges ont-ils ?"
-                  id="childrenAges"
-                  value={values.childrenAges}
-                  onChange={(event) => setField("childrenAges", event.target.value)}
-                  wrapperClassName="md:col-span-2"
-                />
-              </>
+            {values.hasChildren === "true" && (
+              <SelectField
+                id="childrenAgeGroup"
+                label="Tranche d'âge des enfants"
+                value={values.childrenAgeGroup}
+                onChange={(v) => setField("childrenAgeGroup", v)}
+                options={childrenAgeGroupOptions}
+              />
             )}
-
-            <ChoiceSelectField
+            <SelectField
               id="householdAgreement"
-              label="Toutes les personnes vivant au foyer sont-elles d'accord ?"
+              label="Tout le foyer est-il d'accord ?"
               value={values.householdAgreement}
+              onChange={(v) => setField("householdAgreement", v)}
               options={yesNoOptions}
-              onChange={(value) => setField("householdAgreement", value)}
+              required
             />
-
-            {values.householdAgreement === "non" && (
+            {values.householdAgreement === "false" && (
               <FormInput
                 as="textarea"
                 label="Qui n'est pas d'accord et pourquoi ?"
                 id="disagreementDetails"
                 value={values.disagreementDetails}
-                onChange={(event) => setField("disagreementDetails", event.target.value)}
+                onChange={(e) => setField("disagreementDetails", e.target.value)}
+                required
                 wrapperClassName="md:col-span-2"
               />
             )}
@@ -441,179 +410,128 @@ export default function AdopterFormWizard({
 
         {step === 3 && (
           <div className="grid gap-4 md:grid-cols-2">
-            <FormInput
-              as="select"
-              label="Travaillez-vous ?"
-              id="workStatus"
-              value={values.workStatus}
-              onChange={(event) => setField("workStatus", event.target.value)}
-              wrapperClassName="md:col-span-2"
-            >
-              {workOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </FormInput>
-
-            {values.workStatus !== "" && values.workStatus !== "recherche" && (
-              <>
-                <FormInput
-                  label="Quelle est votre profession ?"
-                  id="profession"
-                  value={values.profession}
-                  onChange={(event) => setField("profession", event.target.value)}
-                />
-                <FormInput
-                  label="Quels sont vos horaires de travail ?"
-                  id="workingHours"
-                  value={values.workingHours}
-                  onChange={(event) => setField("workingHours", event.target.value)}
-                />
-              </>
-            )}
-
-            <FormInput
-              label="Combien de temps l'animal restera-t-il seul chez vous ?"
-              id="aloneTime"
-              value={values.aloneTime}
-              onChange={(event) => setField("aloneTime", event.target.value)}
-              wrapperClassName="md:col-span-2"
+            <SelectField
+              id="employmentStatus"
+              label="Situation professionnelle"
+              value={values.employmentStatus}
+              onChange={(v) => setField("employmentStatus", v)}
+              options={employmentStatusOptions}
+              required
+            />
+            <SelectField
+              id="employmentArrangement"
+              label="Mode de travail"
+              value={values.employmentArrangement}
+              onChange={(v) => setField("employmentArrangement", v)}
+              options={employmentArrangementOptions}
+              required
             />
           </div>
         )}
 
         {step === 4 && (
           <div className="grid gap-4 md:grid-cols-2">
-            <FormInput
-              as="select"
-              label="Vous vivez ?"
+            <SelectField
               id="housingType"
+              label="Type de logement"
               value={values.housingType}
-              onChange={(event) => setField("housingType", event.target.value)}
-            >
-              <option value="">-- Choisir --</option>
-              <option value="appartement">Appartement</option>
-              <option value="maison">Maison</option>
-              <option value="autre">Autre</option>
-            </FormInput>
+              onChange={(v) => setField("housingType", v)}
+              options={housingTypeOptions}
+              required
+            />
             <FormInput
-              label="Superficie du logement"
+              label="Superficie du logement (m²)"
               id="housingSurface"
+              type="number"
+              min={1}
               value={values.housingSurface}
-              onChange={(event) => setField("housingSurface", event.target.value)}
+              onChange={(e) => setField("housingSurface", e.target.value)}
+              required
             />
-            <FormInput
-              as="select"
-              label="Habitez-vous ?"
+            <SelectField
               id="livingEnvironment"
+              label="Environnement"
               value={values.livingEnvironment}
-              onChange={(event) => setField("livingEnvironment", event.target.value)}
-            >
-              {environmentOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </FormInput>
-            <ChoiceSelectField
-              id="nearBusyRoad"
-              label="Habitez-vous à proximité d'une route passante ?"
-              value={values.nearBusyRoad}
-              options={yesNoOtherOptions}
-              onChange={(value) => setField("nearBusyRoad", value)}
+              onChange={(v) => setField("livingEnvironment", v)}
+              options={livingEnvironmentOptions}
+              required
             />
-            <ChoiceSelectField
-              id="petCanGoOutside"
-              label="L'animal aura-t-il la possibilité de sortir ?"
-              value={values.petCanGoOutside}
-              options={yesNoOtherOptions}
-              onChange={(value) => setField("petCanGoOutside", value)}
+            <SelectField
+              id="isNearBusyRoad"
+              label="Proximité d'une route passante ?"
+              value={values.isNearBusyRoad}
+              onChange={(v) => setField("isNearBusyRoad", v)}
+              options={yesNoOptions}
+              required
             />
-
-            {values.housingType === "appartement" && (
-              <>
-                <FormInput
-                  label="À quel étage êtes-vous ?"
-                  id="apartmentFloor"
-                  type="number"
-                  min="0"
-                  value={values.apartmentFloor}
-                  onChange={(event) => setField("apartmentFloor", event.target.value)}
-                />
-                <ChoiceSelectField
-                  id="windowsSecured"
-                  label="Vos fenêtres sont-elles sécurisées ?"
-                  value={values.windowsSecured}
-                  options={yesNoOtherOptions}
-                  onChange={(value) => setField("windowsSecured", value)}
-                />
-                {values.windowsSecured === "non" && (
-                  <ChoiceSelectField
-                    id="planToSecureWindows"
-                    label="Envisagez-vous de sécuriser vos fenêtres ?"
-                    value={values.planToSecureWindows}
-                    options={yesNoOtherOptions}
-                    onChange={(value) => setField("planToSecureWindows", value)}
-                  />
-                )}
-              </>
+            <SelectField
+              id="animalCanGoOutside"
+              label="L'animal pourra-t-il sortir ?"
+              value={values.animalCanGoOutside}
+              onChange={(v) => setField("animalCanGoOutside", v)}
+              options={yesNoOptions}
+              required
+            />
+            <SelectField
+              id="areWindowsSecuredOrWillBe"
+              label="Fenêtres sécurisées (ou le seront) ?"
+              value={values.areWindowsSecuredOrWillBe}
+              onChange={(v) => setField("areWindowsSecuredOrWillBe", v)}
+              options={yesNoOptions}
+              required
+            />
+            {values.housingType === "apartment" && (
+              <FormInput
+                label="Étage"
+                id="apartmentFloor"
+                type="number"
+                min={0}
+                value={values.apartmentFloor}
+                onChange={(e) => setField("apartmentFloor", e.target.value)}
+              />
             )}
-
-            <ChoiceSelectField
-              id="hasGarden"
-              label="Avez-vous un jardin ?"
-              value={values.hasGarden}
-              options={yesNoOtherOptions}
-              onChange={(value) => setField("hasGarden", value)}
-            />
-            {values.hasGarden === "oui" && (
-              <>
-                <FormInput
-                  label="Superficie du jardin"
-                  id="gardenSurface"
-                  value={values.gardenSurface}
-                  onChange={(event) => setField("gardenSurface", event.target.value)}
-                />
-                <ChoiceSelectField
-                  id="gardenFenced"
-                  label="Le jardin est-il grillagé ?"
-                  value={values.gardenFenced}
-                  options={yesNoOtherOptions}
-                  onChange={(value) => setField("gardenFenced", value)}
-                />
-                {values.gardenFenced === "oui" && (
-                  <FormInput
-                    label="Hauteur du grillage"
-                    id="fenceHeight"
-                    value={values.fenceHeight}
-                    onChange={(event) => setField("fenceHeight", event.target.value)}
-                  />
-                )}
-              </>
-            )}
-
-            <ChoiceSelectField
+            <SelectField
               id="hasBalconyOrTerrace"
-              label="Avez-vous un balcon ou une terrasse ?"
+              label="Balcon ou terrasse ?"
               value={values.hasBalconyOrTerrace}
-              options={yesNoOtherOptions}
-              onChange={(value) => setField("hasBalconyOrTerrace", value)}
+              onChange={(v) => setField("hasBalconyOrTerrace", v)}
+              options={yesNoOptions}
+              required
             />
-            {values.hasBalconyOrTerrace === "oui" && (
+            {values.hasBalconyOrTerrace === "true" && (
+              <SelectField
+                id="isBalconySecured"
+                label="Balcon sécurisé ?"
+                value={values.isBalconySecured}
+                onChange={(v) => setField("isBalconySecured", v)}
+                options={yesNoOptions}
+              />
+            )}
+            <SelectField
+              id="hasGarden"
+              label="Jardin ?"
+              value={values.hasGarden}
+              onChange={(v) => setField("hasGarden", v)}
+              options={yesNoOptions}
+              required
+            />
+            {values.hasGarden === "true" && (
               <>
                 <FormInput
-                  label="Superficie du balcon / terrasse"
-                  id="balconySurface"
-                  value={values.balconySurface}
-                  onChange={(event) => setField("balconySurface", event.target.value)}
+                  label="Superficie du jardin (m²)"
+                  id="gardenSurface"
+                  type="number"
+                  min={0}
+                  value={values.gardenSurface}
+                  onChange={(e) => setField("gardenSurface", e.target.value)}
                 />
-                <ChoiceSelectField
-                  id="balconySecured"
-                  label="Le balcon est-il sécurisé ?"
-                  value={values.balconySecured}
-                  options={yesNoOtherOptions}
-                  onChange={(value) => setField("balconySecured", value)}
+                <FormInput
+                  label="Hauteur de la clôture (cm)"
+                  id="fenceHeight"
+                  type="number"
+                  min={0}
+                  value={values.fenceHeight}
+                  onChange={(e) => setField("fenceHeight", e.target.value)}
                 />
               </>
             )}
@@ -622,61 +540,62 @@ export default function AdopterFormWizard({
 
         {step === 5 && (
           <div className="grid gap-4 md:grid-cols-2">
-            <ChoiceSelectField
+            <SelectField
               id="hasOtherAnimals"
               label="Avez-vous d'autres animaux ?"
               value={values.hasOtherAnimals}
+              onChange={(v) => setField("hasOtherAnimals", v)}
               options={yesNoOptions}
-              onChange={(value) => setField("hasOtherAnimals", value)}
+              required
             />
-            {values.hasOtherAnimals === "oui" && (
+            <SelectField
+              id="areOtherAnimalsSterilizedOrCastrated"
+              label="Sont-ils stérilisés / castrés ?"
+              value={values.areOtherAnimalsSterilizedOrCastrated}
+              onChange={(v) => setField("areOtherAnimalsSterilizedOrCastrated", v)}
+              options={yesNoOptions}
+              required
+            />
+            {values.hasOtherAnimals === "true" && (
               <>
                 <FormInput
                   as="textarea"
-                  label="Quels animaux avez-vous ? (nombre, espèce, race, sexe, âge)"
+                  label="Quels animaux ? (nombre, espèce, race, sexe, âge)"
                   id="otherAnimalsDetails"
                   value={values.otherAnimalsDetails}
-                  onChange={(event) => setField("otherAnimalsDetails", event.target.value)}
+                  onChange={(e) => setField("otherAnimalsDetails", e.target.value)}
                   wrapperClassName="md:col-span-2"
                 />
-                <ChoiceSelectField
-                  id="sterilizedAnimals"
-                  label="Sont-ils stérilisés ?"
-                  value={values.sterilizedAnimals}
-                  options={yesNoOptions}
-                  onChange={(value) => setField("sterilizedAnimals", value)}
-                />
                 <FormInput
-                  label="Depuis combien de temps les avez-vous ?"
-                  id="petsSince"
-                  value={values.petsSince}
-                  onChange={(event) => setField("petsSince", event.target.value)}
+                  label="Premier animal possédé depuis le"
+                  id="firstAnimalOwnershipDate"
+                  type="date"
+                  value={values.firstAnimalOwnershipDate}
+                  onChange={(e) => setField("firstAnimalOwnershipDate", e.target.value)}
                 />
               </>
             )}
             <FormInput
               as="textarea"
-              label="Avez-vous des remarques à nous partager ?"
+              label="Remarques (facultatif)"
               id="remarks"
               value={values.remarks}
-              onChange={(event) => setField("remarks", event.target.value)}
+              onChange={(e) => setField("remarks", e.target.value)}
               wrapperClassName="md:col-span-2"
             />
             <label className="md:col-span-2 flex items-start gap-3 rounded-xl border-2 border-tertiary bg-tertiary/5 px-4 py-3 text-sm leading-relaxed">
               <input
                 type="checkbox"
-                checked={values.acceptsResponsibility}
-                onChange={(event) =>
-                  setField("acceptsResponsibility", event.target.checked)
-                }
+                checked={values.hasAcceptedResponsibility}
+                onChange={(e) => setField("hasAcceptedResponsibility", e.target.checked)}
                 className="mt-1 accent-primary"
                 required
               />
               <span>
-                En validant ce formulaire, vous acceptez l&apos;entière
-                responsabilité de l&apos;entretien de l&apos;animal, y compris les frais
-                vétérinaires, la nourriture, les accessoires et les conséquences
-                juridiques et pécuniaires liées à sa garde.
+                En validant ce formulaire, vous acceptez l&apos;entière responsabilité de
+                l&apos;entretien de l&apos;animal, y compris les frais vétérinaires, la
+                nourriture, les accessoires et les conséquences juridiques et pécuniaires
+                liées à sa garde.
               </span>
             </label>
           </div>
@@ -684,69 +603,57 @@ export default function AdopterFormWizard({
       </StepCard>
 
       {error && (
-        <p className="text-sm font-bold text-primary bg-primary/10 px-4 py-3 rounded-xl">
+        <p className="px-4 py-3 rounded-xl bg-primary/10 border-2 border-primary text-primary font-bold text-sm">
           {error}
         </p>
       )}
 
       {success && (
-        <p className="text-sm font-bold text-green-700 bg-green-50 px-4 py-3 rounded-xl">
+        <p className="px-4 py-3 rounded-xl bg-green-50 border-2 border-green-600 text-green-700 font-bold text-sm">
           {success}
         </p>
       )}
 
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <button
+        <Button
           type="button"
+          variant="secondary"
+          size="md"
           onClick={goToPreviousStep}
           disabled={step === 0 || loading}
-          className="px-6 py-3 font-bold rounded-xl border-2 border-tertiary text-quaternary/70 hover:border-primary hover:text-primary transition-colors duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          Précédent
-        </button>
+          ← Précédent
+        </Button>
 
-        {isCreateMode && step === 0 ? (
+        {step < totalSteps - 1 ? (
+          <Button type="button" variant="primary" size="md" onClick={goToNextStep} disabled={loading}>
+            Suivant →
+          </Button>
+        ) : isCreateMode ? (
           <div className="flex flex-col gap-3 sm:flex-row">
-            <button
+            <Button
               type="button"
-              onClick={submitCreateQuick}
+              variant="primary"
+              size="md"
+              onClick={() => finishRegistration("/profile")}
               disabled={loading}
-              className="px-6 py-3 font-bold rounded-xl border-2 border-quaternary text-quaternary hover:bg-quaternary/10 transition-colors duration-200 disabled:opacity-60"
             >
-              {loading ? "Création..." : "Créer le compte rapidement"}
-            </button>
-            <button
+              {loading ? "Création..." : "Terminer et compléter mon profil"}
+            </Button>
+            <Button
               type="button"
-              onClick={goToNextStep}
+              variant="secondary"
+              size="md"
+              onClick={() => finishRegistration("/adoption-listings")}
               disabled={loading}
-              className="px-6 py-3 font-bold rounded-xl bg-primary border-2 border-primary text-white hover:bg-primary/10 hover:text-primary transition-colors duration-200 disabled:opacity-60"
             >
-              Continuer le formulaire complet
-            </button>
+              {loading ? "Création..." : "Terminer et voir les annonces"}
+            </Button>
           </div>
-        ) : step < totalSteps - 1 ? (
-          <button
-            type="button"
-            onClick={goToNextStep}
-            disabled={loading}
-            className="px-6 py-3 font-bold rounded-xl bg-primary border-2 border-primary text-white hover:bg-primary/10 hover:text-primary transition-colors duration-200 disabled:opacity-60"
-          >
-            Suivant
-          </button>
         ) : (
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-6 py-3 font-bold rounded-xl bg-primary border-2 border-primary text-white hover:bg-primary/10 hover:text-primary transition-colors duration-200 disabled:opacity-60"
-          >
-            {loading
-              ? isCreateMode
-                ? "Création..."
-                : "Enregistrement..."
-              : isCreateMode
-                ? "Créer mon compte"
-                : "Enregistrer mes informations"}
-          </button>
+          <Button type="submit" variant="primary" size="md" disabled={loading}>
+            {loading ? "Enregistrement..." : "Enregistrer mes informations"}
+          </Button>
         )}
       </div>
     </form>

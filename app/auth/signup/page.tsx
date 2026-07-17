@@ -1,6 +1,7 @@
-﻿import RegisterAdopterForm from "@/components/adopter/RegisterAdoptantForm";
+import RegisterAdopterForm from "@/components/adopter/RegisterAdoptantForm";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
+import Heading from "@/components/ui/Heading";
 
 export default function RegisterAdopterPage() {
   return (
@@ -10,24 +11,34 @@ export default function RegisterAdopterPage() {
           <Navbar />
         </div>
       </header>
-      <main className="max-w-[1200px] mx-auto px-4 py-16">
-        <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 md:p-8 flex flex-col gap-6">
-          <div className="flex flex-col items-start gap-3">
-            <h1 className="text-2xl md:text-3xl font-bold">Créer mon compte adopter</h1>
-            <p className="text-sm md:text-base text-quaternary/70 max-w-3xl leading-relaxed">
-              Vous pouvez créer votre compte rapidement avec les informations de base, ou continuer directement vers le formulaire complet en plusieurs étapes.
+
+      <main className="layout-header-spacing">
+        <div className="container">
+          <div className="mx-auto w-full max-w-3xl flex flex-col gap-8">
+            <div className="flex flex-col items-center gap-3 text-center">
+              <Heading type="h2" headingVariant="quaternary" underlineVariant="tertiary">
+                Créer mon compte adopter
+              </Heading>
+              <p className="text-sm md:text-base text-quaternary/70 max-w-2xl leading-relaxed">
+                Renseignez le formulaire en quelques étapes. À la fin, vous pourrez
+                soit compléter votre profil, soit accéder directement aux annonces.
+              </p>
+            </div>
+
+            <div className="border-2 border-tertiary rounded-2xl p-6 md:p-8">
+              <RegisterAdopterForm />
+            </div>
+
+            <p className="text-center text-sm text-quaternary/70">
+              Déjà un compte ?{" "}
+              <Link
+                href="/auth/signin"
+                className="font-bold text-primary hover:underline"
+              >
+                Se connecter
+              </Link>
             </p>
-            <div className="w-12 h-1 bg-tertiary rounded-full"></div>
           </div>
-
-          <RegisterAdopterForm />
-
-          <p className="text-center text-sm text-quaternary/70">
-            Déjà un compte ?{" "}
-            <Link href="/login" className="font-bold text-primary hover:underline">
-              Se connecter
-            </Link>
-          </p>
         </div>
       </main>
     </div>

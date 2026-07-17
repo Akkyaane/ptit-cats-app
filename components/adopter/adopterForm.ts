@@ -1,102 +1,156 @@
-import { IAdopter } from "@/interfaces/IAdopter";
+import IAdopter from "@/interfaces/IAdopter";
 
+// Le formulaire est intégralement aligné sur le schéma back `adopter`.
+// Les valeurs des <select> correspondent directement aux enums Strapi.
 export type AdopterFormValues = {
-  name: string;
+  // Compte
+  lastName: string;
   firstName: string;
   email: string;
   password: string;
+  // Coordonnées
   birthDate: string;
-  phone: string;
+  phoneNumber: string;
   address: string;
   postalCode: string;
   city: string;
-  householdComposition: string;
-  roommatesCount: string;
-  hasChildren: string;
-  childrenCount: string;
-  childrenAges: string;
-  householdAgreement: string;
+  // Foyer
+  householdType: string; // single | couple | family | shared accommodation | other
+  householdComposition: string; // integer >= 1
+  householdPresence: string; // always | often | sometimes | rarely
+  hasChildren: string; // "true" | "false"
+  childrenAgeGroup: string; // young | old | both | not applicable
+  householdAgreement: string; // "true" | "false"
   disagreementDetails: string;
-  workStatus: string;
-  profession: string;
-  workingHours: string;
-  aloneTime: string;
-  housingType: string;
-  housingSurface: string;
-  livingEnvironment: string;
-  nearBusyRoad: string;
-  petCanGoOutside: string;
+  // Travail
+  employmentStatus: string; // full-time | part-time | job seeking | other
+  employmentArrangement: string; // on site | hybrid | remote | not applicable
+  // Logement
+  housingType: string; // apartment | house | other
+  housingSurface: string; // integer >= 1
   apartmentFloor: string;
-  windowsSecured: string;
-  planToSecureWindows: string;
-  hasGarden: string;
+  areWindowsSecuredOrWillBe: string; // "true" | "false"
+  hasBalconyOrTerrace: string; // "true" | "false"
+  isBalconySecured: string; // "true" | "false"
+  hasGarden: string; // "true" | "false"
   gardenSurface: string;
-  gardenFenced: string;
   fenceHeight: string;
-  hasBalconyOrTerrace: string;
-  balconySurface: string;
-  balconySecured: string;
-  hasOtherAnimals: string;
+  livingEnvironment: string; // urban | suburban | rural
+  isNearBusyRoad: string; // "true" | "false"
+  animalCanGoOutside: string; // "true" | "false"
+  // Autres animaux & engagement
+  hasOtherAnimals: string; // "true" | "false"
   otherAnimalsDetails: string;
-  sterilizedAnimals: string;
-  petsSince: string;
+  areOtherAnimalsSterilizedOrCastrated: string; // "true" | "false"
+  firstAnimalOwnershipDate: string;
   remarks: string;
-  acceptsResponsibility: boolean;
+  hasAcceptedResponsibility: boolean;
 };
 
 export const adopterDefaultValues: AdopterFormValues = {
-  name: "",
+  lastName: "",
   firstName: "",
   email: "",
   password: "",
   birthDate: "",
-  phone: "",
+  phoneNumber: "",
   address: "",
   postalCode: "",
   city: "",
+  householdType: "",
   householdComposition: "",
-  roommatesCount: "",
+  householdPresence: "",
   hasChildren: "",
-  childrenCount: "",
-  childrenAges: "",
+  childrenAgeGroup: "",
   householdAgreement: "",
   disagreementDetails: "",
-  workStatus: "",
-  profession: "",
-  workingHours: "",
-  aloneTime: "",
+  employmentStatus: "",
+  employmentArrangement: "",
   housingType: "",
   housingSurface: "",
-  livingEnvironment: "",
-  nearBusyRoad: "",
-  petCanGoOutside: "",
   apartmentFloor: "",
-  windowsSecured: "",
-  planToSecureWindows: "",
+  areWindowsSecuredOrWillBe: "",
+  hasBalconyOrTerrace: "",
+  isBalconySecured: "",
   hasGarden: "",
   gardenSurface: "",
-  gardenFenced: "",
   fenceHeight: "",
-  hasBalconyOrTerrace: "",
-  balconySurface: "",
-  balconySecured: "",
+  livingEnvironment: "",
+  isNearBusyRoad: "",
+  animalCanGoOutside: "",
   hasOtherAnimals: "",
   otherAnimalsDetails: "",
-  sterilizedAnimals: "",
-  petsSince: "",
+  areOtherAnimalsSterilizedOrCastrated: "",
+  firstAnimalOwnershipDate: "",
   remarks: "",
-  acceptsResponsibility: false,
+  hasAcceptedResponsibility: false,
 };
 
-const stringValue = (value: unknown) =>
-  typeof value === "string" ? value : value == null ? "" : String(value);
+// Options (label FR -> valeur = enum Strapi)
+export const yesNoOptions = [
+  { value: "", label: "-- Choisir --" },
+  { value: "true", label: "Oui" },
+  { value: "false", label: "Non" },
+];
 
-const booleanValue = (value: unknown) => value === true;
-const yesNoValue = (value: unknown) => {
-  if (value === true) return "oui";
-  if (value === false) return "non";
-  return stringValue(value);
-};
+export const householdTypeOptions = [
+  { value: "", label: "-- Choisir --" },
+  { value: "single", label: "Seul(e)" },
+  { value: "couple", label: "En couple" },
+  { value: "family", label: "Famille" },
+  { value: "shared accommodation", label: "Colocation" },
+  { value: "other", label: "Autre" },
+];
+
+export const householdPresenceOptions = [
+  { value: "", label: "-- Choisir --" },
+  { value: "always", label: "Toujours" },
+  { value: "often", label: "Souvent" },
+  { value: "sometimes", label: "Parfois" },
+  { value: "rarely", label: "Rarement" },
+];
+
+export const childrenAgeGroupOptions = [
+  { value: "", label: "-- Choisir --" },
+  { value: "young", label: "Jeunes enfants" },
+  { value: "old", label: "Grands enfants" },
+  { value: "both", label: "Les deux" },
+  { value: "not applicable", label: "Non applicable" },
+];
+
+export const employmentStatusOptions = [
+  { value: "", label: "-- Choisir --" },
+  { value: "full-time", label: "Temps plein" },
+  { value: "part-time", label: "Temps partiel" },
+  { value: "job seeking", label: "En recherche d'emploi" },
+  { value: "other", label: "Autre" },
+];
+
+export const employmentArrangementOptions = [
+  { value: "", label: "-- Choisir --" },
+  { value: "on site", label: "Sur site" },
+  { value: "hybrid", label: "Hybride" },
+  { value: "remote", label: "Télétravail" },
+  { value: "not applicable", label: "Non applicable" },
+];
+
+export const housingTypeOptions = [
+  { value: "", label: "-- Choisir --" },
+  { value: "apartment", label: "Appartement" },
+  { value: "house", label: "Maison" },
+  { value: "other", label: "Autre" },
+];
+
+export const livingEnvironmentOptions = [
+  { value: "", label: "-- Choisir --" },
+  { value: "urban", label: "Urbain" },
+  { value: "suburban", label: "Périurbain" },
+  { value: "rural", label: "Rural" },
+];
+
+// --- Lecture d'une entité existante vers les valeurs du formulaire (mode édition) ---
+const s = (v: unknown) => (typeof v === "string" ? v : v == null ? "" : String(v));
+const b = (v: unknown) => (v === true ? "true" : v === false ? "false" : "");
 
 export function mapAdopterToFormValues(
   adopter?: Partial<IAdopter> | null,
@@ -105,52 +159,45 @@ export function mapAdopterToFormValues(
 
   return {
     ...adopterDefaultValues,
-    name: stringValue(adopter.name),
-    firstName: stringValue(adopter.firstName),
-    email: stringValue(adopter.email),
-    birthDate: stringValue(adopter.birthDate),
-    phone: stringValue(adopter.phone),
-    address: stringValue(adopter.address),
-    postalCode: stringValue(adopter.postalCode),
-    city: stringValue(adopter.city),
-    householdComposition: stringValue(adopter.householdComposition),
-    roommatesCount: stringValue(adopter.roommatesCount),
-    hasChildren: yesNoValue(adopter.hasChildren),
-    childrenCount: stringValue(adopter.childrenCount),
-    childrenAges: stringValue(adopter.childrenAges),
-    householdAgreement: yesNoValue(adopter.householdAgreement),
-    disagreementDetails: stringValue(adopter.disagreementDetails),
-    workStatus: stringValue(adopter.workStatus),
-    profession: stringValue(adopter.profession),
-    workingHours: stringValue(adopter.workingHours),
-    aloneTime: stringValue(adopter.aloneTime),
-    housingType: stringValue(adopter.housingType),
-    housingSurface: stringValue(adopter.housingSurface),
-    livingEnvironment: stringValue(adopter.livingEnvironment),
-    nearBusyRoad: stringValue(adopter.nearBusyRoad),
-    petCanGoOutside: stringValue(adopter.petCanGoOutside),
-    apartmentFloor: stringValue(adopter.apartmentFloor),
-    windowsSecured: stringValue(adopter.windowsSecured),
-    planToSecureWindows: stringValue(adopter.planToSecureWindows),
-    hasGarden: stringValue(adopter.hasGarden),
-    gardenSurface: stringValue(adopter.gardenSurface),
-    gardenFenced: stringValue(adopter.gardenFenced),
-    fenceHeight: stringValue(adopter.fenceHeight),
-    hasBalconyOrTerrace: stringValue(adopter.hasBalconyOrTerrace),
-    balconySurface: stringValue(adopter.balconySurface),
-    balconySecured: stringValue(adopter.balconySecured),
-    hasOtherAnimals: yesNoValue(adopter.hasOtherAnimals),
-    otherAnimalsDetails: stringValue(adopter.otherAnimalsDetails),
-    sterilizedAnimals: yesNoValue(adopter.sterilizedAnimals),
-    petsSince: stringValue(adopter.petsSince),
-    remarks: stringValue(adopter.remarks),
-    acceptsResponsibility: booleanValue(adopter.acceptsResponsibility),
+    lastName: s(adopter.lastName),
+    firstName: s(adopter.firstName),
+    email: s(adopter.email),
+    birthDate: s(adopter.birthDate).slice(0, 10),
+    phoneNumber: s(adopter.phoneNumber),
+    address: s(adopter.address),
+    postalCode: s(adopter.postalCode),
+    city: s(adopter.city),
+    householdType: s(adopter.householdType),
+    householdComposition: s(adopter.householdComposition),
+    householdPresence: s(adopter.householdPresence),
+    hasChildren: b(adopter.hasChildren),
+    childrenAgeGroup: s(adopter.childrenAgeGroup),
+    householdAgreement: b(adopter.householdAgreement),
+    disagreementDetails: s(adopter.disagreementDetails),
+    employmentStatus: s(adopter.employmentStatus),
+    employmentArrangement: s(adopter.employmentArrangement),
+    housingType: s(adopter.housingType),
+    housingSurface: s(adopter.housingSurface),
+    apartmentFloor: s(adopter.apartmentFloor),
+    areWindowsSecuredOrWillBe: b(adopter.areWindowsSecuredOrWillBe),
+    hasBalconyOrTerrace: b(adopter.hasBalconyOrTerrace),
+    isBalconySecured: b(adopter.isBalconySecured),
+    hasGarden: b(adopter.hasGarden),
+    gardenSurface: s(adopter.gardenSurface),
+    fenceHeight: s(adopter.fenceHeight),
+    livingEnvironment: s(adopter.livingEnvironment),
+    isNearBusyRoad: b(adopter.isNearBusyRoad),
+    animalCanGoOutside: b(adopter.animalCanGoOutside),
+    hasOtherAnimals: b(adopter.hasOtherAnimals),
+    otherAnimalsDetails: s(adopter.otherAnimalsDetails),
+    areOtherAnimalsSterilizedOrCastrated: b(adopter.areOtherAnimalsSterilizedOrCastrated),
+    firstAnimalOwnershipDate: s(adopter.firstAnimalOwnershipDate).slice(0, 10),
+    remarks: s(adopter.remarks),
+    hasAcceptedResponsibility: adopter.hasAcceptedResponsibility === true,
   };
 }
 
-export function buildAdopterFormData(
-  values: AdopterFormValues,
-): FormData {
+export function buildAdopterFormData(values: AdopterFormValues): FormData {
   const formData = new FormData();
 
   Object.entries(values).forEach(([key, value]) => {
@@ -158,81 +205,52 @@ export function buildAdopterFormData(
       formData.set(key, value ? "true" : "false");
       return;
     }
-
     const trimmed = value.trim();
-    if (trimmed.length > 0) {
-      formData.set(key, trimmed);
-    }
+    if (trimmed.length > 0) formData.set(key, trimmed);
   });
 
   return formData;
 }
 
-export function getRequiredField(
-  formData: FormData,
-  key: keyof AdopterFormValues,
-  label: string,
-) {
-  const value = formData.get(key);
+// --- Helpers de lecture depuis FormData ---
+type FormKey = keyof AdopterFormValues;
 
+export function getRequiredField(formData: FormData, key: FormKey, label: string) {
+  const value = formData.get(key);
   if (typeof value !== "string" || value.trim().length === 0) {
     return { error: `${label} est requis.` } as const;
   }
-
   return { value: value.trim() } as const;
 }
 
-export function getOptionalField(
-  formData: FormData,
-  key: keyof AdopterFormValues,
-) {
+function optionalString(formData: FormData, key: FormKey): string | null {
   const value = formData.get(key);
-
-  if (typeof value !== "string") {
-    return null;
-  }
-
+  if (typeof value !== "string") return null;
   const trimmed = value.trim();
   return trimmed.length > 0 ? trimmed : null;
 }
 
-export function getBooleanField(
-  formData: FormData,
-  key: keyof AdopterFormValues,
-) {
-  const value = formData.get(key);
+function optionalNumber(formData: FormData, key: FormKey): number | null {
+  const value = optionalString(formData, key);
+  if (value === null) return null;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
+}
 
+function boolean(formData: FormData, key: FormKey): boolean | null {
+  const value = formData.get(key);
   if (value === "true" || value === "oui") return true;
   if (value === "false" || value === "non") return false;
-
   return null;
 }
 
-export function getNumberField(
-  formData: FormData,
-  key: keyof AdopterFormValues,
-) {
-  const value = formData.get(key);
-
-  if (typeof value !== "string") {
-    return null;
-  }
-
-  const trimmed = value.trim();
-  if (trimmed.length === 0) {
-    return null;
-  }
-
-  const number = Number(trimmed);
-  return Number.isFinite(number) ? number : null;
-}
-
+// --- Construction du payload au format schéma Strapi ---
 export function buildAdopterPayload(
   formData: FormData,
   options: { includePassword: boolean },
 ) {
-  const name = getRequiredField(formData, "name", "Le nom");
-  if ("error" in name) return name;
+  const lastName = getRequiredField(formData, "lastName", "Le nom");
+  if ("error" in lastName) return lastName;
 
   const firstName = getRequiredField(formData, "firstName", "Le prénom");
   if ("error" in firstName) return firstName;
@@ -240,99 +258,60 @@ export function buildAdopterPayload(
   const email = getRequiredField(formData, "email", "L'email");
   if ("error" in email) return email;
 
+  let password: string | undefined;
   if (options.includePassword) {
-    const password = getRequiredField(formData, "password", "Le mot de passe");
-    if ("error" in password) return password;
-
-    return {
-      data: {
-        name: name.value,
-        firstName: firstName.value,
-        email: email.value,
-        password: password.value,
-        birthDate: getOptionalField(formData, "birthDate"),
-        phone: getOptionalField(formData, "phone"),
-        address: getOptionalField(formData, "address"),
-        postalCode: getOptionalField(formData, "postalCode"),
-        city: getOptionalField(formData, "city"),
-        householdComposition: getOptionalField(formData, "householdComposition"),
-        roommatesCount: getNumberField(formData, "roommatesCount"),
-        hasChildren: getBooleanField(formData, "hasChildren"),
-        childrenCount: getNumberField(formData, "childrenCount"),
-        childrenAges: getOptionalField(formData, "childrenAges"),
-        householdAgreement: getBooleanField(formData, "householdAgreement"),
-        disagreementDetails: getOptionalField(formData, "disagreementDetails"),
-        workStatus: getOptionalField(formData, "workStatus"),
-        profession: getOptionalField(formData, "profession"),
-        workingHours: getOptionalField(formData, "workingHours"),
-        aloneTime: getOptionalField(formData, "aloneTime"),
-        housingType: getOptionalField(formData, "housingType"),
-        housingSurface: getOptionalField(formData, "housingSurface"),
-        livingEnvironment: getOptionalField(formData, "livingEnvironment"),
-        nearBusyRoad: getOptionalField(formData, "nearBusyRoad"),
-        petCanGoOutside: getOptionalField(formData, "petCanGoOutside"),
-        apartmentFloor: getNumberField(formData, "apartmentFloor"),
-        windowsSecured: getOptionalField(formData, "windowsSecured"),
-        planToSecureWindows: getOptionalField(formData, "planToSecureWindows"),
-        hasGarden: getOptionalField(formData, "hasGarden"),
-        gardenSurface: getOptionalField(formData, "gardenSurface"),
-        gardenFenced: getOptionalField(formData, "gardenFenced"),
-        fenceHeight: getOptionalField(formData, "fenceHeight"),
-        hasBalconyOrTerrace: getOptionalField(formData, "hasBalconyOrTerrace"),
-        balconySurface: getOptionalField(formData, "balconySurface"),
-        balconySecured: getOptionalField(formData, "balconySecured"),
-        hasOtherAnimals: getBooleanField(formData, "hasOtherAnimals"),
-        otherAnimalsDetails: getOptionalField(formData, "otherAnimalsDetails"),
-        sterilizedAnimals: getBooleanField(formData, "sterilizedAnimals"),
-        petsSince: getOptionalField(formData, "petsSince"),
-        remarks: getOptionalField(formData, "remarks"),
-        acceptsResponsibility: getBooleanField(formData, "acceptsResponsibility"),
-      },
-    } as const;
+    const passwordField = getRequiredField(formData, "password", "Le mot de passe");
+    if ("error" in passwordField) return passwordField;
+    password = passwordField.value;
   }
 
-  return {
-    data: {
-      name: name.value,
-      firstName: firstName.value,
-      email: email.value,
-      birthDate: getOptionalField(formData, "birthDate"),
-      phone: getOptionalField(formData, "phone"),
-      address: getOptionalField(formData, "address"),
-      postalCode: getOptionalField(formData, "postalCode"),
-      city: getOptionalField(formData, "city"),
-      householdComposition: getOptionalField(formData, "householdComposition"),
-      roommatesCount: getNumberField(formData, "roommatesCount"),
-      hasChildren: getBooleanField(formData, "hasChildren"),
-      childrenCount: getNumberField(formData, "childrenCount"),
-      childrenAges: getOptionalField(formData, "childrenAges"),
-      householdAgreement: getBooleanField(formData, "householdAgreement"),
-      disagreementDetails: getOptionalField(formData, "disagreementDetails"),
-      workStatus: getOptionalField(formData, "workStatus"),
-      profession: getOptionalField(formData, "profession"),
-      workingHours: getOptionalField(formData, "workingHours"),
-      aloneTime: getOptionalField(formData, "aloneTime"),
-      housingType: getOptionalField(formData, "housingType"),
-      housingSurface: getOptionalField(formData, "housingSurface"),
-      livingEnvironment: getOptionalField(formData, "livingEnvironment"),
-      nearBusyRoad: getOptionalField(formData, "nearBusyRoad"),
-      petCanGoOutside: getOptionalField(formData, "petCanGoOutside"),
-      apartmentFloor: getNumberField(formData, "apartmentFloor"),
-      windowsSecured: getOptionalField(formData, "windowsSecured"),
-      planToSecureWindows: getOptionalField(formData, "planToSecureWindows"),
-      hasGarden: getOptionalField(formData, "hasGarden"),
-      gardenSurface: getOptionalField(formData, "gardenSurface"),
-      gardenFenced: getOptionalField(formData, "gardenFenced"),
-      fenceHeight: getOptionalField(formData, "fenceHeight"),
-      hasBalconyOrTerrace: getOptionalField(formData, "hasBalconyOrTerrace"),
-      balconySurface: getOptionalField(formData, "balconySurface"),
-      balconySecured: getOptionalField(formData, "balconySecured"),
-      hasOtherAnimals: getBooleanField(formData, "hasOtherAnimals"),
-      otherAnimalsDetails: getOptionalField(formData, "otherAnimalsDetails"),
-      sterilizedAnimals: getBooleanField(formData, "sterilizedAnimals"),
-      petsSince: getOptionalField(formData, "petsSince"),
-      remarks: getOptionalField(formData, "remarks"),
-      acceptsResponsibility: getBooleanField(formData, "acceptsResponsibility"),
-    },
-  } as const;
+  const householdAgreement = boolean(formData, "householdAgreement");
+
+  const data = {
+    lastName: lastName.value,
+    firstName: firstName.value,
+    email: email.value,
+    ...(password ? { password } : {}),
+    birthDate: optionalString(formData, "birthDate"),
+    phoneNumber: optionalString(formData, "phoneNumber"),
+    address: optionalString(formData, "address"),
+    postalCode: optionalString(formData, "postalCode"),
+    city: optionalString(formData, "city"),
+    employmentStatus: optionalString(formData, "employmentStatus"),
+    employmentArrangement:
+      optionalString(formData, "employmentArrangement") ?? "not applicable",
+    householdType: optionalString(formData, "householdType"),
+    householdComposition: optionalNumber(formData, "householdComposition"),
+    hasChildren: boolean(formData, "hasChildren"),
+    childrenAgeGroup: optionalString(formData, "childrenAgeGroup") ?? "not applicable",
+    householdPresence: optionalString(formData, "householdPresence"),
+    householdAgreement,
+    // Champ requis par le schéma (minLength 1) : on renseigne une valeur neutre si accord.
+    disagreementDetails:
+      optionalString(formData, "disagreementDetails") ??
+      (householdAgreement === false ? null : "Non applicable"),
+    housingType: optionalString(formData, "housingType"),
+    housingSurface: optionalNumber(formData, "housingSurface"),
+    apartmentFloor: optionalNumber(formData, "apartmentFloor"),
+    areWindowsSecuredOrWillBe: boolean(formData, "areWindowsSecuredOrWillBe"),
+    hasBalconyOrTerrace: boolean(formData, "hasBalconyOrTerrace"),
+    isBalconySecured: boolean(formData, "isBalconySecured"),
+    hasGarden: boolean(formData, "hasGarden"),
+    gardenSurface: optionalNumber(formData, "gardenSurface"),
+    fenceHeight: optionalNumber(formData, "fenceHeight"),
+    livingEnvironment: optionalString(formData, "livingEnvironment"),
+    isNearBusyRoad: boolean(formData, "isNearBusyRoad"),
+    animalCanGoOutside: boolean(formData, "animalCanGoOutside"),
+    hasOtherAnimals: boolean(formData, "hasOtherAnimals"),
+    otherAnimalsDetails: optionalString(formData, "otherAnimalsDetails"),
+    areOtherAnimalsSterilizedOrCastrated: boolean(
+      formData,
+      "areOtherAnimalsSterilizedOrCastrated",
+    ),
+    firstAnimalOwnershipDate: optionalString(formData, "firstAnimalOwnershipDate"),
+    remarks: optionalString(formData, "remarks"),
+    hasAcceptedResponsibility: boolean(formData, "hasAcceptedResponsibility") ?? false,
+  };
+
+  return { data } as const;
 }

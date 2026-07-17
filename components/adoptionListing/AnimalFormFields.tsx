@@ -20,7 +20,7 @@ export function defaultAnimalDraft(): AnimalDraft {
     dogAffinity: "unknown",
     catAffinity: "unknown",
     childAffinity: "unknown",
-    livingEnvironmentType: "apartment",
+    housingType: "apartment",
     isAtypical: false,
     animal_requirements: [],
     animal_personality_traits: [],
@@ -237,8 +237,8 @@ export default function AnimalFormFields({
       </div>
 
       <Select
-        name="livingEnvironmentType"
-        value={value.livingEnvironmentType}
+        name="housingType"
+        value={value.housingType}
         options={[
           { key: "apartment", value: "apartment" },
           { key: "house", value: "house" },
@@ -250,11 +250,11 @@ export default function AnimalFormFields({
           other: "Autre",
         }}
         required={true}
-        labelName="Environnement de vie"
+        labelName="Type de logement"
         onChange={(e) =>
           update(
-            "livingEnvironmentType",
-            e.target.value as AnimalDraft["livingEnvironmentType"],
+            "housingType",
+            e.target.value as AnimalDraft["housingType"],
           )
         }
       />

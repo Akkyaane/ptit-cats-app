@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { changeVolunteerPassword } from "@/app/volunteer/update/action";
+import { changeVolunteerPassword } from "@/app/volunteers/update/action";
 
 export default function VolunteerPasswordChangeForm({
   documentId,

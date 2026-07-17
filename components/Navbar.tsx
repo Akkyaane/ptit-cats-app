@@ -27,12 +27,25 @@ export default function Navbar() {
 
   const userType = volunteerId ? "volunteer" : adopterId ? "adopter" : null;
   const userHref = volunteerId
-    ? `/volunteer/view/${volunteerId}`
+    ? `/volunteers/view/${volunteerId}`
     : adopterId
-      ? "/adopter/profile"
+      ? "/profile"
       : null;
   const pathname = usePathname();
-  type NavLink = { href: string; label: string; variant?: "primary" | "secondary" };
+
+  // Déconnexion : POST (non préfetchable) puis rechargement dur pour que
+  // toute l'arborescence (dont cette Navbar) relise les cookies effacés.
+  async function handleLogout() {
+    await fetch("/auth/signout", { method: "POST" });
+    window.location.assign("/");
+  }
+
+  type NavLink = {
+    href: string;
+    label: string;
+    variant?: "primary" | "secondary";
+    onClick?: () => void;
+  };
   const links: NavLink[] = [
     { href: "/", label: "Accueil" },
     { href: "/adoption-listings", label: "À l'adoption" },
@@ -41,11 +54,30 @@ export default function Navbar() {
     { href: "/blog", label: "Blog" },
     { href: "/contact", label: "Contact" },
     { href: "/donation", label: "Faire un don", variant: "secondary" },
-    ...(!userType ? [{ href: "/login", label: "Se connecter / S'inscrire", variant: "primary" as const }] : []),
-    ...(userRole === "Admin" ? [{ href: "/admin", label: "Admin", variant: "primary" as const }] : []),
+    ...(!userType
+      ? [
+          {
+            href: "/auth/signin",
+            label: "Se connecter / S'inscrire",
+            variant: "primary" as const,
+          },
+        ]
+      : []),
     ...(userType && userHref
       ? [{ href: userHref, label: "Mon profil", variant: "primary" as const }]
-
+      : []),
+    ...(userRole === "admin"
+      ? [{ href: "/admin", label: "Admin", variant: "primary" as const }]
+      : []),
+    ...(userRole
+      ? [
+          {
+            href: "/auth/signout",
+            label: "Se déconnecter",
+            variant: "primary" as const,
+            onClick: handleLogout,
+          },
+        ]
       : []),
   ];
 
@@ -100,11 +132,19 @@ export default function Navbar() {
               Sans Croquettes Fixes
             </span>
           </Link>
-          <ul className="hidden xl:flex flex-row gap-3">
+          <ul className="hidden xl:flex flex-row items-center gap-3">
             {links.map((link) =>
               pathname === link.href ? null : (
                 <li key={link.href}>
-                  {link.variant === "secondary" ? (
+                  {link.onClick ? (
+                    <Button
+                      variant={link.variant ?? "primary"}
+                      size="sm"
+                      onClick={link.onClick}
+                    >
+                      {link.label}
+                    </Button>
+                  ) : link.variant === "secondary" ? (
                     <Button href={link.href} variant="secondary" size="sm">
                       {link.label}
                     </Button>
@@ -191,7 +231,18 @@ export default function Navbar() {
             {links.map((link) =>
               pathname === link.href ? null : (
                 <li className="flex flex-col gap-2" key={link.href}>
-                  {link.variant === "secondary" ? (
+                  {link.onClick ? (
+                    <Button
+                      variant={link.variant ?? "primary"}
+                      size="sm"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        link.onClick!();
+                      }}
+                    >
+                      {link.label}
+                    </Button>
+                  ) : link.variant === "secondary" ? (
                     <Button
                       href={link.href}
                       variant="secondary"

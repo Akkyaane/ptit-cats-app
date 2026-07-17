@@ -2,13 +2,12 @@
 import { redirect } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
-import LogoutButton from "@/components/adopter/LogoutButton";
 
 export default async function AdminPage() {
   const cookieStore = await cookies();
   const userRole = cookieStore.get("user_role")?.value;
 
-  if (userRole !== "Admin") {
+  if (userRole !== "admin") {
     redirect("/home");
   }
 
@@ -28,7 +27,7 @@ export default async function AdminPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl">
             <Link
-              href="/volunteer/create"
+              href="/volunteers/create"
               className="flex flex-col items-center gap-4 p-8 bg-white rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-200"
             >
               <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
@@ -55,7 +54,7 @@ export default async function AdminPage() {
             </Link>
 
             <Link
-              href="/volunteer/update"
+              href="/volunteers/update"
               className="flex flex-col items-center gap-4 p-8 bg-white rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-200"
             >
               <div className="w-14 h-14 rounded-full bg-tertiary/30 flex items-center justify-center">
@@ -82,7 +81,7 @@ export default async function AdminPage() {
             </Link>
 
             <Link
-  href="/attendance/calendar"
+  href="/absences/calendar"
   className="flex flex-col items-center gap-4 p-8 bg-white rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-200"
 >
   <div className="w-14 h-14 rounded-full bg-tertiary/30 flex items-center justify-center">
@@ -107,10 +106,6 @@ export default async function AdminPage() {
     </p>
   </div>
 </Link>
-          </div>
-
-          <div className="w-full max-w-xs">
-            <LogoutButton />
           </div>
         </div>
       </main>

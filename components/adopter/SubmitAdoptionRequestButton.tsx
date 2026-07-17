@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { createAdoptionRequest } from "@/app/adopters/adoption-request/action";
+import { createAdoptionRequest } from "@/app/adoption-request/action";
 
 export default function SubmitAdoptionRequestButton({
   adopterDocumentId,

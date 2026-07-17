@@ -1,5 +1,6 @@
-﻿import LoginAdopterForm from "@/components/adopter/LoginAdopterForm";
+import LoginAdopterForm from "@/components/adopter/LoginAdopterForm";
 import Navbar from "@/components/Navbar";
+import Heading from "@/components/ui/Heading";
 
 export default async function LoginPage({
   searchParams,
@@ -10,6 +11,7 @@ export default async function LoginPage({
   // Valide que le redirect est interne (pas d'open redirect)
   const redirectTo =
     params.redirect?.startsWith("/") ? params.redirect : undefined;
+
   return (
     <div className="min-h-screen bg-secondary">
       <header className="bg-tertiary">
@@ -17,14 +19,17 @@ export default async function LoginPage({
           <Navbar />
         </div>
       </header>
-      <main className="flex items-center justify-center py-16 px-4">
-        <div className="w-full max-w-md">
-          <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-8 flex flex-col gap-6">
-            <div className="flex flex-col items-center gap-2">
-              <h1 className="text-2xl md:text-3xl font-bold ">Se connecter</h1>
-              <div className="w-12 h-1 bg-tertiary rounded-full"></div>
+
+      <main className="layout-header-spacing">
+        <div className="container">
+          <div className="mx-auto max-w-xl flex flex-col gap-8">
+            <Heading type="h2" headingVariant="quaternary" underlineVariant="tertiary">
+              Se connecter
+            </Heading>
+
+            <div className="p-6 md:p-8">
+              <LoginAdopterForm redirectTo={redirectTo} />
             </div>
-            <LoginAdopterForm redirectTo={redirectTo} />
           </div>
         </div>
       </main>

@@ -120,7 +120,7 @@ export default async function AdoptionRequestPage({
                 Vous pouvez suivre son statut dans votre profil.
               </p>
               <Link
-                href="/adopter/profile?tab=demandes"
+                href="/profile?tab=demandes"
                 className="text-sm font-bold text-yellow-800 underline hover:no-underline w-fit mt-1"
               >
                 Voir mes demandes →
@@ -222,7 +222,7 @@ export default async function AdoptionRequestPage({
                         votre demande.
                       </p>
                       <Link
-                        href="/adopter/profile?tab=profil"
+                        href="/profile?tab=profil"
                         className="inline-block mt-2 font-bold underline hover:no-underline"
                       >
                         Compléter mon profil →

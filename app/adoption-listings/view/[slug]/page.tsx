@@ -372,7 +372,7 @@ export default async function displayOne(params: { params: { slug: string } }) {
                         Lieu de vie
                       </p>
                       <span className="text-xs font-semibold bg-primary/10 text-primary px-3 py-1 rounded-xl w-fit">
-                        {envLabel[animal.livingEnvironmentType]}
+                        {envLabel[animal.housingType]}
                       </span>
                     </div>
 

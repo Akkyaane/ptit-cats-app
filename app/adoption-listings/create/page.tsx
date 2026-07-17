@@ -60,7 +60,7 @@ async function createAnimal(animal: AnimalDraft): Promise<string> {
     dogAffinity: animal.dogAffinity,
     catAffinity: animal.catAffinity,
     childAffinity: animal.childAffinity,
-    livingEnvironmentType: animal.livingEnvironmentType,
+    housingType: animal.housingType,
     entityStatus: animal.entityStatus,
     animal_requirements: animal.animal_requirements.map((r) => r.documentId),
     animal_personality_traits: animal.animal_personality_traits.map(
@@ -115,6 +115,7 @@ async function createAdoptionListing(
     longDescription: listing.longDescription,
     price: listing.price,
     isDuo,
+    entityStatus: "adoption pending",
     animals: animalDocumentIds,
     media: mediaIds,
   };

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { deleteBenevole, deleteOwnVolunteerAccount } from "@/app/volunteer/update/action";
+import { deleteBenevole, deleteOwnVolunteerAccount } from "@/app/volunteers/update/action";
 
 export default function VolunteerDeleteSection({
   documentId,
@@ -30,7 +30,7 @@ export default function VolunteerDeleteSection({
         setError(result.error);
         setConfirm(false);
       } else {
-        router.push("/volunteer/view");
+        router.push("/volunteers/view");
       }
     }
   }

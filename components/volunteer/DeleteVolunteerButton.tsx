@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { deleteBenevole } from "@/app/volunteer/update/action";
+import { deleteBenevole } from "@/app/volunteers/update/action";
 
 export default function DeleteVolunteerButton({
   documentId,
@@ -24,7 +24,7 @@ export default function DeleteVolunteerButton({
       setError(result.error);
       setConfirm(false);
     } else {
-      router.push("/volunteer/update");
+      router.push("/volunteers/update");
     }
   }
 

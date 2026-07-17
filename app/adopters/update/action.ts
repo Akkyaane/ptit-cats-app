@@ -1,7 +1,7 @@
 "use server";
 
-import { IAdopter } from "@/interfaces/IAdopter";
-import { buildAdopterPayload } from "@/components/adopter/adopterForm";
+import IAdopter from "@/interfaces/IAdopter";
+import { buildAdopterPayload } from "@/components/adopter/AdopterForm";
 
 export async function getAllAdopters(): Promise<IAdopter[]> {
   const response = await fetch(
@@ -47,8 +47,10 @@ export async function updateAdopter(
 
   const payload = buildAdopterPayload(formData, { includePassword: false });
 
-  if ("error" in payload) {
-    return { error: payload.error };
+  if (!("data" in payload)) {
+    return {
+      error: "error" in payload && payload.error ? payload.error : "Formulaire invalide.",
+    };
   }
 
   try {
@@ -61,7 +63,7 @@ export async function updateAdopter(
         headers: { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` },
       }
     );
-    const updateData = { ...payload.data };
+    const updateData: Record<string, unknown> = { ...payload.data };
     if (currentResponse.ok) {
       const currentJson = await currentResponse.json();
       const currentEmail: string | undefined = currentJson?.data?.email;
