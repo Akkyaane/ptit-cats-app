@@ -77,10 +77,10 @@ export default async function AbsencePage() {
 
           <div className="flex justify-center">
             <Link
-              href="/admin"
+              href="/account"
               className="font-bold text-primary hover:underline text-sm"
             >
-              &larr; Retour au panneau admin
+              &larr; Retour à mon espace
             </Link>
           </div>
         </div>

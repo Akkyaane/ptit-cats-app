@@ -2,7 +2,9 @@
 
 import { useMemo, useRef, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import FormInput from "@/components/ui/FormInput";
+import Input from "@/components/ui/Input";
+import Select from "@/components/ui/Select";
+import Textarea from "@/components/ui/Textarea";
 import Heading from "@/components/ui/Heading";
 import Button from "@/components/ui/Button";
 import { updateAdopter } from "@/app/adopters/update/action";
@@ -23,7 +25,6 @@ import {
 
 type StepDefinition = {
   title: string;
-  description: string;
 };
 
 type AdopterFormWizardProps = {
@@ -35,12 +36,12 @@ type AdopterFormWizardProps = {
 type Option = { value: string; label: string };
 
 const stepDefinitions: StepDefinition[] = [
-  { title: "Compte", description: "Les informations de base pour créer votre espace adopter." },
-  { title: "Coordonnées", description: "Les informations pour vous contacter et vérifier votre dossier." },
-  { title: "Composition du foyer", description: "Le contexte familial et l'organisation du quotidien." },
-  { title: "Travail et rythme de vie", description: "Les habitudes qui influencent l'accueil du chat." },
-  { title: "Logement", description: "Le cadre de vie et les sécurisations prévues." },
-  { title: "Autres animaux et engagement", description: "Les infos complémentaires et l'accord final." },
+  { title: "Compte" },
+  { title: "Coordonnées" },
+  { title: "Foyer" },
+  { title: "Travail et rythme de vie" },
+  { title: "Logement" },
+  { title: "Autres animaux et engagement" },
 ];
 
 function SelectField({
@@ -60,41 +61,41 @@ function SelectField({
   required?: boolean;
   wrapperClassName?: string;
 }) {
-  return (
-    <FormInput
-      as="select"
-      id={id}
-      label={label}
+  const select = (
+    <Select
+      name={id}
+      labelName={label}
       value={value}
-      onChange={(event) => onChange(event.target.value)}
       required={required}
-      wrapperClassName={wrapperClassName}
-    >
-      {options.map((option) => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </FormInput>
+      onChange={(event) => onChange(event.target.value)}
+      options={options.map((option) => ({
+        key: option.value,
+        value: option.value,
+      }))}
+      translatedOptions={Object.fromEntries(
+        options.map((option) => [option.value, option.label]),
+      )}
+    />
+  );
+
+  return wrapperClassName ? (
+    <div className={wrapperClassName}>{select}</div>
+  ) : (
+    select
   );
 }
 
-function StepCard({
-  title,
-  description,
-  children,
-}: {
-  title: string;
-  description: string;
-  children: ReactNode;
-}) {
+function StepCard({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
-        <Heading type="h3" headingVariant="quaternary" underlineVariant="tertiary">
+        <Heading
+          type="h4"
+          headingVariant="quaternary"
+          underlineVariant="tertiary"
+        >
           {title}
         </Heading>
-        <p className="text-sm text-quaternary/70 leading-relaxed">{description}</p>
       </div>
       {children}
     </div>
@@ -112,6 +113,9 @@ export default function AdopterFormWizard({
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  // Cible du bouton de création cliqué, pour n'afficher « Création… » que sur
+  // celui-ci (les deux boutons partagent l'état `loading`).
+  const [pendingTarget, setPendingTarget] = useState<string | null>(null);
 
   const [values, setValues] = useState<AdopterFormValues>(() => ({
     ...adopterDefaultValues,
@@ -147,12 +151,21 @@ export default function AdopterFormWizard({
 
   // Contrat d'inscription : create entité -> create user lié -> auto-login.
   async function registerAdopter(): Promise<boolean> {
+    if (values.password !== values.confirmPassword) {
+      setError("Les deux mots de passe ne correspondent pas.");
+      return false;
+    }
+
     const payload = buildAdopterPayload(buildAdopterFormData(values), {
       includePassword: true,
     });
 
     if (!("data" in payload)) {
-      setError("error" in payload && payload.error ? payload.error : "Formulaire invalide.");
+      setError(
+        "error" in payload && payload.error
+          ? payload.error
+          : "Formulaire invalide.",
+      );
       return false;
     }
 
@@ -166,7 +179,8 @@ export default function AdopterFormWizard({
 
     if (!entityRes.ok || !entityData.data?.documentId) {
       setError(
-        typeof entityData.error === "string" && entityData.error.includes("email")
+        typeof entityData.error === "string" &&
+          entityData.error.includes("email")
           ? "Un compte existe déjà avec cet email."
           : "Erreur lors de la création du compte.",
       );
@@ -196,7 +210,10 @@ export default function AdopterFormWizard({
     await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ identifier: payload.data.email, password: values.password }),
+      body: JSON.stringify({
+        identifier: payload.data.email,
+        password: values.password,
+      }),
     });
 
     return true;
@@ -211,14 +228,20 @@ export default function AdopterFormWizard({
     setError(null);
     setSuccess(null);
     setLoading(true);
+    setPendingTarget(target);
 
     try {
       if (isCreateMode) {
-        if (await registerAdopter()) router.push(target);
+        // Hard-navigation pour que la Navbar (montée) relise les cookies posés
+        // par l'auto-login après inscription.
+        if (await registerAdopter()) window.location.assign(target);
         return;
       }
 
-      const result = await updateAdopter(documentId ?? "", buildAdopterFormData(values));
+      const result = await updateAdopter(
+        documentId ?? "",
+        buildAdopterFormData(values),
+      );
       if (result.error) {
         setError(result.error);
         return;
@@ -227,16 +250,23 @@ export default function AdopterFormWizard({
       router.refresh();
     } finally {
       setLoading(false);
+      setPendingTarget(null);
     }
   }
 
+  // Aucune sauvegarde via submit implicite : l'enregistrement passe uniquement
+  // par un clic explicite sur le bouton (évite les soumissions accidentelles,
+  // notamment le changement de type du bouton réutilisé au changement d'étape).
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!isCreateMode) void finishRegistration("");
   }
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-6">
+    <form
+      ref={formRef}
+      onSubmit={handleSubmit}
+      className={`flex flex-col gap-6${isCreateMode ? " wizard-compact" : ""}`}
+    >
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between gap-4 text-sm">
           <span className="font-bold text-quaternary/70">
@@ -252,92 +282,106 @@ export default function AdopterFormWizard({
         </div>
       </div>
 
-      <StepCard title={currentStep.title} description={currentStep.description}>
+      <StepCard title={currentStep.title}>
         {step === 0 && (
           <div className="grid gap-4 md:grid-cols-2">
-            <FormInput
-              label="Nom"
-              id="lastName"
+            <Input
+              type="text"
+              name="lastName"
+              labelName="Nom"
+              required
               value={values.lastName}
               onChange={(e) => setField("lastName", e.target.value)}
-              required
             />
-            <FormInput
-              label="Prénom"
-              id="firstName"
+            <Input
+              type="text"
+              name="firstName"
+              labelName="Prénom"
+              required
               value={values.firstName}
               onChange={(e) => setField("firstName", e.target.value)}
-              required
             />
-            <FormInput
-              label="Adresse e-mail"
-              id="email"
-              type="email"
-              autoComplete="email"
-              value={values.email}
-              onChange={(e) => setField("email", e.target.value)}
-              required
-              wrapperClassName="md:col-span-2"
-            />
-            {isCreateMode ? (
-              <FormInput
-                label="Mot de passe (14 caractères min.)"
-                id="password"
-                type="password"
-                autoComplete="new-password"
-                minLength={14}
-                value={values.password}
-                onChange={(e) => setField("password", e.target.value)}
+            <div className="md:col-span-2">
+              <Input
+                type="email"
+                name="email"
+                labelName="Adresse e-mail"
+                autoComplete="email"
                 required
-                wrapperClassName="md:col-span-2"
+                value={values.email}
+                onChange={(e) => setField("email", e.target.value)}
               />
-            ) : (
-              <p className="md:col-span-2 rounded-xl bg-tertiary/10 px-4 py-3 text-sm text-quaternary/80">
-                Le mot de passe n&apos;est pas modifié depuis cette page.
-              </p>
-            )}
+            </div>
+            {isCreateMode ? (
+              <>
+                <Input
+                  type="password"
+                  name="password"
+                  labelName="Mot de passe (14 caractères min.)"
+                  autoComplete="new-password"
+                  minLength={14}
+                  required
+                  value={values.password}
+                  onChange={(e) => setField("password", e.target.value)}
+                />
+                <Input
+                  type="password"
+                  name="confirmPassword"
+                  labelName="Confirmation du mot de passe"
+                  autoComplete="new-password"
+                  minLength={14}
+                  required
+                  value={values.confirmPassword}
+                  onChange={(e) => setField("confirmPassword", e.target.value)}
+                />
+              </>
+            ) : null}
           </div>
         )}
 
         {step === 1 && (
           <div className="grid gap-4 md:grid-cols-2">
-            <FormInput
-              label="Date de naissance"
-              id="birthDate"
+            <Input
               type="date"
+              name="birthDate"
+              labelName="Date de naissance"
+              required
               value={values.birthDate}
               onChange={(e) => setField("birthDate", e.target.value)}
-              required
             />
-            <FormInput
-              label="Numéro de téléphone"
-              id="phoneNumber"
+            <Input
               type="tel"
+              name="phoneNumber"
+              labelName="Numéro de téléphone"
+              required
               value={values.phoneNumber}
               onChange={(e) => setField("phoneNumber", e.target.value)}
-              required
             />
-            <FormInput
-              label="Adresse postale"
-              id="address"
-              value={values.address}
-              onChange={(e) => setField("address", e.target.value)}
+            <div className="md:col-span-2">
+              <Input
+                type="text"
+                name="address"
+                labelName="Adresse postale"
+                required
+                value={values.address}
+                onChange={(e) => setField("address", e.target.value)}
+              />
+            </div>
+            <Input
+              type="text"
+              name="postalCode"
+              labelName="Code postal"
               required
-              wrapperClassName="md:col-span-2"
-            />
-            <FormInput
-              label="Code postal"
-              id="postalCode"
               value={values.postalCode}
               onChange={(e) => setField("postalCode", e.target.value)}
-              required
             />
-            <FormInput
-              label="Ville"
-              id="city"
+            <Input
+              type="text"
+              name="city"
+              labelName="Ville"
+              required
               value={values.city}
               onChange={(e) => setField("city", e.target.value)}
-              required
             />
           </div>
         )}
@@ -346,24 +390,24 @@ export default function AdopterFormWizard({
           <div className="grid gap-4 md:grid-cols-2">
             <SelectField
               id="householdType"
-              label="Composition du foyer"
+              label="Type de foyer"
               value={values.householdType}
               onChange={(v) => setField("householdType", v)}
               options={householdTypeOptions}
               required
             />
-            <FormInput
-              label="Nombre de personnes au foyer"
-              id="householdComposition"
+            <Input
               type="number"
+              name="householdComposition"
+              labelName="Composition du foyer"
               min={1}
+              required
               value={values.householdComposition}
               onChange={(e) => setField("householdComposition", e.target.value)}
-              required
             />
             <SelectField
               id="householdPresence"
-              label="Présence à la maison"
+              label="Présence du foyer à la maison"
               value={values.householdPresence}
               onChange={(v) => setField("householdPresence", v)}
               options={householdPresenceOptions}
@@ -388,22 +432,25 @@ export default function AdopterFormWizard({
             )}
             <SelectField
               id="householdAgreement"
-              label="Tout le foyer est-il d'accord ?"
+              label="Avez-vous l'accord de tous les membres du foyer pour accueillir un animal ?"
               value={values.householdAgreement}
               onChange={(v) => setField("householdAgreement", v)}
               options={yesNoOptions}
               required
             />
             {values.householdAgreement === "false" && (
-              <FormInput
-                as="textarea"
-                label="Qui n'est pas d'accord et pourquoi ?"
-                id="disagreementDetails"
-                value={values.disagreementDetails}
-                onChange={(e) => setField("disagreementDetails", e.target.value)}
-                required
-                wrapperClassName="md:col-span-2"
-              />
+              <div className="md:col-span-2">
+                <Textarea
+                  name="disagreementDetails"
+                  labelName="Qui n'est pas d'accord et pourquoi ?"
+                  rows={4}
+                  required
+                  value={values.disagreementDetails}
+                  onChange={(e) =>
+                    setField("disagreementDetails", e.target.value)
+                  }
+                />
+              </div>
             )}
           </div>
         )}
@@ -439,14 +486,14 @@ export default function AdopterFormWizard({
               options={housingTypeOptions}
               required
             />
-            <FormInput
-              label="Superficie du logement (m²)"
-              id="housingSurface"
+            <Input
               type="number"
+              name="housingSurface"
+              labelName="Superficie du logement (m²)"
               min={1}
+              required
               value={values.housingSurface}
               onChange={(e) => setField("housingSurface", e.target.value)}
-              required
             />
             <SelectField
               id="livingEnvironment"
@@ -458,7 +505,7 @@ export default function AdopterFormWizard({
             />
             <SelectField
               id="isNearBusyRoad"
-              label="Proximité d'une route passante ?"
+              label="Êtes-vous à proximité d'une route passante ?"
               value={values.isNearBusyRoad}
               onChange={(v) => setField("isNearBusyRoad", v)}
               options={yesNoOptions}
@@ -474,25 +521,26 @@ export default function AdopterFormWizard({
             />
             <SelectField
               id="areWindowsSecuredOrWillBe"
-              label="Fenêtres sécurisées (ou le seront) ?"
+              label="Vos fenêtres sont-elles ou seront-elles sécurisées ?"
               value={values.areWindowsSecuredOrWillBe}
               onChange={(v) => setField("areWindowsSecuredOrWillBe", v)}
               options={yesNoOptions}
               required
             />
             {values.housingType === "apartment" && (
-              <FormInput
-                label="Étage"
-                id="apartmentFloor"
+              <Input
                 type="number"
+                name="apartmentFloor"
+                labelName="Numéro d'étage"
                 min={0}
+                required={false}
                 value={values.apartmentFloor}
                 onChange={(e) => setField("apartmentFloor", e.target.value)}
               />
             )}
             <SelectField
               id="hasBalconyOrTerrace"
-              label="Balcon ou terrasse ?"
+              label="Avez-vous un balcon ou une terrasse ?"
               value={values.hasBalconyOrTerrace}
               onChange={(v) => setField("hasBalconyOrTerrace", v)}
               options={yesNoOptions}
@@ -501,7 +549,7 @@ export default function AdopterFormWizard({
             {values.hasBalconyOrTerrace === "true" && (
               <SelectField
                 id="isBalconySecured"
-                label="Balcon sécurisé ?"
+                label="Votre balcon est-il sécurisé ?"
                 value={values.isBalconySecured}
                 onChange={(v) => setField("isBalconySecured", v)}
                 options={yesNoOptions}
@@ -509,7 +557,7 @@ export default function AdopterFormWizard({
             )}
             <SelectField
               id="hasGarden"
-              label="Jardin ?"
+              label="Avez-vous un jardin ?"
               value={values.hasGarden}
               onChange={(v) => setField("hasGarden", v)}
               options={yesNoOptions}
@@ -517,19 +565,21 @@ export default function AdopterFormWizard({
             />
             {values.hasGarden === "true" && (
               <>
-                <FormInput
-                  label="Superficie du jardin (m²)"
-                  id="gardenSurface"
+                <Input
                   type="number"
+                  name="gardenSurface"
+                  labelName="Superficie du jardin (m²)"
                   min={0}
+                  required={false}
                   value={values.gardenSurface}
                   onChange={(e) => setField("gardenSurface", e.target.value)}
                 />
-                <FormInput
-                  label="Hauteur de la clôture (cm)"
-                  id="fenceHeight"
+                <Input
                   type="number"
+                  name="fenceHeight"
+                  labelName="Hauteur de la clôture (cm)"
                   min={0}
+                  required={false}
                   value={values.fenceHeight}
                   onChange={(e) => setField("fenceHeight", e.target.value)}
                 />
@@ -548,54 +598,67 @@ export default function AdopterFormWizard({
               options={yesNoOptions}
               required
             />
-            <SelectField
-              id="areOtherAnimalsSterilizedOrCastrated"
-              label="Sont-ils stérilisés / castrés ?"
-              value={values.areOtherAnimalsSterilizedOrCastrated}
-              onChange={(v) => setField("areOtherAnimalsSterilizedOrCastrated", v)}
-              options={yesNoOptions}
-              required
-            />
             {values.hasOtherAnimals === "true" && (
               <>
-                <FormInput
-                  as="textarea"
-                  label="Quels animaux ? (nombre, espèce, race, sexe, âge)"
-                  id="otherAnimalsDetails"
-                  value={values.otherAnimalsDetails}
-                  onChange={(e) => setField("otherAnimalsDetails", e.target.value)}
-                  wrapperClassName="md:col-span-2"
+                <SelectField
+                  id="areOtherAnimalsSterilizedOrCastrated"
+                  label="Sont-ils stérilisés / castrés ?"
+                  value={values.areOtherAnimalsSterilizedOrCastrated}
+                  onChange={(v) =>
+                    setField("areOtherAnimalsSterilizedOrCastrated", v)
+                  }
+                  options={yesNoOptions}
+                  required
                 />
-                <FormInput
-                  label="Premier animal possédé depuis le"
-                  id="firstAnimalOwnershipDate"
+                <div className="md:col-span-2">
+                  <Textarea
+                    name="otherAnimalsDetails"
+                    labelName="Décrivez vos animaux ? (nombre, espèce, race, sexe, âge, etc.)"
+                    rows={4}
+                    required={false}
+                    value={values.otherAnimalsDetails}
+                    onChange={(e) =>
+                      setField("otherAnimalsDetails", e.target.value)
+                    }
+                  />
+                </div>
+                <Input
                   type="date"
+                  name="firstAnimalOwnershipDate"
+                  labelName="Depuis quand approximativement possédez-vous des animaux ?"
+                  required={false}
                   value={values.firstAnimalOwnershipDate}
-                  onChange={(e) => setField("firstAnimalOwnershipDate", e.target.value)}
+                  onChange={(e) =>
+                    setField("firstAnimalOwnershipDate", e.target.value)
+                  }
                 />
               </>
             )}
-            <FormInput
-              as="textarea"
-              label="Remarques (facultatif)"
-              id="remarks"
-              value={values.remarks}
-              onChange={(e) => setField("remarks", e.target.value)}
-              wrapperClassName="md:col-span-2"
-            />
+            <div className="md:col-span-2">
+              <Textarea
+                name="remarks"
+                labelName="Remarques (facultatif)"
+                rows={4}
+                required={false}
+                value={values.remarks}
+                onChange={(e) => setField("remarks", e.target.value)}
+              />
+            </div>
             <label className="md:col-span-2 flex items-start gap-3 rounded-xl border-2 border-tertiary bg-tertiary/5 px-4 py-3 text-sm leading-relaxed">
               <input
                 type="checkbox"
                 checked={values.hasAcceptedResponsibility}
-                onChange={(e) => setField("hasAcceptedResponsibility", e.target.checked)}
+                onChange={(e) =>
+                  setField("hasAcceptedResponsibility", e.target.checked)
+                }
                 className="mt-1 accent-primary"
                 required
               />
               <span>
-                En validant ce formulaire, vous acceptez l&apos;entière responsabilité de
-                l&apos;entretien de l&apos;animal, y compris les frais vétérinaires, la
-                nourriture, les accessoires et les conséquences juridiques et pécuniaires
-                liées à sa garde.
+                En validant ce formulaire, vous acceptez l&apos;entière
+                responsabilité de l&apos;entretien de l&apos;animal, y compris
+                les frais vétérinaires, la nourriture, les accessoires et les
+                conséquences juridiques et pécuniaires liées à sa garde.
               </span>
             </label>
           </div>
@@ -626,32 +689,35 @@ export default function AdopterFormWizard({
         </Button>
 
         {step < totalSteps - 1 ? (
-          <Button type="button" variant="primary" size="md" onClick={goToNextStep} disabled={loading}>
+          <Button
+            type="button"
+            variant="primary"
+            size="md"
+            onClick={goToNextStep}
+            disabled={loading}
+          >
             Suivant →
           </Button>
         ) : isCreateMode ? (
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Button
-              type="button"
-              variant="primary"
-              size="md"
-              onClick={() => finishRegistration("/profile")}
-              disabled={loading}
-            >
-              {loading ? "Création..." : "Terminer et compléter mon profil"}
-            </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              size="md"
-              onClick={() => finishRegistration("/adoption-listings")}
-              disabled={loading}
-            >
-              {loading ? "Création..." : "Terminer et voir les annonces"}
-            </Button>
-          </div>
+          <Button
+            type="button"
+            variant="primary"
+            size="md"
+            onClick={() => finishRegistration("/account")}
+            disabled={loading}
+          >
+            {loading && pendingTarget === "/account"
+              ? "Création..."
+              : "Créer mon compte"}
+          </Button>
         ) : (
-          <Button type="submit" variant="primary" size="md" disabled={loading}>
+          <Button
+            type="button"
+            variant="primary"
+            size="md"
+            onClick={() => finishRegistration("")}
+            disabled={loading}
+          >
             {loading ? "Enregistrement..." : "Enregistrer mes informations"}
           </Button>
         )}

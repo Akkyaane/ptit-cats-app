@@ -6,7 +6,7 @@ import Heading from "@/components/ui/Heading";
 export default function About() {
   return (
     <>
-      <header className="bg-[url('/assets/img/backgrounds/background-2.jpg')] bg-cover">
+      <header className="bg-[url('/assets/img/backgrounds/background-2.jpg')] bg-cover bg-center">
         <div className="container relative">
           <div className="flex flex-col items-center justify-center gap-6 py-16 md:py-24 lg:py-40">
             <Heading type="h1" headingVariant="secondary">

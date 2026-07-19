@@ -94,19 +94,36 @@ export async function changeVolunteerPassword(documentId: string, formData: Form
     return { error: "Le mot de passe doit contenir au moins 6 caractères." };
   }
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/volunteers/${documentId}`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
-      },
-      body: JSON.stringify({ data: { password: newPassword } }),
-    }
-  );
+  const base = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
+  const authHeaders = { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` };
 
-  if (!response.ok) return { error: "Erreur lors de la mise à jour du mot de passe." };
+  // Le mot de passe de connexion est porté par le users_permissions_user lié
+  // (auth via users-permissions), pas par le champ password de l'entité.
+  const current = await fetch(
+    `${base}/api/volunteers/${documentId}?populate=users_permissions_user`,
+    { cache: "no-store", headers: authHeaders }
+  );
+  if (!current.ok) {
+    return { error: "Compte introuvable." };
+  }
+  const json = await current.json();
+  const userId = json?.data?.users_permissions_user?.id;
+  if (!userId) {
+    return { error: "Aucun compte de connexion associé à ce profil." };
+  }
+
+  const response = await fetch(`${base}/api/users/${userId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json", ...authHeaders },
+    body: JSON.stringify({ password: newPassword }),
+  });
+
+  if (!response.ok) {
+    console.error(
+      `[changeVolunteerPassword] PUT user ${userId}: ${response.status} - ${await response.text()}`
+    );
+    return { error: "Erreur lors de la mise à jour du mot de passe." };
+  }
 
   return { success: true };
 }

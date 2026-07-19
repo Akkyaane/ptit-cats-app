@@ -2,15 +2,15 @@ import IAdoptionRequest from "@/interfaces/IAdoptionRequest";
 import Image from "next/image";
 
 const statusConfig: Record<string, { label: string; className: string }> = {
-  en_attente: {
+  "on hold": {
     label: "En attente",
     className: "bg-yellow-100 text-yellow-800",
   },
-  acceptée: {
+  accepted: {
     label: "Acceptée",
     className: "bg-green-100 text-green-800",
   },
-  refusée: {
+  refused: {
     label: "Refusée",
     className: "bg-red-100 text-red-800",
   },

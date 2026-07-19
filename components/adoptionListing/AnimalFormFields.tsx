@@ -12,7 +12,9 @@ export function defaultAnimalDraft(): AnimalDraft {
   return {
     name: "",
     sex: "male",
-    birthDate: "",
+    // IAnimal.birthDate est typé Date ; un <input type="date"> travaille avec
+    // une chaîne ("" = non renseigné). Cast localisé à la frontière du form.
+    birthDate: "" as unknown as Date,
     isDewormed: false,
     isVaccinated: false,
     isSterilizedOrCastrated: false,
@@ -54,16 +56,17 @@ export default function AnimalFormFields({
     onChange({ [field]: val } as Partial<AnimalDraft>);
   };
 
+  // L'interface IAnimal déclare ces relations nullables : on normalise en
+  // tableau pour la lecture (le type du draft reste fidèle à l'interface).
+  const selectedRequirements = value.animal_requirements ?? [];
+  const selectedTraits = value.animal_personality_traits ?? [];
+
   const requirements = animalRequirements.filter(
-    (r) =>
-      !value.animal_requirements.some((s) => s.documentId === r.documentId),
+    (r) => !selectedRequirements.some((s) => s.documentId === r.documentId),
   );
 
   const personalityTraits = animalPersonalityTraits.filter(
-    (t) =>
-      !value.animal_personality_traits.some(
-        (s) => s.documentId === t.documentId,
-      ),
+    (t) => !selectedTraits.some((s) => s.documentId === t.documentId),
   );
 
   const addRequirement = (documentId: string) => {
@@ -71,13 +74,13 @@ export default function AnimalFormFields({
       (r) => r.documentId === documentId,
     );
     if (!requirement) return;
-    update("animal_requirements", [...value.animal_requirements, requirement]);
+    update("animal_requirements", [...selectedRequirements, requirement]);
   };
 
   const removeRequirement = (documentId: string) => {
     update(
       "animal_requirements",
-      value.animal_requirements.filter((r) => r.documentId !== documentId),
+      selectedRequirements.filter((r) => r.documentId !== documentId),
     );
   };
 
@@ -87,7 +90,7 @@ export default function AnimalFormFields({
     );
     if (!trait) return;
     update("animal_personality_traits", [
-      ...value.animal_personality_traits,
+      ...selectedTraits,
       trait,
     ]);
   };
@@ -95,7 +98,7 @@ export default function AnimalFormFields({
   const removeTrait = (documentId: string) => {
     update(
       "animal_personality_traits",
-      value.animal_personality_traits.filter(
+      selectedTraits.filter(
         (t) => t.documentId !== documentId,
       ),
     );
@@ -147,10 +150,10 @@ export default function AnimalFormFields({
         <Input
           type="date"
           name="birthDate"
-          value={value.birthDate}
+          value={value.birthDate ? new Date(value.birthDate).toISOString().slice(0, 10) : ""}
           required={false}
           labelName="Date de naissance"
-          onChange={(e) => update("birthDate", e.target.value)}
+          onChange={(e) => update("birthDate", e.target.value as unknown as Date)}
         />
       </div>
 
@@ -283,9 +286,9 @@ export default function AnimalFormFields({
             }}
           />
         )}
-        {value.animal_requirements.length > 0 && (
+        {selectedRequirements.length > 0 && (
           <div className="flex flex-wrap gap-2">
-            {value.animal_requirements.map((r) => (
+            {selectedRequirements.map((r) => (
               <span
                 key={r.documentId}
                 className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-primary text-secondary text-sm font-bold"
@@ -335,9 +338,9 @@ export default function AnimalFormFields({
             }}
           />
         )}
-        {value.animal_personality_traits.length > 0 && (
+        {selectedTraits.length > 0 && (
           <div className="flex flex-wrap gap-2">
-            {value.animal_personality_traits.map((t) => (
+            {selectedTraits.map((t) => (
               <span
                 key={t.documentId}
                 className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-primary text-secondary text-sm font-bold"

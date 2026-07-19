@@ -86,6 +86,12 @@ export async function POST(request: Request) {
     const cookieStore = await cookies();
     const base = { sameSite: "lax" as const, path: "/", maxAge: MAX_AGE };
 
+    // Nettoyage d'un éventuel cookie résiduel de l'autre type de profil
+    // (ex. connexion bénévole puis adoptant sans déconnexion) pour éviter
+    // qu'un adoptant hérite des accès bénévole via un volunteer_id périmé.
+    cookieStore.delete("adopter_id");
+    cookieStore.delete("volunteer_id");
+
     cookieStore.set("jwt", jwt, { ...base, httpOnly: true });
     cookieStore.set("user_role", linked.role, { ...base, httpOnly: false });
     cookieStore.set(

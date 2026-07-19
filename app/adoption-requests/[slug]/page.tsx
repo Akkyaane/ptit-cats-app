@@ -4,9 +4,9 @@ import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import Image from "next/image";
 import { getAdopterById } from "@/app/adopters/update/action";
-import { getAdoptionRequestsByAdopter } from "@/app/adopters/adoption-request/action";
+import { getAdoptionRequestsByAdopter } from "@/app/adoption-requests/action";
 import SubmitAdoptionRequestButton from "@/components/adopter/SubmitAdoptionRequestButton";
-import { IAdopter } from "@/interfaces/IAdopter";
+import IAdopter from "@/interfaces/IAdopter";
 import IAdoptionListing from "@/interfaces/IAdoptionListing";
 
 // Champs requis pour soumettre une demande
@@ -14,16 +14,16 @@ type RequiredField = { key: keyof IAdopter; label: string };
 
 const REQUIRED_FIELDS: RequiredField[] = [
   { key: "birthDate", label: "Date de naissance" },
-  { key: "phone", label: "Téléphone" },
+  { key: "phoneNumber", label: "Téléphone" },
   { key: "address", label: "Adresse" },
   { key: "postalCode", label: "Code postal" },
   { key: "city", label: "Ville" },
   { key: "householdComposition", label: "Composition du foyer" },
-  { key: "workStatus", label: "Situation professionnelle" },
+  { key: "employmentStatus", label: "Situation professionnelle" },
   { key: "housingType", label: "Type de logement" },
   { key: "housingSurface", label: "Surface du logement" },
   { key: "livingEnvironment", label: "Environnement de vie" },
-  { key: "nearBusyRoad", label: "Proximité route passante" },
+  { key: "isNearBusyRoad", label: "Proximité route passante" },
   { key: "hasGarden", label: "Présence d'un jardin" },
 ];
 
@@ -54,7 +54,7 @@ export default async function AdoptionRequestPage({
   const userRole = cookieStore.get("user_role")?.value;
 
   if (!adopterId || userRole !== "adopter") {
-    redirect(`/login?redirect=/adopter/adoption-request/${slug}`);
+    redirect(`/auth/signin?redirect=/adoption-requests/${slug}`);
   }
 
   // Fetch data
@@ -68,14 +68,14 @@ export default async function AdoptionRequestPage({
 
   // Vérifie doublon
   const alreadyRequested = existingRequests.some(
-    (r: { adoptionListing: { documentId: string; }; }) => r.adoptionListing?.documentId === slug
+    (r) => r.adoption_listing?.documentId === slug
   );
 
   // Champs manquants
   const missingFields = REQUIRED_FIELDS.filter(
     (f) => !adopter[f.key] && adopter[f.key] !== false
   );
-  const responsibilityMissing = !adopter.acceptsResponsibility;
+  const responsibilityMissing = !adopter.hasAcceptedResponsibility;
   const canSubmit = missingFields.length === 0 && !responsibilityMissing;
 
   const catNames = listing.animals.map((a: { name: any; }) => a.name).join(" & ");
@@ -120,7 +120,7 @@ export default async function AdoptionRequestPage({
                 Vous pouvez suivre son statut dans votre profil.
               </p>
               <Link
-                href="/profile?tab=demandes"
+                href="/account?tab=demandes"
                 className="text-sm font-bold text-yellow-800 underline hover:no-underline w-fit mt-1"
               >
                 Voir mes demandes →
@@ -194,22 +194,22 @@ export default async function AdoptionRequestPage({
                     <li className="flex items-center gap-3 text-sm">
                       <span
                         className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-xs font-bold flex-shrink-0 ${
-                          adopter.acceptsResponsibility
+                          adopter.hasAcceptedResponsibility
                             ? "bg-green-100 text-green-700"
                             : "bg-red-100 text-red-600"
                         }`}
                       >
-                        {adopter.acceptsResponsibility ? "✓" : "✗"}
+                        {adopter.hasAcceptedResponsibility ? "✓" : "✗"}
                       </span>
                       <span
                         className={
-                          adopter.acceptsResponsibility
+                          adopter.hasAcceptedResponsibility
                             ? "text-gray-700"
                             : "text-red-600 font-semibold"
                         }
                       >
                         Engagement de responsabilité accepté
-                        {!adopter.acceptsResponsibility && " — manquant"}
+                        {!adopter.hasAcceptedResponsibility && " — manquant"}
                       </span>
                     </li>
                   </ul>
@@ -222,7 +222,7 @@ export default async function AdoptionRequestPage({
                         votre demande.
                       </p>
                       <Link
-                        href="/profile?tab=profil"
+                        href="/account?tab=compte"
                         className="inline-block mt-2 font-bold underline hover:no-underline"
                       >
                         Compléter mon profil →
@@ -237,9 +237,9 @@ export default async function AdoptionRequestPage({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                     {[
                       { label: "Prénom", value: adopter.firstName },
-                      { label: "Nom", value: adopter.name },
+                      { label: "Nom", value: adopter.lastName },
                       { label: "Email", value: adopter.email },
-                      { label: "Téléphone", value: adopter.phone },
+                      { label: "Téléphone", value: adopter.phoneNumber },
                       { label: "Adresse", value: adopter.address },
                       { label: "Ville", value: adopter.city ? `${adopter.postalCode} ${adopter.city}` : null },
                     ].map(({ label, value }) => (

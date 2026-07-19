@@ -8,6 +8,7 @@ export default interface IAdoptionListing {
   shortDescription: string;
   longDescription: string;
   media: {
+    id: number;
     documentId: string;
     name: string;
     alternativeText?: string | null;

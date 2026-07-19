@@ -27,13 +27,13 @@ export default function AddAbsenceForm({ benevoles }: { benevoles: Benevole[] })
       setError(result.error);
     } else {
       setSuccess(true);
-      setTimeout(() => router.push("/absences"), 1500);
+      setTimeout(() => router.push("/absences/calendar"), 1500);
     }
   }
 
   if (success) {
     return (
-      <p className="text-sm font-bold text-green-600 bg-green-50 px-4 py-3 rounded-xl text-center">
+      <p className="text-sm font-bold text-primary bg-primary/10 px-4 py-3 rounded-xl text-center">
         Absence ajoutée avec succès ! Redirection...
       </p>
     );
@@ -51,7 +51,7 @@ export default function AddAbsenceForm({ benevoles }: { benevoles: Benevole[] })
           required
           className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200 bg-white"
         >
-          <option value="">-- Choisir un bénévole --</option>
+          <option value="">-- Sélectionner un bénévole --</option>
           {benevoles.map((b) => (
             <option key={b.documentId} value={b.documentId}>
               {b.firstName} {b.lastName}

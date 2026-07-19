@@ -11,7 +11,6 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [adopterId, setAdopterId] = useState<string | null>(null);
   const [volunteerId, setVolunteerId] = useState<string | null>(null);
-  const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {
     const getCookie = (name: string): string | null => {
@@ -22,23 +21,10 @@ export default function Navbar() {
     };
     setAdopterId(getCookie("adopter_id"));
     setVolunteerId(getCookie("volunteer_id"));
-    setUserRole(getCookie("user_role"));
   }, []);
 
   const userType = volunteerId ? "volunteer" : adopterId ? "adopter" : null;
-  const userHref = volunteerId
-    ? `/volunteers/view/${volunteerId}`
-    : adopterId
-      ? "/profile"
-      : null;
   const pathname = usePathname();
-
-  // Déconnexion : POST (non préfetchable) puis rechargement dur pour que
-  // toute l'arborescence (dont cette Navbar) relise les cookies effacés.
-  async function handleLogout() {
-    await fetch("/auth/signout", { method: "POST" });
-    window.location.assign("/");
-  }
 
   type NavLink = {
     href: string;
@@ -63,21 +49,8 @@ export default function Navbar() {
           },
         ]
       : []),
-    ...(userType && userHref
-      ? [{ href: userHref, label: "Mon profil", variant: "primary" as const }]
-      : []),
-    ...(userRole === "admin"
-      ? [{ href: "/admin", label: "Admin", variant: "primary" as const }]
-      : []),
-    ...(userRole
-      ? [
-          {
-            href: "/auth/signout",
-            label: "Se déconnecter",
-            variant: "primary" as const,
-            onClick: handleLogout,
-          },
-        ]
+    ...(userType
+      ? [{ href: "/account", label: "Mon compte", variant: "primary" as const }]
       : []),
   ];
 

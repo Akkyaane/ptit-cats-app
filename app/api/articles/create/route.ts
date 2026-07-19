@@ -4,6 +4,10 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
+    // Auteur = bénévole connecté (cookie volunteer_id = documentId côté Strapi).
+    // Lu côté serveur pour ne pas dépendre du client.
+    const volunteerId = req.cookies.get("volunteer_id")?.value;
+
     const payload = {
       ...body,
       content:
@@ -11,6 +15,7 @@ export async function POST(req: NextRequest) {
           ? body.content
           : JSON.stringify(body.content),
       publicationDate: body.publicationDate ?? new Date().toISOString(),
+      ...(volunteerId ? { volunteer: volunteerId } : {}),
     };
 
     const res = await fetch(

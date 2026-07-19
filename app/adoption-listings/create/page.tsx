@@ -62,10 +62,10 @@ async function createAnimal(animal: AnimalDraft): Promise<string> {
     childAffinity: animal.childAffinity,
     housingType: animal.housingType,
     entityStatus: animal.entityStatus,
-    animal_requirements: animal.animal_requirements.map((r) => r.documentId),
-    animal_personality_traits: animal.animal_personality_traits.map(
+    animal_requirements: animal.animal_requirements?.map((r) => r.documentId) || [],
+    animal_personality_traits: animal.animal_personality_traits?.map(
       (t) => t.documentId,
-    ),
+    ) || [],
   };
 
   const res = await fetch(

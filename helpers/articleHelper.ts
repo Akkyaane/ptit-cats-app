@@ -1,4 +1,17 @@
 import { PartialBlock } from "@blocknote/core";
+import IVolunteer from "@/interfaces/IVolunteer";
+
+/**
+ * Formate l'auteur d'un article : prénom complet + initiale du nom suivie
+ * d'un point (ex. "Lucas C."). Renvoie null si l'auteur n'est pas renseigné.
+ */
+export function formatAuthor(
+  volunteer: IVolunteer | null | undefined,
+): string | null {
+  if (!volunteer?.firstName) return null;
+  const initial = volunteer.lastName?.trim().charAt(0).toUpperCase();
+  return initial ? `${volunteer.firstName} ${initial}.` : volunteer.firstName;
+}
 
 export const CATEGORY_OPTIONS = [
   { key: "news", value: "news" },

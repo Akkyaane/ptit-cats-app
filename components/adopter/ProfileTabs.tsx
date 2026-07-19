@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { IAdopter } from "@/interfaces/IAdopter";
-import { IAdoptionRequest } from "@/interfaces/IAdoptionRequest";
+import IAdopter from "@/interfaces/IAdopter";
+import IAdoptionRequest from "@/interfaces/IAdoptionRequest";
 import AdopterProfileForm from "@/components/adopter/AdopterProfileForm";
 import ALCard from "@/components/adoptionListing/ALCard";
 
 const statusConfig: Record<string, { label: string; className: string }> = {
-  en_attente: { label: "En attente", className: "bg-yellow-100 text-yellow-800" },
-  acceptée: { label: "Acceptée", className: "bg-green-100 text-green-800" },
-  refusée: { label: "Refusée", className: "bg-red-100 text-red-800" },
+  "on hold": { label: "En attente", className: "bg-yellow-100 text-yellow-800" },
+  accepted: { label: "Acceptée", className: "bg-green-100 text-green-800" },
+  refused: { label: "Refusée", className: "bg-red-100 text-red-800" },
 };
 
 export default function ProfileTabs({
@@ -24,7 +24,7 @@ export default function ProfileTabs({
   const [activeTab, setActiveTab] = useState<"profil" | "demandes">(initialTab);
 
   const pendingCount = adoptionRequests.filter(
-    (r) => r.status === "en_attente"
+    (r) => r.entityStatus === "to be processed" || r.entityStatus === "pending"
   ).length;
 
   return (
@@ -101,8 +101,8 @@ export default function ProfileTabs({
           ) : (
             <div className="flex flex-col gap-3">
               {adoptionRequests.map((req) => {
-                const status = statusConfig[req.status] ?? {
-                  label: req.status,
+                const status = statusConfig[req.entityStatus] ?? {
+                  label: req.entityStatus,
                   className: "bg-gray-100 text-gray-600",
                 };
                 const date = new Date(req.createdAt).toLocaleDateString("fr-FR", {
@@ -118,7 +118,7 @@ export default function ProfileTabs({
                         {status.label}
                       </span>
                     </div>
-                    <ALCard {...req.adoptionListing} />
+                    {req.adoption_listing && <ALCard {...req.adoption_listing} />}
                   </div>
                 );
               })}

@@ -11,7 +11,9 @@ const baseHeadingPrimary = "text-3xl md:text-4xl lg:text-5xl";
 
 const baseHeadingSecondary = "text-2xl md:text-3xl lg:text-4xl mb-4";
 
-const baseOtherHeading = "text-lg md:text-xl lg:text-2xl";
+const baseHeadingTertiary = "text-lg md:text-xl lg:text-2xl mb-4";
+
+const baseOtherHeading = "text-md md:text-lg lg:text-xl";
 
 const baseUnderline = "w-16 h-1 rounded-full mx-auto";
 
@@ -47,11 +49,26 @@ export default function Heading({
   } else if (type === "h2") {
     return (
       <div className="flex flex-col items-center justify-center text-center">
-        <HeadingTag
+        <h2
           className={`${baseHeading} ${baseHeadingSecondary} ${headingVariants[headingVariant]}`}
         >
           {children}
-        </HeadingTag>
+        </h2>
+        {underlineVariant && (
+          <div
+            className={`${baseUnderline} ${underlineVariants[underlineVariant]}`}
+          />
+        )}
+      </div>
+    );
+  } else if (type === "h3") {
+    return (
+      <div className="flex flex-col items-center justify-center text-center">
+        <h3
+          className={`${baseHeading} ${baseHeadingTertiary} ${headingVariants[headingVariant]}`}
+        >
+          {children}
+        </h3>
         {underlineVariant && (
           <div
             className={`${baseUnderline} ${underlineVariants[underlineVariant]}`}
@@ -61,13 +78,11 @@ export default function Heading({
     );
   } else {
     return (
-      <div className="flex items-center">
-        <HeadingTag
-          className={`${baseHeading} ${baseOtherHeading} ${headingVariants[headingVariant]}`}
-        >
-          {children}
-        </HeadingTag>
-      </div>
+      <HeadingTag
+        className={`${baseHeading} ${baseOtherHeading} ${headingVariants[headingVariant]}`}
+      >
+        {children}
+      </HeadingTag>
     );
   }
 }

@@ -16,9 +16,11 @@ type Benevole = {
 export default function UpdateVolunteerForm({
   benevole,
   canChangeRole = true,
+  redirectTo,
 }: {
   benevole: Benevole;
   canChangeRole?: boolean;
+  redirectTo?: string;
 }) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -36,7 +38,7 @@ export default function UpdateVolunteerForm({
     } else {
       setSuccess(true);
       setTimeout(
-        () => router.push(`/volunteers/view/${benevole.documentId}`),
+        () => router.push(redirectTo ?? `/volunteers/view/${benevole.documentId}`),
         1500,
       );
     }
@@ -106,7 +108,7 @@ export default function UpdateVolunteerForm({
             required
             className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200 bg-white"
           >
-            <option value="">-- Choisir un rôle --</option>
+            <option value="">-- Sélectionner un rôle --</option>
             <option value="admin">Administrateur</option>
             <option value="manager">Responsable</option>
             <option value="referent">Référent</option>

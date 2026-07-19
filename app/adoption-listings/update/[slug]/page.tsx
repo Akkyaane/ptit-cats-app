@@ -95,8 +95,10 @@ async function createAnimal(draft: AnimalDraft): Promise<string> {
     childAffinity: draft.childAffinity,
     housingType: draft.housingType,
     entityStatus: draft.entityStatus,
-    animal_requirements: draft.animal_requirements.map((r) => r.documentId),
-    animal_personality_traits: draft.animal_personality_traits.map(
+    animal_requirements: (draft.animal_requirements ?? []).map(
+      (r) => r.documentId,
+    ),
+    animal_personality_traits: (draft.animal_personality_traits ?? []).map(
       (t) => t.documentId,
     ),
   };
@@ -133,8 +135,10 @@ async function updateAnimal(
     childAffinity: draft.childAffinity,
     housingType: draft.housingType,
     entityStatus: draft.entityStatus,
-    animal_requirements: draft.animal_requirements.map((r) => r.documentId),
-    animal_personality_traits: draft.animal_personality_traits.map(
+    animal_requirements: (draft.animal_requirements ?? []).map(
+      (r) => r.documentId,
+    ),
+    animal_personality_traits: (draft.animal_personality_traits ?? []).map(
       (t) => t.documentId,
     ),
   };
@@ -390,7 +394,6 @@ export default function UpdateAdoptionListing({
 
         <main>
           <ALForm
-            mode="update"
             step={step}
             setStep={setStep}
             isDuo={isDuo}

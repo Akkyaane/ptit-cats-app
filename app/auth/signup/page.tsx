@@ -17,15 +17,15 @@ export default function RegisterAdopterPage() {
           <div className="mx-auto w-full max-w-3xl flex flex-col gap-8">
             <div className="flex flex-col items-center gap-3 text-center">
               <Heading type="h2" headingVariant="quaternary" underlineVariant="tertiary">
-                Créer mon compte adopter
+                Créer mon compte
               </Heading>
               <p className="text-sm md:text-base text-quaternary/70 max-w-2xl leading-relaxed">
-                Renseignez le formulaire en quelques étapes. À la fin, vous pourrez
+                Veuillez remplir le formulaire pour vous inscrire. À la fin, vous pourrez
                 soit compléter votre profil, soit accéder directement aux annonces.
               </p>
             </div>
 
-            <div className="border-2 border-tertiary rounded-2xl p-6 md:p-8">
+            <div className="p-6 md:p-8">
               <RegisterAdopterForm />
             </div>
 

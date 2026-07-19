@@ -1,14 +1,38 @@
 ﻿"use client";
 import { useState } from "react";
-import FormInput from "@/components/ui/FormInput";
+import Input from "@/components/ui/Input";
+import Select from "@/components/ui/Select";
+import Textarea from "@/components/ui/Textarea";
 import Breadcrumb from "@/components/Breadcrumb";
 import Image from "next/image";
 import Heading from "@/components/ui/Heading";
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
+const SUBJECT_OPTIONS = [
+  { key: "distribution", value: "distribution" },
+  { key: "materiel", value: "materiel" },
+  { key: "informations", value: "informations" },
+  { key: "autre", value: "autre" },
+];
+
+const SUBJECT_LABELS: Record<string, string> = {
+  distribution: "Distribution de croquettes",
+  materiel: "Don de matériel",
+  informations: "Demande d'informations",
+  autre: "Autre",
+};
+
 export default function Contact() {
   const [status, setStatus] = useState<FormStatus>("idle");
+  const [values, setValues] = useState({
+    lastName: "",
+    firstName: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+  });
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -80,71 +104,79 @@ export default function Contact() {
               >
                 <fieldset className="flex flex-col gap-4 sm:flex-row border-0 p-0 m-0 min-w-0">
                   <legend className="sr-only">Identité</legend>
-                  <FormInput
-                    label="Nom"
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    autoComplete="family-name"
-                    required
-                    wrapperClassName="flex-1"
-                  />
-                  <FormInput
-                    label="Prénom"
-                    id="firstName"
-                    name="firstName"
-                    type="text"
-                    autoComplete="given-name"
-                    required
-                    wrapperClassName="flex-1"
-                  />
+                  <div className="flex-1">
+                    <Input
+                      type="text"
+                      name="lastName"
+                      labelName="Nom"
+                      autoComplete="family-name"
+                      required
+                      value={values.lastName}
+                      onChange={(e) =>
+                        setValues((v) => ({ ...v, lastName: e.target.value }))
+                      }
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <Input
+                      type="text"
+                      name="firstName"
+                      labelName="Prénom"
+                      autoComplete="given-name"
+                      required
+                      value={values.firstName}
+                      onChange={(e) =>
+                        setValues((v) => ({ ...v, firstName: e.target.value }))
+                      }
+                    />
+                  </div>
                 </fieldset>
 
-                <FormInput
-                  label="E-mail"
-                  id="email"
-                  name="email"
+                <Input
                   type="email"
+                  name="email"
+                  labelName="E-mail"
                   autoComplete="email"
                   required
+                  value={values.email}
+                  onChange={(e) =>
+                    setValues((v) => ({ ...v, email: e.target.value }))
+                  }
                 />
 
-                <FormInput
-                  label="Numéro de téléphone (optionnel)"
-                  id="phone"
-                  name="phone"
+                <Input
                   type="tel"
+                  name="phone"
+                  labelName="Numéro de téléphone (optionnel)"
                   autoComplete="tel"
+                  required={false}
+                  value={values.phone}
+                  onChange={(e) =>
+                    setValues((v) => ({ ...v, phone: e.target.value }))
+                  }
                 />
 
-                <FormInput
-                  as="select"
-                  label="Objet de la demande"
-                  id="subject"
+                <Select
                   name="subject"
+                  labelName="Objet de la demande"
                   required
-                  defaultValue=""
-                >
-                  <option value="" disabled>
-                    Sélectionnez une option
-                  </option>
-                  <option value="distribution">
-                    Distribution de croquettes
-                  </option>
-                  <option value="materiel">Don de matériel</option>
-                  <option value="informations">
-                    Demande d&apos;informations
-                  </option>
-                  <option value="autre">Autre</option>
-                </FormInput>
+                  value={values.subject}
+                  options={SUBJECT_OPTIONS}
+                  translatedOptions={SUBJECT_LABELS}
+                  onChange={(e) =>
+                    setValues((v) => ({ ...v, subject: e.target.value }))
+                  }
+                />
 
-                <FormInput
-                  as="textarea"
-                  label="Message"
-                  id="message"
+                <Textarea
                   name="message"
-                  required
+                  labelName="Message"
                   rows={6}
+                  required
+                  value={values.message}
+                  onChange={(e) =>
+                    setValues((v) => ({ ...v, message: e.target.value }))
+                  }
                 />
 
                 {status === "error" && (

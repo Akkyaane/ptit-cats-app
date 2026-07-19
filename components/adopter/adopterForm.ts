@@ -8,6 +8,7 @@ export type AdopterFormValues = {
   firstName: string;
   email: string;
   password: string;
+  confirmPassword: string;
   // Coordonnées
   birthDate: string;
   phoneNumber: string;
@@ -52,6 +53,7 @@ export const adopterDefaultValues: AdopterFormValues = {
   firstName: "",
   email: "",
   password: "",
+  confirmPassword: "",
   birthDate: "",
   phoneNumber: "",
   address: "",
@@ -88,13 +90,11 @@ export const adopterDefaultValues: AdopterFormValues = {
 
 // Options (label FR -> valeur = enum Strapi)
 export const yesNoOptions = [
-  { value: "", label: "-- Choisir --" },
   { value: "true", label: "Oui" },
   { value: "false", label: "Non" },
 ];
 
 export const householdTypeOptions = [
-  { value: "", label: "-- Choisir --" },
   { value: "single", label: "Seul(e)" },
   { value: "couple", label: "En couple" },
   { value: "family", label: "Famille" },
@@ -103,7 +103,6 @@ export const householdTypeOptions = [
 ];
 
 export const householdPresenceOptions = [
-  { value: "", label: "-- Choisir --" },
   { value: "always", label: "Toujours" },
   { value: "often", label: "Souvent" },
   { value: "sometimes", label: "Parfois" },
@@ -111,15 +110,12 @@ export const householdPresenceOptions = [
 ];
 
 export const childrenAgeGroupOptions = [
-  { value: "", label: "-- Choisir --" },
-  { value: "young", label: "Jeunes enfants" },
-  { value: "old", label: "Grands enfants" },
+  { value: "young", label: "Nourrissons / Enfants" },
+  { value: "old", label: "Adolescents / Adultes" },
   { value: "both", label: "Les deux" },
-  { value: "not applicable", label: "Non applicable" },
 ];
 
 export const employmentStatusOptions = [
-  { value: "", label: "-- Choisir --" },
   { value: "full-time", label: "Temps plein" },
   { value: "part-time", label: "Temps partiel" },
   { value: "job seeking", label: "En recherche d'emploi" },
@@ -127,7 +123,6 @@ export const employmentStatusOptions = [
 ];
 
 export const employmentArrangementOptions = [
-  { value: "", label: "-- Choisir --" },
   { value: "on site", label: "Sur site" },
   { value: "hybrid", label: "Hybride" },
   { value: "remote", label: "Télétravail" },
@@ -135,14 +130,12 @@ export const employmentArrangementOptions = [
 ];
 
 export const housingTypeOptions = [
-  { value: "", label: "-- Choisir --" },
   { value: "apartment", label: "Appartement" },
   { value: "house", label: "Maison" },
   { value: "other", label: "Autre" },
 ];
 
 export const livingEnvironmentOptions = [
-  { value: "", label: "-- Choisir --" },
   { value: "urban", label: "Urbain" },
   { value: "suburban", label: "Périurbain" },
   { value: "rural", label: "Rural" },
@@ -283,13 +276,15 @@ export function buildAdopterPayload(
     householdType: optionalString(formData, "householdType"),
     householdComposition: optionalNumber(formData, "householdComposition"),
     hasChildren: boolean(formData, "hasChildren"),
-    childrenAgeGroup: optionalString(formData, "childrenAgeGroup") ?? "not applicable",
+    childrenAgeGroup: optionalString(formData, "childrenAgeGroup"),
     householdPresence: optionalString(formData, "householdPresence"),
     householdAgreement,
     // Champ requis par le schéma (minLength 1) : on renseigne une valeur neutre si accord.
     disagreementDetails:
       optionalString(formData, "disagreementDetails") ??
       (householdAgreement === false ? null : "Non applicable"),
+    // childrenAgeGroup n'accepte que young/old/both côté schéma : on laisse null
+    // (et non "not applicable") lorsqu'il n'y a pas d'enfant, sinon Strapi 400.
     housingType: optionalString(formData, "housingType"),
     housingSurface: optionalNumber(formData, "housingSurface"),
     apartmentFloor: optionalNumber(formData, "apartmentFloor"),

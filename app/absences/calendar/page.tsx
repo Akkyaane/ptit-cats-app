@@ -1,6 +1,6 @@
-import AbsenceCalendar from "@/components/absence/AbsenceCalendar";
-import Navbar from "@/components/Navbar";
-import Link from "next/link";
+import AbsencesTabs from "@/components/absence/AbsencesTabs";
+import Breadcrumb from "@/components/Breadcrumb";
+import Button from "@/components/ui/Button";
 import IAbsence from "@/interfaces/IAbsence";
 import { getAllBenevoles } from "@/app/volunteers/update/action";
 
@@ -24,40 +24,26 @@ export default async function CalendarPage() {
   ]);
 
   return (
-    <div className="min-h-screen bg-secondary">
-      <header className="bg-tertiary">
-        <div className="max-w-[1200px] mx-auto">
-          <Navbar />
-        </div>
-      </header>
-      <main className="max-w-[1200px] mx-auto px-4 py-16">
-        <div className="flex flex-col gap-8">
-          <div className="flex flex-col items-center gap-2">
-            <h1 className="text-3xl md:text-4xl font-bold">
-              Tableau de présence
+    <div className="layout-header-spacing">
+      <main className="container">
+        <Breadcrumb />
+        <div className="w-full max-w-6xl mx-auto flex flex-col gap-8">
+          {/* Toolbar : titre à gauche, actions (retour + ajout) à droite */}
+          <div className="flex items-center justify-between gap-4 flex-wrap">
+            <h1 className="text-2xl md:text-3xl font-bold text-quaternary">
+              Absences
             </h1>
-            <div className="w-16 h-1 bg-tertiary rounded-full"></div>
+            <div className="flex flex-row flex-wrap gap-2 shrink-0">
+              <Button href="/account?tab=actions" variant="secondary" size="sm">
+                ← Retour
+              </Button>
+              <Button href="/absences/create" variant="primary" size="sm">
+                Ajouter +
+              </Button>
+            </div>
           </div>
 
-          <div className="flex justify-end gap-3">
-            <Link
-              href="/absences/create"
-              className="px-4 py-2 font-bold rounded-xl bg-tertiary border-2 border-tertiary text-white hover:bg-tertiary/10 hover:text-tertiary transition-colors duration-200 text-sm"
-            >
-              + Ajouter une absence
-            </Link>
-          </div>
-
-          <AbsenceCalendar absences={absences} benevoles={benevoles} />
-
-          <div className="flex justify-center">
-            <Link
-              href="/admin"
-              className="font-bold text-primary hover:underline text-sm"
-            >
-              &larr; Retour au panneau admin
-            </Link>
-          </div>
+          <AbsencesTabs absences={absences} benevoles={benevoles} />
         </div>
       </main>
     </div>

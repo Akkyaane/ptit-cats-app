@@ -75,5 +75,26 @@ export async function updateAbsence(formData: FormData) {
 
   if (!res.ok) return { error: "Erreur lors de la modification" };
   revalidatePath("/absences");
+  revalidatePath("/absences/calendar");
+  return { success: true };
+}
+
+export async function deleteAbsence(documentId: string) {
+  if (!documentId) {
+    return { error: "Identifiant d'absence manquant" };
+  }
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/absences/delete`,
+    {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ documentId }),
+    }
+  );
+
+  if (!res.ok) return { error: "Erreur lors de la suppression" };
+  revalidatePath("/absences");
+  revalidatePath("/absences/calendar");
   return { success: true };
 }

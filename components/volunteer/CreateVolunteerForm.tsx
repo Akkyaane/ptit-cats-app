@@ -58,7 +58,7 @@ export default function CreateVolunteerForm() {
       }
 
       setSuccess(true);
-      setTimeout(() => router.push("/volunteers/update"), 1500);
+      setTimeout(() => router.push("/account/volunteers"), 1500);
     } catch {
       setError("Erreur serveur, veuillez réessayer.");
     } finally {
@@ -68,7 +68,7 @@ export default function CreateVolunteerForm() {
 
   if (success) {
     return (
-      <p className="text-sm font-bold text-green-600 bg-green-50 px-4 py-3 rounded-xl text-center">
+      <p className="text-sm font-bold text-primary bg-primary/10 px-4 py-3 rounded-xl text-center">
         Bénévole créé avec succès ! Redirection...
       </p>
     );
@@ -140,7 +140,7 @@ export default function CreateVolunteerForm() {
           required
           className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200 bg-white"
         >
-          <option value="">-- Choisir un rôle --</option>
+          <option value="">-- Sélectionner un rôle --</option>
           <option value="admin">Admin</option>
           <option value="manager">Responsable</option>
           <option value="referent">Référent</option>

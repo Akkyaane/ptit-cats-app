@@ -1,4 +1,5 @@
-﻿import Button from "@/components/ui/Button";
+﻿import { cookies } from "next/headers";
+import Button from "@/components/ui/Button";
 import AdoptionPostCarousel from "@/components/adoptionListing/ALCarousel";
 import ArticleCard from "@/components/article/ArticleCard";
 import Card from "@/components/ui/Card";
@@ -65,6 +66,11 @@ export default async function Index() {
   const adoptionListings = await getLastAdoptionListings();
   const lastArticles = await getLastArticles();
 
+  // Le matching est réservé aux (futurs) adoptants : le bouton est désactivé
+  // pour les bénévoles connectés.
+  const cookieStore = await cookies();
+  const isVolunteer = Boolean(cookieStore.get("volunteer_id")?.value);
+
   return (
     <>
       <header className="bg-[url('/assets/img/backgrounds/background-1.jpg')] bg-center">
@@ -82,9 +88,15 @@ export default async function Index() {
               <Button href="/adoption-listings" variant="secondary" size="lg">
                 Découvrir nos compagnons
               </Button>
-              <Button href="/pet-matchmaker" variant="primary" size="lg">
-                Trouver mon compagnon idéal
-              </Button>
+              {isVolunteer ? (
+                <Button variant="primary" size="lg" disabled>
+                  Trouver mon compagnon idéal
+                </Button>
+              ) : (
+                <Button href="/pet-matchmaker" variant="primary" size="lg">
+                  Trouver mon compagnon idéal
+                </Button>
+              )}
             </div>
           </section>
         </div>

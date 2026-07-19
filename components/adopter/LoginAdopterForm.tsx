@@ -1,17 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import FormInput from "@/components/ui/FormInput";
+import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 
 export default function LoginAdopterForm({ redirectTo }: { redirectTo?: string }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
-  async function handleSubmit(formData: FormData) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     if (loading) return;
     setError(null);
     setLoading(true);
@@ -19,10 +20,7 @@ export default function LoginAdopterForm({ redirectTo }: { redirectTo?: string }
     const res = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        identifier: formData.get("email"),
-        password: formData.get("password"),
-      }),
+      body: JSON.stringify({ identifier: email, password }),
     });
     const result = await res.json();
     setLoading(false);
@@ -32,32 +30,29 @@ export default function LoginAdopterForm({ redirectTo }: { redirectTo?: string }
       return;
     }
 
-    if (result.type === "adopter") {
-      router.push(redirectTo ?? "/profile");
-    } else if (result.role === "admin") {
-      router.push("/admin");
-    } else {
-      router.push(`/volunteers/view/${result.documentId}`);
-    }
+    // Hard-navigation pour que la Navbar (montée) relise les cookies de session.
+    window.location.assign(redirectTo ?? "/account");
   }
 
   return (
-    <form action={handleSubmit} className="flex flex-col gap-6">
-      <FormInput
-        label="Email"
-        id="email"
-        name="email"
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+      <Input
         type="email"
+        name="email"
+        labelName="Email"
         autoComplete="username"
         required
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
       />
-      <FormInput
-        label="Mot de passe"
-        id="password"
-        name="password"
+      <Input
         type="password"
+        name="password"
+        labelName="Mot de passe"
         autoComplete="current-password"
         required
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
       />
 
       {error && (

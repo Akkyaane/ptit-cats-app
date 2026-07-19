@@ -6,5 +6,5 @@ export default interface IArticle {
   publicationDate: Date;
   category: "news" | "community" | "inspiringStories" | "goodToKnow" | "events" | "quizzes" | "everydayLife" | "PeopleAndStories" | "health" | "shopping";
   content: PartialBlock[];
-  volunteer: IVolunteer;
+  volunteer?: IVolunteer | null;
 }

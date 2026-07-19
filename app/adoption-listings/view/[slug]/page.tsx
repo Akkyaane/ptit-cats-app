@@ -26,21 +26,62 @@ async function getOne(documentId: string): Promise<IAdoptionListing> {
   }
 }
 
+// Résumé des demandes reçues pour l'annonce : le nombre par défaut, remplacé
+// par un statut dès qu'une demande est validée (En attente d'adoption) ou
+// terminée (Adopté). Visible par tous.
+async function getRequestSummary(
+  listingDocumentId: string,
+): Promise<{ total: number; badge: string | null }> {
+  try {
+    const p = new URLSearchParams();
+    p.set("filters[adoption_listing][documentId][$eq]", listingDocumentId);
+    p.set("fields[0]", "entityStatus");
+    p.set("pagination[pageSize]", "100");
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoption-requests?${p}`,
+      {
+        cache: "no-store",
+        headers: { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` },
+      },
+    );
+    if (!res.ok) return { total: 0, badge: null };
+
+    const json = await res.json();
+    const statuses: string[] = (json.data ?? []).map(
+      (r: { entityStatus: string }) => r.entityStatus,
+    );
+    if (statuses.includes("done"))
+      return { total: statuses.length, badge: "Adopté" };
+    if (statuses.includes("pending"))
+      return { total: statuses.length, badge: "En attente d'adoption" };
+    return { total: statuses.length, badge: null };
+  } catch {
+    return { total: 0, badge: null };
+  }
+}
+
 export default async function displayOne(params: { params: { slug: string } }) {
   const param = await params.params;
   const documentId = param.slug;
   const adoptionListing = await getOne(documentId);
+  const requestSummary = await getRequestSummary(documentId);
 
-  // Détermine le comportement du bouton "Je suis intéressé·e"
+  // Détermine le comportement des boutons d'action
   const cookieStore = await cookies();
   const adopterId = cookieStore.get("adopter_id")?.value;
   const volunteerId = cookieStore.get("volunteer_id")?.value;
   const userRole = cookieStore.get("user_role")?.value;
+  // Modifier / Supprimer : réservés à l'admin et au responsable d'adoption
+  // (manager). Le référent et l'adoptant n'y ont pas accès.
+  const isVolunteer =
+    Boolean(volunteerId) && (userRole === "admin" || userRole === "manager");
   const isAdopter = Boolean(adopterId && userRole === "adopter");
-  const isVolunteerOrAdmin = Boolean(volunteerId || (userRole && userRole !== "adopter"));
+  const isVolunteerOrAdmin = Boolean(userRole && userRole !== "adopter");
+  // "Je suis intéressé·e" : renvoie vers la connexion si non connecté.
   const interestHref = isAdopter
-    ? `/adopter/adoption-request/${documentId}`
-    : `/login?redirect=/adopter/adoption-request/${documentId}`;
+    ? `/adoption-requests/${documentId}`
+    : `/auth/signin?redirect=/adoption-requests/${documentId}`;
 
   const birthDates: (string | null)[] = [];
   const ages: (string | null)[] = [];
@@ -110,6 +151,16 @@ export default async function displayOne(params: { params: { slug: string } }) {
                     Duo
                   </span>
                 )}
+                {requestSummary.badge ? (
+                  <span className="text-xs font-bold bg-quaternary text-secondary px-3 py-1 rounded-xl shadow-sm">
+                    {requestSummary.badge}
+                  </span>
+                ) : requestSummary.total > 0 ? (
+                  <span className="text-xs font-bold bg-tertiary/30 text-quaternary px-3 py-1 rounded-xl shadow-sm">
+                    {requestSummary.total} demande
+                    {requestSummary.total > 1 ? "s" : ""}
+                  </span>
+                ) : null}
               </div>
               {adoptionListing.slogan && (
                 <p className="text-base md:text-lg text-quaternary/80">
@@ -123,20 +174,24 @@ export default async function displayOne(params: { params: { slug: string } }) {
               <Button href="/adoption-listings" variant="secondary" size="sm">
                 ← Retour
               </Button>
-              <Button
-                href={`/adoption-listings/update/${adoptionListing.documentId}`}
-                variant="primary"
-                size="sm"
-              >
-                Modifier
-              </Button>
-              <Button
-                href={`/adoption-listings/delete/${adoptionListing.documentId}`}
-                variant="primary"
-                size="sm"
-              >
-                Supprimer
-              </Button>
+              {isVolunteer && (
+                <>
+                  <Button
+                    href={`/adoption-listings/update/${adoptionListing.documentId}`}
+                    variant="primary"
+                    size="sm"
+                  >
+                    Modifier
+                  </Button>
+                  <Button
+                    href={`/adoption-listings/delete/${adoptionListing.documentId}`}
+                    variant="primary"
+                    size="sm"
+                  >
+                    Supprimer
+                  </Button>
+                </>
+              )}
             </div>
           </div>
 
@@ -240,9 +295,9 @@ export default async function displayOne(params: { params: { slug: string } }) {
 
               <div className="pt-5">
                 {isVolunteerOrAdmin ? (
-                  <p className="text-sm text-quaternary/50 italic text-center">
-                    Cette fonctionnalité est réservée aux adopters.
-                  </p>
+                  <Button variant="primary" size="lg" disabled>
+                    Je suis intéressé·e
+                  </Button>
                 ) : (
                   <Button href={interestHref} variant="primary" size="lg">
                     Je suis intéressé·e
@@ -424,23 +479,33 @@ export default async function displayOne(params: { params: { slug: string } }) {
           <Button href="/adoption-listings" variant="secondary" size="lg">
             ← Retour
           </Button>
-          <Button href="/contact" variant="primary" size="lg">
-            Je suis intéressé·e
-          </Button>
-          <Button
-            href={`/adoption-listings/update/${adoptionListing.documentId}`}
-            variant="primary"
-            size="lg"
-          >
-            Modifier
-          </Button>
-          <Button
-            href={`/adoption-listings/delete/${adoptionListing.documentId}`}
-            variant="primary"
-            size="lg"
-          >
-            Supprimer
-          </Button>
+          {isVolunteerOrAdmin ? (
+            <Button variant="primary" size="lg" disabled>
+              Je suis intéressé·e
+            </Button>
+          ) : (
+            <Button href={interestHref} variant="primary" size="lg">
+              Je suis intéressé·e
+            </Button>
+          )}
+          {isVolunteer && (
+            <>
+              <Button
+                href={`/adoption-listings/update/${adoptionListing.documentId}`}
+                variant="primary"
+                size="lg"
+              >
+                Modifier
+              </Button>
+              <Button
+                href={`/adoption-listings/delete/${adoptionListing.documentId}`}
+                variant="primary"
+                size="lg"
+              >
+                Supprimer
+              </Button>
+            </>
+          )}
         </div>
       </main>
     </>
