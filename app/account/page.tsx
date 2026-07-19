@@ -4,9 +4,9 @@ import Breadcrumb from "@/components/Breadcrumb";
 import Heading from "@/components/ui/Heading";
 import AccountView from "@/components/account/AccountView";
 import { AccountUser } from "@/components/account/types";
-import { getAdopterById } from "@/app/adopters/update/action";
-import { getBenevoleById } from "@/app/volunteers/update/action";
-import { getAdoptionRequestsByAdopter } from "@/app/adoption-requests/action";
+import { serverApiData } from "@/helpers/api";
+import IAdopter from "@/interfaces/IAdopter";
+import IVolunteer from "@/interfaces/IVolunteer";
 import IAdoptionRequest from "@/interfaces/IAdoptionRequest";
 
 const VOLUNTEER_ROLES = ["admin", "manager", "referent"];
@@ -27,24 +27,30 @@ export default async function AccountPage({
   const volunteerId = cookieStore.get("volunteer_id")?.value;
   const params = await searchParams;
 
-  // Résolution de l'utilisateur connecté (adoptant ou bénévole).
   let user: AccountUser | null = null;
 
   if (userRole === "adopter" && adopterId) {
-    const adopter = await getAdopterById(adopterId);
+    const adopter = await serverApiData<IAdopter | null>(
+      `/api/adopters/${adopterId}`,
+      null,
+    );
     if (adopter) user = { kind: "adopter", adopter };
   } else if (volunteerId && userRole && VOLUNTEER_ROLES.includes(userRole)) {
-    const volunteer = await getBenevoleById(volunteerId);
+    const volunteer = await serverApiData<IVolunteer | null>(
+      `/api/volunteers/${volunteerId}`,
+      null,
+    );
     if (volunteer) user = { kind: "volunteer", volunteer };
   }
 
   if (!user) redirect("/auth/signin");
 
-  // L'adoptant n'a qu'une action : ses demandes s'affichent directement dans
-  // l'onglet dédié, on charge donc le tableau côté serveur.
   let adopterRequests: IAdoptionRequest[] = [];
   if (user.kind === "adopter" && adopterId) {
-    adopterRequests = await getAdoptionRequestsByAdopter(adopterId);
+    adopterRequests = await serverApiData<IAdoptionRequest[]>(
+      `/api/adoption-requests?adopter=${adopterId}`,
+      [],
+    );
   }
 
   const initialTab: "actions" | "compte" =

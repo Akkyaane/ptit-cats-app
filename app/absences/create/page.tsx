@@ -2,10 +2,11 @@ import AddAbsenceForm from "@/components/absence/AddAbsenceForm";
 import Breadcrumb from "@/components/Breadcrumb";
 import Heading from "@/components/ui/Heading";
 import Button from "@/components/ui/Button";
-import { getAllBenevoles } from "@/app/volunteers/update/action";
+import IVolunteer from "@/interfaces/IVolunteer";
+import { serverApiData } from "@/helpers/api";
 
 export default async function AddAbsencePage() {
-  const benevoles = await getAllBenevoles();
+  const benevoles = await serverApiData<IVolunteer[]>("/api/volunteers", []);
 
   return (
     <div className="layout-header-spacing">
@@ -23,7 +24,7 @@ export default async function AddAbsencePage() {
               headingVariant="quaternary"
               underlineVariant="tertiary"
             >
-              Ajouter une absence
+              Ajouter +
             </Heading>
             <AddAbsenceForm benevoles={benevoles} />
           </div>

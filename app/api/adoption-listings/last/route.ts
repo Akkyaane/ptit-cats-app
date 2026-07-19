@@ -15,7 +15,7 @@ export async function GET() {
 
     const data = await res.json();
 
-    
+
     return NextResponse.json(
       { success: true, data: data.data },
       { status: 200 },

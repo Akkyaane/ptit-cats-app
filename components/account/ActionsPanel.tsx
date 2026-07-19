@@ -52,8 +52,7 @@ const ACTIONS: Record<string, ActionLink> = {
 };
 
 function linksForUser(user: AccountUser): ActionLink[] {
-  // Les adoptants sont gérés en amont (tableau direct), seuls les bénévoles
-  // arrivent ici.
+
   if (user.kind !== "volunteer") return [];
 
   switch (user.volunteer.role) {
@@ -81,8 +80,7 @@ export default function ActionsPanel({
   user: AccountUser;
   adopterRequests?: IAdoptionRequest[];
 }) {
-  // L'adoptant n'a qu'une action : on affiche directement le tableau de ses
-  // demandes dans l'onglet, sans passer par une carte-lien intermédiaire.
+
   if (user.kind === "adopter") {
     return <MyRequestsManager requests={adopterRequests} />;
   }

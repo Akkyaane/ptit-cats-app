@@ -12,8 +12,7 @@ export function defaultAnimalDraft(): AnimalDraft {
   return {
     name: "",
     sex: "male",
-    // IAnimal.birthDate est typé Date ; un <input type="date"> travaille avec
-    // une chaîne ("" = non renseigné). Cast localisé à la frontière du form.
+
     birthDate: "" as unknown as Date,
     isDewormed: false,
     isVaccinated: false,
@@ -56,8 +55,6 @@ export default function AnimalFormFields({
     onChange({ [field]: val } as Partial<AnimalDraft>);
   };
 
-  // L'interface IAnimal déclare ces relations nullables : on normalise en
-  // tableau pour la lecture (le type du draft reste fidèle à l'interface).
   const selectedRequirements = value.animal_requirements ?? [];
   const selectedTraits = value.animal_personality_traits ?? [];
 

@@ -1,18 +1,17 @@
 import { NextResponse } from "next/server";
+import { strapiFetch } from "@/helpers/strapi";
 
 export async function GET() {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/absences?populate=volunteer&sort=startDate:desc`,
-      {
-        headers: { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` },
-      }
+    const res = await strapiFetch(
+      `/api/absences?populate=volunteer&sort=startDate:desc&pagination[pageSize]=1000`,
+      { cache: "no-store" },
     );
 
     if (!res.ok) {
       return NextResponse.json(
         { error: `[absence] GET: ${res.status} - ${await res.text()}` },
-        { status: res.status }
+        { status: res.status },
       );
     }
 

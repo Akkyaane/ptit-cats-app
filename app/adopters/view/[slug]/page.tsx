@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
-import { getAdopterById } from "@/app/adopters/update/action";
+import { serverApiData } from "@/helpers/api";
 import Breadcrumb from "@/components/Breadcrumb";
 import Heading from "@/components/ui/Heading";
 import Button from "@/components/ui/Button";
@@ -13,7 +13,7 @@ import {
   employmentArrangementOptions,
   housingTypeOptions,
   livingEnvironmentOptions,
-} from "@/components/adopter/AdopterForm";
+} from "@/helpers/adopterPayload";
 
 type Option = { value: string; label: string };
 
@@ -71,7 +71,10 @@ export default async function AdopterViewPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const adopter: IAdopter | null = await getAdopterById(slug);
+  const adopter = await serverApiData<IAdopter | null>(
+    `/api/adopters/${slug}`,
+    null,
+  );
 
   if (!adopter) notFound();
 
@@ -83,7 +86,7 @@ export default async function AdopterViewPage({
       <main className="container">
         <Breadcrumb />
         <div className="w-full max-w-4xl mx-auto flex flex-col gap-6">
-          {/* Toolbar */}
+
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <h1 className="text-2xl md:text-3xl font-bold text-quaternary">
               Profil de l&apos;adoptant
@@ -102,7 +105,6 @@ export default async function AdopterViewPage({
             </div>
           </div>
 
-          {/* En-tête profil */}
           <div className="bg-white rounded-2xl shadow-md border border-gray-100 px-8 py-6 flex items-center gap-6">
             <div className="size-16 rounded-full bg-primary flex items-center justify-center text-white font-bold text-2xl flex-shrink-0">
               {adopter.firstName.charAt(0).toUpperCase()}
@@ -115,7 +117,6 @@ export default async function AdopterViewPage({
             </div>
           </div>
 
-          {/* Identité & coordonnées */}
           <InfoCard title="Identité & coordonnées">
             <Field label="Prénom" value={text(adopter.firstName)} />
             <Field label="Nom" value={text(adopter.lastName)} />
@@ -130,7 +131,6 @@ export default async function AdopterViewPage({
             <Field label="Ville" value={text(adopter.city)} />
           </InfoCard>
 
-          {/* Situation professionnelle */}
           <InfoCard title="Situation professionnelle">
             <Field
               label="Statut"
@@ -145,7 +145,6 @@ export default async function AdopterViewPage({
             />
           </InfoCard>
 
-          {/* Foyer */}
           <InfoCard title="Foyer">
             <Field
               label="Type de foyer"
@@ -184,7 +183,6 @@ export default async function AdopterViewPage({
             )}
           </InfoCard>
 
-          {/* Logement */}
           <InfoCard title="Logement">
             <Field
               label="Type de logement"
@@ -250,7 +248,6 @@ export default async function AdopterViewPage({
             />
           </InfoCard>
 
-          {/* Autres animaux & remarques */}
           <InfoCard title="Autres animaux & remarques">
             <Field
               label="Possède d'autres animaux"
@@ -277,7 +274,6 @@ export default async function AdopterViewPage({
             </div>
           </InfoCard>
 
-          {/* Suppression du compte (admin) */}
           {isAdmin && (
             <div className="bg-white rounded-2xl shadow-md border border-gray-100 px-8 py-6 flex flex-col gap-3">
               <Heading

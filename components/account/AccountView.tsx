@@ -44,10 +44,10 @@ export default function AccountView({
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 lg:items-start">
-      {/* Sidebar : entête + navigation dans une seule carte */}
+
       <aside className="w-full lg:w-72 lg:shrink-0 lg:sticky lg:top-28">
         <div className="overflow-hidden rounded-2xl shadow-md flex flex-col bg-white">
-          {/* En-tête : initiale + Prénom Nom + rôle (flex colonne) */}
+
           <div className="p-8 flex flex-col items-center text-center gap-4 border-b border-gray-100">
             <div className="size-20 rounded-full bg-primary flex items-center justify-center text-white font-bold text-3xl">
               {firstName.charAt(0).toUpperCase()}
@@ -66,7 +66,6 @@ export default function AccountView({
             </div>
           </div>
 
-          {/* Navigation */}
           <nav className="p-3 flex flex-row lg:flex-col gap-2">
             {(["actions", "compte"] as const).map((tab) => (
               <button
@@ -83,7 +82,6 @@ export default function AccountView({
             ))}
           </nav>
 
-          {/* Déconnexion (bas de la sidebar) */}
           <div className="mt-auto p-3 border-t border-gray-100">
             <Button variant="secondary" size="sm" full onClick={handleLogout}>
               Se déconnecter
@@ -92,9 +90,8 @@ export default function AccountView({
         </div>
       </aside>
 
-      {/* Contenu */}
       <div className="flex-1 min-w-0 flex flex-col gap-6">
-        {/* Bannière succès */}
+
         {bannerMessage && (
           <div className="rounded-2xl bg-green-50 border border-green-200 px-6 py-4 text-sm text-green-800 font-medium">
             {bannerMessage}

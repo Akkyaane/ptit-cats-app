@@ -2,7 +2,7 @@
 
 import IAdopter from "@/interfaces/IAdopter";
 import AdopterFormWizard from "@/components/adopter/AdopterFormWizard";
-import { mapAdopterToFormValues } from "@/components/adopter/AdopterForm";
+import { mapAdopterToFormValues } from "@/helpers/adopterPayload";
 
 export default function AdopterProfileForm({
   adopter,

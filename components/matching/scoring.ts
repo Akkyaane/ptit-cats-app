@@ -8,14 +8,8 @@ import {
   PLAYFUL_TRAITS,
   MAX_IDEAL_TRAITS,
   ageGroupOf,
-} from "./MatchmakerForm";
+} from "./matchmakerConfig";
 
-// -----------------------------------------------------------------------------
-// Table de scoring — centralisée ici pour un réglage facile des pondérations.
-// Un point (ou plus) est attribué au chat pour chaque critère satisfait ; des
-// pénalités écartent les chats incompatibles sans jamais les exclure totalement
-// (il y a toujours un podium tant qu'il existe des chats).
-// -----------------------------------------------------------------------------
 export const WEIGHTS = {
   age: 3,
   sex: 2,
@@ -38,7 +32,7 @@ export type ScoredMatch = {
   animal: IAnimal;
   score: number;
   maxScore: number;
-  percentage: number; // 0..100, adéquation aux critères exprimés
+  percentage: number;
 };
 
 function traitLabels(animal: IAnimal): Set<string> {
@@ -53,8 +47,6 @@ function hasAny(traits: Set<string>, labels: string[]): boolean {
   return labels.some((label) => traits.has(label));
 }
 
-// Score d'UN chat. Renvoie le score obtenu et le score maximum atteignable
-// compte tenu des seuls critères exprimés par l'utilisateur (pour le %).
 function scoreAnimal(
   values: MatchFormValues,
   animal: IAnimal,
@@ -64,33 +56,28 @@ function scoreAnimal(
   let score = 0;
   let maxScore = 0;
 
-  // --- Âge ---
   if (values.agePreference === "true" && values.ageGroup) {
     maxScore += WEIGHTS.age;
     if (ageGroupOf(animal.birthDate) === values.ageGroup) score += WEIGHTS.age;
   }
 
-  // --- Sexe ---
   if (values.sexPreference === "true" && values.sex) {
     maxScore += WEIGHTS.sex;
     if (animal.sex === values.sex) score += WEIGHTS.sex;
   }
 
-  // --- Entente avec les chats (si jugée indispensable) ---
   if (values.mustGetAlongCats === "true") {
     maxScore += WEIGHTS.affinityCats;
     if (animal.catAffinity === "yes") score += WEIGHTS.affinityCats;
     else if (animal.catAffinity === "no") score += WEIGHTS.affinityCatsConflict;
   }
 
-  // --- Entente avec les chiens (si jugée indispensable) ---
   if (values.mustGetAlongDogs === "true") {
     maxScore += WEIGHTS.affinityDogs;
     if (animal.dogAffinity === "yes") score += WEIGHTS.affinityDogs;
     else if (animal.dogAffinity === "no") score += WEIGHTS.affinityDogsConflict;
   }
 
-  // --- Besoins spécifiques (chat atypique) ---
   if (values.openToSpecificNeeds === "true") {
     maxScore += WEIGHTS.specificNeedsOpen;
     if (animal.isAtypical) score += WEIGHTS.specificNeedsOpen;
@@ -98,7 +85,6 @@ function scoreAnimal(
     score += WEIGHTS.specificNeedsConflict;
   }
 
-  // --- Personnalité oui/non ---
   for (const key of PERSONALITY_YESNO_KEYS) {
     if (values[key] === "true") {
       maxScore += WEIGHTS.personality;
@@ -106,14 +92,12 @@ function scoreAnimal(
     }
   }
 
-  // --- Calme ou joueur ---
   if (values.calmOrPlayful) {
     maxScore += WEIGHTS.calmOrPlayful;
     const target = values.calmOrPlayful === "calm" ? CALM_TRAITS : PLAYFUL_TRAITS;
     if (hasAny(traits, target)) score += WEIGHTS.calmOrPlayful;
   }
 
-  // --- Caractère idéal (labels exacts, 3 max) ---
   const idealTraits = values.idealTraits.slice(0, MAX_IDEAL_TRAITS);
   if (idealTraits.length > 0) {
     maxScore += idealTraits.length * WEIGHTS.idealTrait;
@@ -122,7 +106,6 @@ function scoreAnimal(
     }
   }
 
-  // --- Logement ---
   if (values.housingType) {
     maxScore += WEIGHTS.housing;
     if (animal.housingType === values.housingType || animal.housingType === "other") {
@@ -130,7 +113,6 @@ function scoreAnimal(
     }
   }
 
-  // --- Besoins du chat vs foyer (pénalités seules, hors maxScore) ---
   if (requirements.has("Extérieur sécurisé") && values.securedExterior === "false") {
     score += WEIGHTS.requirementUnmet;
   }
@@ -144,7 +126,6 @@ function scoreAnimal(
     score += WEIGHTS.requirementUnmet;
   }
 
-  // --- Enfants en bas âge vs affinité enfants du chat ---
   if (values.hasYoungChildren === "true" && animal.childAffinity === "no") {
     score += WEIGHTS.childrenConflict;
   }
@@ -152,11 +133,6 @@ function scoreAnimal(
   return { score, maxScore };
 }
 
-// -----------------------------------------------------------------------------
-// Score les annonces "adoption pending". Un chat gagnant appartient à une
-// annonce : on retient le meilleur chat de chaque annonce (évite d'afficher
-// deux fois la même card pour un duo), puis on renvoie le Top N trié.
-// -----------------------------------------------------------------------------
 export function scoreListings(
   values: MatchFormValues,
   listings: IAdoptionListing[],

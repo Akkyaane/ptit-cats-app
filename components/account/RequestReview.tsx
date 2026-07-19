@@ -9,7 +9,6 @@ import {
   volunteerStatusBadge,
   adopterStatusBadge,
 } from "@/components/account/adoptionRequestStatus";
-import { setAdoptionRequestStatus } from "@/app/adoption-requests/action";
 
 const CONGRATS =
   "Félicitations, votre demande a été approuvée. Un bénévole prendra contact avec vous d'ici quelques jours.";
@@ -30,7 +29,6 @@ export default function RequestReview({
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  // Vue adoptant : lecture seule (statut côté adoptant + réponse du responsable).
   if (readOnly) {
     const adopterBadge = adopterStatusBadge(request.entityStatus);
     return (
@@ -73,13 +71,17 @@ export default function RequestReview({
   function act(next: "refused" | "pending" | "done") {
     setError(null);
     startTransition(async () => {
-      const result = await setAdoptionRequestStatus(
-        request.documentId,
-        next,
-        remarks.trim() || undefined,
-      );
-      if (result?.error) {
-        setError(result.error);
+      const body: { status: string; remarks?: string } = { status: next };
+      const trimmed = remarks.trim();
+      if (trimmed) body.remarks = trimmed;
+      const res = await fetch(`/api/adoption-requests/${request.documentId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        setError(data?.error ?? "Échec de la mise à jour de la demande.");
         return;
       }
       router.refresh();

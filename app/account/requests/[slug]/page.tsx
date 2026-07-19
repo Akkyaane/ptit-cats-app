@@ -5,20 +5,20 @@ import Breadcrumb from "@/components/Breadcrumb";
 import Heading from "@/components/ui/Heading";
 import Button from "@/components/ui/Button";
 import RequestReview from "@/components/account/RequestReview";
-import { getAdoptionRequestById } from "@/app/adoption-requests/action";
-import { getAdopterById } from "@/app/adopters/update/action";
+import { serverApiData } from "@/helpers/api";
+import IAdopter from "@/interfaces/IAdopter";
+import IAdoptionRequest from "@/interfaces/IAdoptionRequest";
 import {
   householdTypeOptions,
   householdPresenceOptions,
   housingTypeOptions,
   livingEnvironmentOptions,
-} from "@/components/adopter/AdopterForm";
+} from "@/helpers/adopterPayload";
 
 const VOLUNTEER_ROLES = ["admin", "manager", "referent"];
 
 type Option = { value: string; label: string };
 
-// Traduit une valeur d'enum Strapi (anglais) en libellé français.
 function labelOf(options: Option[], value: unknown) {
   if (value == null || value === "") return null;
   return options.find((o) => o.value === value)?.label ?? String(value);
@@ -69,15 +69,15 @@ export default async function ReviewRequestPage({
 
   if (!role) redirect("/account");
 
-  const request = await getAdoptionRequestById(slug);
+  const request = await serverApiData<IAdoptionRequest | null>(
+    `/api/adoption-requests/${slug}`,
+    null,
+  );
   if (!request) redirect("/account?tab=demandes");
 
   const isVolunteer = VOLUNTEER_ROLES.includes(role) && !!volunteerId;
   const isAdopter = role === "adopter" && !!adopterId;
 
-  // Autorisation :
-  //  - bénévole assigné / responsable ayant transféré / admin → accès + action
-  //  - adoptant propriétaire de la demande → accès en lecture seule
   let canView = false;
   let canAct = false;
   if (isVolunteer) {
@@ -91,9 +91,11 @@ export default async function ReviewRequestPage({
   }
   if (!canView) redirect("/account?tab=demandes");
 
-  // Profil complet de l'adoptant (la relation n'expose pas tous les champs).
   const adopter = request.adopter?.documentId
-    ? await getAdopterById(request.adopter.documentId)
+    ? await serverApiData<IAdopter | null>(
+        `/api/adopters/${request.adopter.documentId}`,
+        null,
+      )
     : null;
 
   const listing = request.adoption_listing;
@@ -121,7 +123,6 @@ export default async function ReviewRequestPage({
             readOnly={isAdopter}
           />
 
-          {/* Annonce */}
           <div className="flex flex-col gap-4 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-bold">Annonce concernée</h2>
             <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -140,7 +141,6 @@ export default async function ReviewRequestPage({
             )}
           </div>
 
-          {/* Adoptant */}
           <div className="flex flex-col gap-4 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-bold">Adoptant</h2>
             {adopter ? (

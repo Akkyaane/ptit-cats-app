@@ -3,19 +3,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 import Heading from "@/components/ui/Heading";
 import Button from "@/components/ui/Button";
 import IAbsence from "@/interfaces/IAbsence";
-
-async function getAbsence(documentId: string): Promise<IAbsence | null> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/absences/${documentId}?populate=volunteer`,
-    {
-      headers: { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` },
-      cache: "no-store",
-    }
-  );
-  if (!res.ok) return null;
-  const json = await res.json();
-  return json.data;
-}
+import { serverApiData } from "@/helpers/api";
 
 export default async function UpdateAbsencePage({
   params,
@@ -23,7 +11,10 @@ export default async function UpdateAbsencePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const absence = await getAbsence(slug);
+  const absence = await serverApiData<IAbsence | null>(
+    `/api/absences/${slug}`,
+    null,
+  );
 
   if (!absence) {
     return (

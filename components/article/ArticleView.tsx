@@ -65,7 +65,7 @@ export default function ArticleView({
             size="md"
             onClick={() => router.push("/blog")}
           >
-            Retour au blog
+            ← Retour
           </Button>
         </div>
       </div>
@@ -80,8 +80,6 @@ export default function ArticleView({
   });
   const author = formatAuthor(article.volunteer);
 
-  // Modifier / Supprimer : admin (tous les articles) ou auteur de l'article
-  // (manager / référent uniquement sur les leurs).
   const canManage =
     userRole === "admin" ||
     (!!currentVolunteerId &&
@@ -89,13 +87,13 @@ export default function ArticleView({
 
   return (
     <div className="max-w-5xl mx-auto">
-      {/* En-tête */}
+
       <header className="bg-tertiary h-28" />
 
       <Breadcrumb />
       <main className="container py-12">
         <div className="flex flex-col gap-8">
-          {/* Actions */}
+
           <div className="flex flex-row flex-wrap gap-2 justify-end">
             <Button
               variant="secondary"
@@ -124,7 +122,6 @@ export default function ArticleView({
             )}
           </div>
 
-          {/* Métadonnées */}
           <div className="flex flex-col gap-4 border-b-2 border-tertiary/40 pb-6">
             <span className="w-fit text-xs font-bold uppercase tracking-wider bg-primary text-secondary px-3.5 py-1.5 rounded-full shadow-sm">
               {category}
@@ -170,12 +167,10 @@ export default function ArticleView({
             </div>
           </div>
 
-          {/* Contenu BlockNote en lecture seule */}
           <div className="article-view-content">
             <DynamicEditor initialContent={article.content} editable={false} />
           </div>
 
-          {/* Actions */}
           <div className="flex flex-row flex-wrap gap-3 pt-4">
             <Button
               variant="secondary"

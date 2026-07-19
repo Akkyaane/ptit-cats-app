@@ -71,7 +71,6 @@ export default function MatchResult({
         </p>
       </div>
 
-      {/* Gagnant, mis en avant */}
       <div className="mx-auto w-full max-w-md">
         <div className="flex items-center justify-between gap-3 mb-3">
           <span className="text-lg font-bold text-quaternary">
@@ -82,7 +81,6 @@ export default function MatchResult({
         <ALCard {...winner.listing} />
       </div>
 
-      {/* 2ᵉ et 3ᵉ choix */}
       {others.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto w-full">
           {others.map((match, index) => (

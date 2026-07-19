@@ -3,12 +3,10 @@ import { cookies } from "next/headers";
 
 const STRAPI_BASE = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
 const API_TOKEN = process.env.STRAPI_API_TOKEN;
-const MAX_AGE = 60 * 60 * 24 * 7; // 7 jours
+const MAX_AGE = 60 * 60 * 24 * 7;
 
 type LinkedEntity = { documentId: string; role: string } | null;
 
-// Cherche l'adopter ou le volunteer lié au user users-permissions.
-// Utilise le token API serveur (jamais exposé au client).
 async function findLinkedEntity(
   collection: "adopters" | "volunteers",
   userId: number,
@@ -32,7 +30,7 @@ async function findLinkedEntity(
 
   return {
     documentId: entity.documentId,
-    // adopters n'ont pas de champ role : on renvoie "adopter" par défaut
+
     role: entity.role ?? "adopter",
   };
 }
@@ -48,7 +46,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // 1. Authentification via le plugin users-and-permissions
     const authRes = await fetch(`${STRAPI_BASE}/api/auth/local`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -64,7 +61,6 @@ export async function POST(request: Request) {
 
     const { jwt, user } = await authRes.json();
 
-    // 2. Résolution du profil lié (adopter puis volunteer)
     let type: "adopter" | "volunteer";
     let linked = await findLinkedEntity("adopters", user.id);
 
@@ -82,13 +78,9 @@ export async function POST(request: Request) {
       );
     }
 
-    // 3. Pose des cookies (jwt httpOnly, le reste lisible côté client)
     const cookieStore = await cookies();
     const base = { sameSite: "lax" as const, path: "/", maxAge: MAX_AGE };
 
-    // Nettoyage d'un éventuel cookie résiduel de l'autre type de profil
-    // (ex. connexion bénévole puis adoptant sans déconnexion) pour éviter
-    // qu'un adoptant hérite des accès bénévole via un volunteer_id périmé.
     cookieStore.delete("adopter_id");
     cookieStore.delete("volunteer_id");
 

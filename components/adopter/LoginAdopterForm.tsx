@@ -30,7 +30,6 @@ export default function LoginAdopterForm({ redirectTo }: { redirectTo?: string }
       return;
     }
 
-    // Hard-navigation pour que la Navbar (montée) relise les cookies de session.
     window.location.assign(redirectTo ?? "/account");
   }
 

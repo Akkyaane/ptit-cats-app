@@ -8,7 +8,7 @@ export default async function LoginPage({
   searchParams: Promise<{ redirect?: string }>;
 }) {
   const params = await searchParams;
-  // Valide que le redirect est interne (pas d'open redirect)
+
   const redirectTo =
     params.redirect?.startsWith("/") ? params.redirect : undefined;
 

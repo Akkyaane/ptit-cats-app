@@ -13,7 +13,7 @@ export default function Statistics() {
     "animaux sauvés",
     "tonnes de croquettes distribuées",
   ];
-  
+
   return (
     <ul
       aria-label="Statistiques clés"

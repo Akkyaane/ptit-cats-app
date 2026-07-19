@@ -16,7 +16,7 @@ import {
   calmOrPlayfulOptions,
   householdSummary,
   MAX_IDEAL_TRAITS,
-} from "./MatchmakerForm";
+} from "./matchmakerConfig";
 import { scoreListings, ScoredMatch } from "./scoring";
 import MatchResult from "./MatchResult";
 
@@ -153,7 +153,7 @@ export default function MatchmakerWizard({
 
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-6">
-      {/* Progression */}
+
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between gap-4 text-sm">
           <span className="font-bold text-quaternary/70">
@@ -438,7 +438,7 @@ export default function MatchmakerWizard({
           </Button>
         ) : (
           <Button type="button" variant="primary" size="md" onClick={handleFinish}>
-            Trouver mon compagnon 🐾
+            Trouver mon compagnon
           </Button>
         )}
       </div>

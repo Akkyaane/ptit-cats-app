@@ -1,4 +1,4 @@
-import { getAllAbsences } from "@/app/absences/action";
+import { serverApiData } from "@/helpers/api";
 import IAbsence from "@/interfaces/IAbsence";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
@@ -8,7 +8,7 @@ function formatDate(value: Date | string | null | undefined) {
 }
 
 export default async function AbsencePage() {
-  const absences: IAbsence[] = await getAllAbsences();
+  const absences = await serverApiData<IAbsence[]>("/api/absences", []);
 
   return (
     <div className="min-h-screen bg-secondary">
@@ -31,7 +31,7 @@ export default async function AbsencePage() {
               href="/absences/create"
               className="px-4 py-2 font-bold rounded-xl bg-tertiary border-2 border-tertiary text-white hover:bg-tertiary/10 hover:text-tertiary transition-colors duration-200 text-sm"
             >
-              + Ajouter une absence
+              Ajouter +
             </Link>
           </div>
 
@@ -80,7 +80,7 @@ export default async function AbsencePage() {
               href="/account"
               className="font-bold text-primary hover:underline text-sm"
             >
-              &larr; Retour à mon espace
+              ← Retour
             </Link>
           </div>
         </div>

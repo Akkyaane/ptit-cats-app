@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import IAbsence from "@/interfaces/IAbsence";
-import { deleteAbsence } from "@/app/absences/action";
 
 const JOURS = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
 const MOIS = [
@@ -75,11 +74,15 @@ export default function AbsenceCalendar({
   async function handleDelete(documentId: string) {
     setDeletingId(documentId);
     setError(null);
-    const result = await deleteAbsence(documentId);
+    const res = await fetch("/api/absences/delete", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ documentId }),
+    });
     setDeletingId(null);
 
-    if (result?.error) {
-      setError(result.error);
+    if (!res.ok) {
+      setError("Erreur lors de la suppression");
       return;
     }
 
@@ -94,7 +97,6 @@ export default function AbsenceCalendar({
   let startOffset = firstDay.getDay() - 1;
   if (startOffset < 0) startOffset = 6;
 
-  // Une absence couvre tous les jours de startDate à endDate (inclus).
   const absencesByDate: Record<string, IAbsence[]> = {};
   absences.forEach((a) => {
     const startKey = String(a.startDate).slice(0, 10);
@@ -121,7 +123,6 @@ export default function AbsenceCalendar({
     return `${currentYear}-${m}-${d}`;
   }
 
-  // Absences du jour sélectionné, indexées par bénévole.
   const selectedAbsences = absencesByDate[selectedDate] ?? [];
   const absenceByVolunteer = new Map<string, IAbsence>();
   selectedAbsences.forEach((a) => {
@@ -146,9 +147,9 @@ export default function AbsenceCalendar({
       )}
 
       <div className="flex flex-col lg:flex-row gap-6 items-start">
-        {/* Calendrier — moitié gauche */}
+
         <div className="flex flex-col gap-4 w-full lg:w-1/2">
-          {/* Navigation mois */}
+
           <div className="flex items-center justify-between">
             <button
               onClick={prevMonth}
@@ -167,7 +168,6 @@ export default function AbsenceCalendar({
             </button>
           </div>
 
-          {/* Grille */}
           <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
             <div className="grid grid-cols-7 bg-tertiary/10">
               {JOURS.map((j) => (
@@ -216,7 +216,6 @@ export default function AbsenceCalendar({
           </div>
         </div>
 
-        {/* Liste présence/absence — moitié droite */}
         <div className="w-full lg:w-1/2 flex flex-col gap-4">
           <h2 className="text-xl font-bold">
             {selectedDateObj.toLocaleDateString("fr-FR", {
@@ -227,7 +226,6 @@ export default function AbsenceCalendar({
             })}
           </h2>
 
-          {/* Absents */}
           <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
             <div className="px-5 py-3 bg-primary/10 border-b border-primary/10">
               <p className="font-bold text-primary text-sm">
@@ -304,7 +302,6 @@ export default function AbsenceCalendar({
             )}
           </div>
 
-          {/* Présents */}
           <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
             <div className="px-5 py-3 bg-tertiary/20 border-b border-tertiary/30">
               <p className="font-bold text-quaternary text-sm">

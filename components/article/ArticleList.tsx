@@ -61,7 +61,7 @@ export default function ArticleList() {
 
   return (
     <div className="flex flex-col lg:flex-row gap-8 items-start">
-      {/* Catégories (colonne gauche) */}
+
       <aside className="w-full lg:w-56 shrink-0">
         {!isLoading && usedCategories.length > 0 && (
           <div className="flex flex-col gap-0.5 border-2 border-tertiary rounded-xl p-4">
@@ -85,7 +85,6 @@ export default function ArticleList() {
         )}
       </aside>
 
-      {/* Grille d'articles */}
       <div className="flex-1 min-w-0 flex flex-col gap-8">
         {isLoading && (
           <p className="text-center font-bold text-quaternary">Chargement…</p>
@@ -127,7 +126,6 @@ export default function ArticleList() {
           </div>
         )}
 
-        {/* Pagination */}
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

@@ -1,4 +1,4 @@
-import RegisterAdopterForm from "@/components/adopter/RegisterAdoptantForm";
+import RegisterAdopterForm from "@/components/adopter/RegisterAdopterForm";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import Heading from "@/components/ui/Heading";

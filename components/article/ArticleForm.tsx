@@ -66,7 +66,7 @@ export default function ArticleForm({
         )}
 
         <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-8">
-          {/* Catégorie */}
+
           <div className="max-w-xs">
             <Select
               name="category"
@@ -79,17 +79,17 @@ export default function ArticleForm({
             />
           </div>
 
-          {/* Séparateur */}
+
           <div className="h-px bg-tertiary/50" />
 
-          {/* Éditeur de contenu */}
+
           <DynamicEditor
             initialContent={initialDraft?.content ?? INITIAL_CONTENT}
             onChange={setBlocks}
             editable={!isSaving}
           />
 
-          {/* Actions */}
+
           <div className="flex flex-col md:flex-row items-center justify-between gap-2">
             <Button
               type="button"

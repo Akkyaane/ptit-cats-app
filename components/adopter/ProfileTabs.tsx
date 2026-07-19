@@ -29,7 +29,7 @@ export default function ProfileTabs({
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Tab switcher */}
+
       <div className="flex gap-1 bg-white rounded-2xl shadow-sm border border-gray-100 p-1.5">
         <button
           onClick={() => setActiveTab("profil")}
@@ -66,7 +66,7 @@ export default function ProfileTabs({
         </button>
       </div>
 
-      {/* Tab content */}
+
       {activeTab === "profil" && (
         <section className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 md:p-8 flex flex-col gap-6">
           <div className="flex flex-col gap-2">
@@ -86,10 +86,9 @@ export default function ProfileTabs({
           <h2 className="text-xl md:text-2xl font-bold">Mes demandes d'adoption</h2>
           {adoptionRequests.length === 0 ? (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 px-8 py-12 text-center flex flex-col gap-3 items-center">
-              <span className="text-4xl">🐱</span>
               <p className="font-bold text-quaternary/70">Aucune demande d'adoption pour l'instant.</p>
               <p className="text-sm text-quaternary/50">
-                Parcourez les chats disponibles et cliquez sur "Je suis intéressé·e".
+                Parcourez les annonces disponibles sur le site".
               </p>
               <a
                 href="/adoption-listings"

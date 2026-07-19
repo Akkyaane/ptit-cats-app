@@ -134,10 +134,10 @@ export default function ALFilteredList({
 
   return (
     <div className="flex flex-col gap-8 w-full">
-      {/* Filter bar + bouton d'ajout (haut droite) */}
+
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-2 flex-wrap p-3">
-          {/* Age */}
+
           <div className="flex items-center gap-1.5">
             <span className="text-xs text-quaternary/40 font-medium shrink-0">Âge</span>
             <div className="flex gap-1">
@@ -155,7 +155,7 @@ export default function ALFilteredList({
 
           <span className="hidden sm:block w-px h-4 bg-quaternary/20 mx-1" />
 
-          {/* Sex */}
+
           <div className="flex items-center gap-1.5">
             <span className="text-xs text-quaternary/40 font-medium shrink-0">Sexe</span>
             <div className="flex gap-1">
@@ -173,7 +173,7 @@ export default function ALFilteredList({
 
           <span className="hidden sm:block w-px h-4 bg-quaternary/20 mx-1" />
 
-          {/* Special */}
+
           <div className="flex gap-1">
             <ToggleBtn active={duoFilter} onClick={toggleDuo}>
               Duo

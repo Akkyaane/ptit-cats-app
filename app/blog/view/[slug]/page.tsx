@@ -8,8 +8,6 @@ export default async function ViewArticlePage({
 }) {
   const { slug } = await params;
 
-  // Permissions Modifier / Supprimer calculées côté ArticleView (qui connaît
-  // l'auteur de l'article) : admin (tous) ou auteur (manager/référent).
   const cookieStore = await cookies();
   const volunteerId = cookieStore.get("volunteer_id")?.value;
   const userRole = cookieStore.get("user_role")?.value;

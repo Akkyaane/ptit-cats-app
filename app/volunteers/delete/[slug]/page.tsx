@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
-import { getBenevoleById } from "@/app/volunteers/update/action";
+import { serverApiData } from "@/helpers/api";
+import IVolunteer from "@/interfaces/IVolunteer";
 import VolunteerDeleteConfirm from "@/components/volunteer/VolunteerDeleteConfirm";
 
 export default async function DeleteVolunteerPage({
@@ -8,12 +9,15 @@ export default async function DeleteVolunteerPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  // Seul un administrateur peut supprimer un compte bénévole.
+
   const cookieStore = await cookies();
   if (cookieStore.get("user_role")?.value !== "admin") redirect("/account");
 
   const { slug } = await params;
-  const volunteer = await getBenevoleById(slug);
+  const volunteer = await serverApiData<IVolunteer | null>(
+    `/api/volunteers/${slug}`,
+    null,
+  );
 
   if (!volunteer) notFound();
 

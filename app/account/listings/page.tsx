@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { getAllAdoptionListings } from "@/app/adoption-listings/action";
+import { serverApiData } from "@/helpers/api";
+import IAdoptionListing from "@/interfaces/IAdoptionListing";
 import AdoptionListingsManager from "@/components/account/AdoptionListingsManager";
 import AccountSubLayout from "@/components/account/AccountSubLayout";
 import Button from "@/components/ui/Button";
@@ -10,7 +11,10 @@ export default async function AccountListingsPage() {
   const role = cookieStore.get("user_role")?.value;
   if (role !== "admin" && role !== "manager") redirect("/account");
 
-  const listings = await getAllAdoptionListings();
+  const listings = await serverApiData<IAdoptionListing[]>(
+    "/api/adoption-listings",
+    [],
+  );
 
   return (
     <AccountSubLayout

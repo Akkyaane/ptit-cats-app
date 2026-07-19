@@ -2,10 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { updateAbsence } from "@/app/absences/action";
 import IAbsence from "@/interfaces/IAbsence";
 
-// Extrait la partie date (YYYY-MM-DD) d'un datetime ISO pour un <input type="date">.
 function toDateInput(value: Date | string | null | undefined) {
   return value ? String(value).slice(0, 10) : "";
 }
@@ -18,12 +16,33 @@ export default function UpdateAbsenceForm({ absence }: { absence: IAbsence }) {
 
   async function handleSubmit(formData: FormData) {
     setError(null);
+    const documentId = formData.get("documentId") as string;
+    const startDate = formData.get("startDate") as string;
+    const endDate = (formData.get("endDate") as string) || startDate;
+
+    if (!documentId || !startDate) {
+      setError("Champs requis manquants");
+      return;
+    }
+    if (endDate < startDate) {
+      setError("La date de fin doit être postérieure ou égale à la date de début");
+      return;
+    }
+
     setLoading(true);
-    const result = await updateAbsence(formData);
+    const res = await fetch("/api/absences/update", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        documentId,
+        startDate: new Date(`${startDate}T00:00:00.000Z`).toISOString(),
+        endDate: new Date(`${endDate}T00:00:00.000Z`).toISOString(),
+      }),
+    });
     setLoading(false);
 
-    if (result.error) {
-      setError(result.error);
+    if (!res.ok) {
+      setError("Erreur lors de la modification");
     } else {
       setSuccess(true);
       setTimeout(() => router.push("/absences/calendar"), 1500);

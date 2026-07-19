@@ -2,6 +2,7 @@ import IAbsence from "./IAbsence";
 import IArticle from "./IArticle";
 
 export default interface IVolunteer {
+  id: number;
   documentId: string;
   lastName: string;
   firstName: string;

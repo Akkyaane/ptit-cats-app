@@ -3,28 +3,24 @@ import { NextRequest, NextResponse } from "next/server";
 const STRAPI_BASE = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
 const API_TOKEN = process.env.STRAPI_API_TOKEN;
 
-// Rôles users-permissions configurés côté back (cf. table up_roles).
 const ROLE_IDS = {
-  adopter: 8, // "Adopter"
-  admin: 6, // "Admin"
-  managerReferent: 7, // "Manager/Referent"
+  adopter: 8,
+  admin: 6,
+  managerReferent: 7,
 } as const;
 
 type Collection = "adopters" | "volunteers";
 
-// Détermine le rôle u&p selon le type d'entité et, pour un volunteer, son rôle métier.
 function resolveRoleId(collection: Collection, volunteerRole?: string): number {
   if (collection === "adopters") return ROLE_IDS.adopter;
   return volunteerRole === "admin" ? ROLE_IDS.admin : ROLE_IDS.managerReferent;
 }
 
-// username = lastName + 1re lettre du firstName, en minuscules, sans caractères parasites.
 function buildUsernameBase(lastName: string, firstName: string): string {
   const raw = `${lastName}${firstName.charAt(0)}`.toLowerCase();
   return raw.normalize("NFD").replace(/[^a-z0-9]/g, "");
 }
 
-// Cherche le prochain suffixe à 3 chiffres disponible (001, 002, ...) pour ce base.
 async function nextUsername(base: string): Promise<string> {
   const res = await fetch(
     `${STRAPI_BASE}/api/users?filters[username][$startsWith]=${base}&fields[0]=username`,
@@ -65,7 +61,6 @@ export async function POST(req: NextRequest) {
 
     const username = await nextUsername(buildUsernameBase(lastName, firstName));
 
-    // 1. Création du user users-permissions (mêmes email/password + username généré).
     const userRes = await fetch(`${STRAPI_BASE}/api/users`, {
       method: "POST",
       headers: {
@@ -91,7 +86,6 @@ export async function POST(req: NextRequest) {
 
     const user = await userRes.json();
 
-    // 2. Lien vers l'entité créée précédemment (relation portée côté adopter/volunteer).
     const linkRes = await fetch(`${STRAPI_BASE}/api/${collection}/${documentId}`, {
       method: "PUT",
       headers: {

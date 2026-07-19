@@ -18,7 +18,7 @@ export default function AbsencesTabs({
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Sélecteur d'onglets */}
+
       <div className="flex gap-1 bg-white rounded-2xl shadow-sm border border-gray-100 p-1.5 w-fit mx-auto">
         {(["calendrier", "tableau"] as const).map((t) => (
           <button

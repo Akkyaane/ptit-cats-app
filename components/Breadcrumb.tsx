@@ -31,8 +31,7 @@ const SEGMENT_LABELS: Record<string, string> = {
   "pet-matchmaker": "Trouver mon compagnon idéal",
 };
 
-// Certains segments ne correspondent pas à une route existante (ou pointent vers
-// une page dépréciée) : on redirige le lien du fil d'Ariane vers la bonne page.
+
 const SEGMENT_HREFS: Record<string, string> = {
   volunteers: "/account/volunteers",
   adopters: "/account/adopters",

@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getAdopterById } from "@/app/adopters/update/action";
+import { serverApiData } from "@/helpers/api";
 import Breadcrumb from "@/components/Breadcrumb";
 import Button from "@/components/ui/Button";
 import AdopterProfileForm from "@/components/adopter/AdopterProfileForm";
@@ -11,7 +11,10 @@ export default async function AdopterUpdatePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const adopter: IAdopter | null = await getAdopterById(slug);
+  const adopter = await serverApiData<IAdopter | null>(
+    `/api/adopters/${slug}`,
+    null,
+  );
 
   if (!adopter) notFound();
 
@@ -20,7 +23,7 @@ export default async function AdopterUpdatePage({
       <main className="container">
         <Breadcrumb />
         <div className="w-full max-w-4xl mx-auto flex flex-col gap-6">
-          {/* Toolbar */}
+
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <h1 className="text-2xl md:text-3xl font-bold text-quaternary">
               Modifier l&apos;adoptant
@@ -36,7 +39,6 @@ export default async function AdopterUpdatePage({
             </div>
           </div>
 
-          {/* En-tête profil */}
           <div className="bg-white rounded-2xl shadow-md border border-gray-100 px-8 py-6 flex items-center gap-6">
             <div className="size-16 rounded-full bg-primary flex items-center justify-center text-white font-bold text-2xl flex-shrink-0">
               {adopter.firstName.charAt(0).toUpperCase()}
@@ -49,7 +51,6 @@ export default async function AdopterUpdatePage({
             </div>
           </div>
 
-          {/* Formulaire */}
           <div className="bg-white rounded-2xl shadow-md border border-gray-100 px-8 py-6">
             <AdopterProfileForm adopter={adopter} />
           </div>

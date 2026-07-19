@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Heading from "@/components/ui/Heading";
 import Button from "@/components/ui/Button";
-import { deleteAdopter } from "@/app/adopters/update/action";
 
 type Adopter = {
   documentId: string;
@@ -26,9 +25,12 @@ export default function AdopterDeleteConfirm({
     setIsDeleting(true);
     setError(null);
 
-    const result = await deleteAdopter(adopter.documentId);
-    if (result?.error) {
-      setError(result.error);
+    const res = await fetch(`/api/adopters/${adopter.documentId}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      setError(data?.error ?? "Erreur lors de la suppression de l'adoptant.");
       setIsDeleting(false);
       return;
     }

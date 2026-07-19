@@ -1,6 +1,6 @@
 ﻿import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { getAllBenevoles } from "@/app/volunteers/update/action";
+import { serverApiData } from "@/helpers/api";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 
@@ -23,7 +23,7 @@ export default async function VolunteerListPage() {
   const cookieStore = await cookies();
   if (cookieStore.get("user_role")?.value !== "admin") redirect("/");
 
-  const benevoles: Benevole[] = await getAllBenevoles();
+  const benevoles = await serverApiData<Benevole[]>("/api/volunteers", []);
 
   return (
     <div className="min-h-screen bg-secondary">
@@ -86,7 +86,7 @@ export default async function VolunteerListPage() {
               href="/account"
               className="font-bold text-primary hover:underline text-sm"
             >
-              &larr; Retour à mon espace
+              ← Retour
             </Link>
           </div>
         </div>

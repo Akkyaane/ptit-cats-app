@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { createAdoptionRequest } from "@/app/adoption-requests/action";
+import { useRouter } from "next/navigation";
 
 export default function SubmitAdoptionRequestButton({
   adopterDocumentId,
@@ -14,12 +14,25 @@ export default function SubmitAdoptionRequestButton({
 }) {
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   function handleClick() {
     setError(null);
     startTransition(async () => {
-      const result = await createAdoptionRequest(adopterDocumentId, listingDocumentId);
-      if (result?.error) setError(result.error);
+      const res = await fetch("/api/adoption-requests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ adopterDocumentId, listingDocumentId }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        setError(
+          data?.error ??
+            "Erreur lors de la création de la demande. Veuillez réessayer.",
+        );
+        return;
+      }
+      router.push("/account?tab=demandes&requested=true");
     });
   }
 

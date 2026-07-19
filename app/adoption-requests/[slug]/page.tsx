@@ -3,13 +3,13 @@ import { redirect } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import Image from "next/image";
-import { getAdopterById } from "@/app/adopters/update/action";
-import { getAdoptionRequestsByAdopter } from "@/app/adoption-requests/action";
+import { serverApiData } from "@/helpers/api";
 import SubmitAdoptionRequestButton from "@/components/adopter/SubmitAdoptionRequestButton";
 import IAdopter from "@/interfaces/IAdopter";
 import IAdoptionListing from "@/interfaces/IAdoptionListing";
+import IAdoptionRequest from "@/interfaces/IAdoptionRequest";
 
-// Champs requis pour soumettre une demande
+
 type RequiredField = { key: keyof IAdopter; label: string };
 
 const REQUIRED_FIELDS: RequiredField[] = [
@@ -48,7 +48,7 @@ export default async function AdoptionRequestPage({
 }) {
   const { slug } = await params;
 
-  // Auth
+
   const cookieStore = await cookies();
   const adopterId = cookieStore.get("adopter_id")?.value;
   const userRole = cookieStore.get("user_role")?.value;
@@ -57,21 +57,24 @@ export default async function AdoptionRequestPage({
     redirect(`/auth/signin?redirect=/adoption-requests/${slug}`);
   }
 
-  // Fetch data
+
   const [listing, adopter, existingRequests] = await Promise.all([
     getCatListing(slug),
-    getAdopterById(adopterId),
-    getAdoptionRequestsByAdopter(adopterId),
+    serverApiData<IAdopter | null>(`/api/adopters/${adopterId}`, null),
+    serverApiData<IAdoptionRequest[]>(
+      `/api/adoption-requests?adopter=${adopterId}`,
+      [],
+    ),
   ]);
 
   if (!listing || !adopter) redirect("/adoption-listings");
 
-  // Vérifie doublon
+
   const alreadyRequested = existingRequests.some(
     (r) => r.adoption_listing?.documentId === slug
   );
 
-  // Champs manquants
+
   const missingFields = REQUIRED_FIELDS.filter(
     (f) => !adopter[f.key] && adopter[f.key] !== false
   );
@@ -97,12 +100,12 @@ export default async function AdoptionRequestPage({
       <main className="max-w-[1200px] mx-auto px-4 py-16">
         <div className="flex flex-col gap-8 max-w-4xl mx-auto">
 
-          {/* Fil d'Ariane */}
+
           <Link
             href={`/adoption-listings/view/${slug}`}
             className="text-sm font-bold text-quaternary/60 hover:text-quaternary transition-colors duration-200 w-fit"
           >
-            ← Retour à la fiche de {catNames}
+            ← Retour
           </Link>
 
           <div className="flex flex-col gap-2">
@@ -110,14 +113,14 @@ export default async function AdoptionRequestPage({
             <div className="w-12 h-1 bg-tertiary rounded-full" />
           </div>
 
-          {/* Déjà demandé */}
+
           {alreadyRequested && (
             <div className="rounded-2xl bg-yellow-50 border border-yellow-200 px-6 py-5 flex flex-col gap-2">
               <p className="font-bold text-yellow-800">
                 Vous avez déjà soumis une demande pour {catNames}.
               </p>
               <p className="text-sm text-yellow-700">
-                Vous pouvez suivre son statut dans votre profil.
+                Vous pouvez suivre son statut depuis votre profil.
               </p>
               <Link
                 href="/account?tab=demandes"
@@ -131,7 +134,7 @@ export default async function AdoptionRequestPage({
           {!alreadyRequested && (
             <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6 items-start">
 
-              {/* Carte du chat */}
+
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-28">
                 {imageUrl && (
                   <div className="relative h-52 w-full">
@@ -157,10 +160,10 @@ export default async function AdoptionRequestPage({
                 </div>
               </div>
 
-              {/* Panel droit */}
+
               <div className="flex flex-col gap-5">
 
-                {/* Checklist profil */}
+
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col gap-4">
                   <div>
                     <h2 className="text-lg font-bold">Vérification de votre profil</h2>
@@ -190,7 +193,7 @@ export default async function AdoptionRequestPage({
                         </li>
                       );
                     })}
-                    {/* Engagement */}
+
                     <li className="flex items-center gap-3 text-sm">
                       <span
                         className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-xs font-bold flex-shrink-0 ${
@@ -231,7 +234,7 @@ export default async function AdoptionRequestPage({
                   )}
                 </div>
 
-                {/* Récap adopter */}
+
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col gap-3">
                   <h2 className="text-lg font-bold">Vos coordonnées</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
@@ -255,7 +258,7 @@ export default async function AdoptionRequestPage({
                   </div>
                 </div>
 
-                {/* Bouton de soumission */}
+
                 <SubmitAdoptionRequestButton
                   adopterDocumentId={adopterId}
                   listingDocumentId={slug}

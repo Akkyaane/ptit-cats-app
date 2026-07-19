@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createAbsence } from "@/app/absences/action";
 
 type Benevole = {
   id: number;
@@ -19,12 +18,33 @@ export default function AddAbsenceForm({ benevoles }: { benevoles: Benevole[] })
 
   async function handleSubmit(formData: FormData) {
     setError(null);
+    const startDate = formData.get("startDate") as string;
+    const endDate = (formData.get("endDate") as string) || startDate;
+    const volunteerId = formData.get("volunteerId") as string;
+
+    if (!startDate || !volunteerId) {
+      setError("Le bénévole et la date de début sont requis");
+      return;
+    }
+    if (endDate < startDate) {
+      setError("La date de fin doit être postérieure ou égale à la date de début");
+      return;
+    }
+
     setLoading(true);
-    const result = await createAbsence(formData);
+    const res = await fetch("/api/absences/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        startDate: new Date(`${startDate}T00:00:00.000Z`).toISOString(),
+        endDate: new Date(`${endDate}T00:00:00.000Z`).toISOString(),
+        volunteer: volunteerId,
+      }),
+    });
     setLoading(false);
 
-    if (result.error) {
-      setError(result.error);
+    if (!res.ok) {
+      setError("Erreur lors de la création");
     } else {
       setSuccess(true);
       setTimeout(() => router.push("/absences/calendar"), 1500);
@@ -97,7 +117,7 @@ export default function AddAbsenceForm({ benevoles }: { benevoles: Benevole[] })
         disabled={loading}
         className="w-full px-6 py-3 font-bold rounded-xl bg-primary border-2 border-primary text-white hover:bg-primary/10 hover:text-primary transition-colors duration-200 disabled:opacity-60"
       >
-        {loading ? "Enregistrement..." : "Ajouter l'absence"}
+        {loading ? "Enregistrement..." : "Enregistrer"}
       </button>
     </form>
   );

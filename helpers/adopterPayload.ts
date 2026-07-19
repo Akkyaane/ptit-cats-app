@@ -1,48 +1,46 @@
 import IAdopter from "@/interfaces/IAdopter";
 
-// Le formulaire est intégralement aligné sur le schéma back `adopter`.
-// Les valeurs des <select> correspondent directement aux enums Strapi.
 export type AdopterFormValues = {
-  // Compte
+
   lastName: string;
   firstName: string;
   email: string;
   password: string;
   confirmPassword: string;
-  // Coordonnées
+
   birthDate: string;
   phoneNumber: string;
   address: string;
   postalCode: string;
   city: string;
-  // Foyer
-  householdType: string; // single | couple | family | shared accommodation | other
-  householdComposition: string; // integer >= 1
-  householdPresence: string; // always | often | sometimes | rarely
-  hasChildren: string; // "true" | "false"
-  childrenAgeGroup: string; // young | old | both | not applicable
-  householdAgreement: string; // "true" | "false"
+
+  householdType: string;
+  householdComposition: string;
+  householdPresence: string;
+  hasChildren: string;
+  childrenAgeGroup: string;
+  householdAgreement: string;
   disagreementDetails: string;
-  // Travail
-  employmentStatus: string; // full-time | part-time | job seeking | other
-  employmentArrangement: string; // on site | hybrid | remote | not applicable
-  // Logement
-  housingType: string; // apartment | house | other
-  housingSurface: string; // integer >= 1
+
+  employmentStatus: string;
+  employmentArrangement: string;
+
+  housingType: string;
+  housingSurface: string;
   apartmentFloor: string;
-  areWindowsSecuredOrWillBe: string; // "true" | "false"
-  hasBalconyOrTerrace: string; // "true" | "false"
-  isBalconySecured: string; // "true" | "false"
-  hasGarden: string; // "true" | "false"
+  areWindowsSecuredOrWillBe: string;
+  hasBalconyOrTerrace: string;
+  isBalconySecured: string;
+  hasGarden: string;
   gardenSurface: string;
   fenceHeight: string;
-  livingEnvironment: string; // urban | suburban | rural
-  isNearBusyRoad: string; // "true" | "false"
-  animalCanGoOutside: string; // "true" | "false"
-  // Autres animaux & engagement
-  hasOtherAnimals: string; // "true" | "false"
+  livingEnvironment: string;
+  isNearBusyRoad: string;
+  animalCanGoOutside: string;
+
+  hasOtherAnimals: string;
   otherAnimalsDetails: string;
-  areOtherAnimalsSterilizedOrCastrated: string; // "true" | "false"
+  areOtherAnimalsSterilizedOrCastrated: string;
   firstAnimalOwnershipDate: string;
   remarks: string;
   hasAcceptedResponsibility: boolean;
@@ -88,7 +86,6 @@ export const adopterDefaultValues: AdopterFormValues = {
   hasAcceptedResponsibility: false,
 };
 
-// Options (label FR -> valeur = enum Strapi)
 export const yesNoOptions = [
   { value: "true", label: "Oui" },
   { value: "false", label: "Non" },
@@ -141,7 +138,6 @@ export const livingEnvironmentOptions = [
   { value: "rural", label: "Rural" },
 ];
 
-// --- Lecture d'une entité existante vers les valeurs du formulaire (mode édition) ---
 const s = (v: unknown) => (typeof v === "string" ? v : v == null ? "" : String(v));
 const b = (v: unknown) => (v === true ? "true" : v === false ? "false" : "");
 
@@ -205,7 +201,6 @@ export function buildAdopterFormData(values: AdopterFormValues): FormData {
   return formData;
 }
 
-// --- Helpers de lecture depuis FormData ---
 type FormKey = keyof AdopterFormValues;
 
 export function getRequiredField(formData: FormData, key: FormKey, label: string) {
@@ -237,7 +232,6 @@ function boolean(formData: FormData, key: FormKey): boolean | null {
   return null;
 }
 
-// --- Construction du payload au format schéma Strapi ---
 export function buildAdopterPayload(
   formData: FormData,
   options: { includePassword: boolean },
@@ -279,12 +273,11 @@ export function buildAdopterPayload(
     childrenAgeGroup: optionalString(formData, "childrenAgeGroup"),
     householdPresence: optionalString(formData, "householdPresence"),
     householdAgreement,
-    // Champ requis par le schéma (minLength 1) : on renseigne une valeur neutre si accord.
+
     disagreementDetails:
       optionalString(formData, "disagreementDetails") ??
       (householdAgreement === false ? null : "Non applicable"),
-    // childrenAgeGroup n'accepte que young/old/both côté schéma : on laisse null
-    // (et non "not applicable") lorsqu'il n'y a pas d'enfant, sinon Strapi 400.
+
     housingType: optionalString(formData, "housingType"),
     housingSurface: optionalNumber(formData, "housingSurface"),
     apartmentFloor: optionalNumber(formData, "apartmentFloor"),

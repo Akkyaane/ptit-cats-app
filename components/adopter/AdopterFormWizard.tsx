@@ -7,7 +7,6 @@ import Select from "@/components/ui/Select";
 import Textarea from "@/components/ui/Textarea";
 import Heading from "@/components/ui/Heading";
 import Button from "@/components/ui/Button";
-import { updateAdopter } from "@/app/adopters/update/action";
 import {
   AdopterFormValues,
   buildAdopterFormData,
@@ -21,7 +20,7 @@ import {
   employmentArrangementOptions,
   housingTypeOptions,
   livingEnvironmentOptions,
-} from "@/components/adopter/AdopterForm";
+} from "@/helpers/adopterPayload";
 
 type StepDefinition = {
   title: string;
@@ -113,8 +112,7 @@ export default function AdopterFormWizard({
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  // Cible du bouton de création cliqué, pour n'afficher « Création… » que sur
-  // celui-ci (les deux boutons partagent l'état `loading`).
+
   const [pendingTarget, setPendingTarget] = useState<string | null>(null);
 
   const [values, setValues] = useState<AdopterFormValues>(() => ({
@@ -149,7 +147,6 @@ export default function AdopterFormWizard({
     setStep((previous) => Math.max(previous - 1, 0));
   }
 
-  // Contrat d'inscription : create entité -> create user lié -> auto-login.
   async function registerAdopter(): Promise<boolean> {
     if (values.password !== values.confirmPassword) {
       setError("Les deux mots de passe ne correspondent pas.");
@@ -169,7 +166,6 @@ export default function AdopterFormWizard({
       return false;
     }
 
-    // 1. Création de l'entité adopter (publiée immédiatement).
     const entityRes = await fetch("/api/adopters/create", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -187,7 +183,6 @@ export default function AdopterFormWizard({
       return false;
     }
 
-    // 2. Création du user users-permissions lié à l'entité.
     const userRes = await fetch("/api/users/create", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -206,7 +201,6 @@ export default function AdopterFormWizard({
       return false;
     }
 
-    // 3. Connexion automatique (pose les cookies via la route de login existante).
     await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -219,8 +213,6 @@ export default function AdopterFormWizard({
     return true;
   }
 
-  // En création : finalise puis redirige selon le choix de l'utilisateur.
-  // En édition : enregistre la mise à jour du profil.
   async function finishRegistration(target: string) {
     const form = formRef.current;
     if (form && !form.reportValidity()) return;
@@ -232,18 +224,18 @@ export default function AdopterFormWizard({
 
     try {
       if (isCreateMode) {
-        // Hard-navigation pour que la Navbar (montée) relise les cookies posés
-        // par l'auto-login après inscription.
+
         if (await registerAdopter()) window.location.assign(target);
         return;
       }
 
-      const result = await updateAdopter(
-        documentId ?? "",
-        buildAdopterFormData(values),
-      );
-      if (result.error) {
-        setError(result.error);
+      const res = await fetch(`/api/adopters/${documentId ?? ""}`, {
+        method: "PUT",
+        body: buildAdopterFormData(values),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        setError(data?.error ?? "Erreur lors de la mise à jour.");
         return;
       }
       setSuccess("Vos informations ont bien été enregistrées.");
@@ -254,9 +246,6 @@ export default function AdopterFormWizard({
     }
   }
 
-  // Aucune sauvegarde via submit implicite : l'enregistrement passe uniquement
-  // par un clic explicite sur le bouton (évite les soumissions accidentelles,
-  // notamment le changement de type du bouton réutilisé au changement d'étape).
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
   }

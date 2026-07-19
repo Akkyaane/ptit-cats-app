@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { getArticlesByVolunteer } from "@/app/blog/action";
+import { serverApiData } from "@/helpers/api";
+import IArticle from "@/interfaces/IArticle";
 import ArticlesManager from "@/components/account/ArticlesManager";
 import AccountSubLayout from "@/components/account/AccountSubLayout";
 import Button from "@/components/ui/Button";
@@ -13,7 +14,10 @@ export default async function AccountArticlesPage() {
   const volunteerId = cookieStore.get("volunteer_id")?.value;
   if (!volunteerId || !role || !ALLOWED.includes(role)) redirect("/account");
 
-  const articles = await getArticlesByVolunteer(volunteerId);
+  const articles = await serverApiData<IArticle[]>(
+    `/api/articles?volunteer=${volunteerId}`,
+    [],
+  );
 
   return (
     <AccountSubLayout

@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request, params: any) {
   const param = await params.params;
   const documentId = param.slug;
-  
+
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoption-listings/${documentId}?populate[animals][populate]=*&populate=media`,

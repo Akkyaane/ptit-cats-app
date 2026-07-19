@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Heading from "@/components/ui/Heading";
 import Button from "@/components/ui/Button";
-import { deleteBenevole } from "@/app/volunteers/update/action";
 
 type Volunteer = {
   documentId: string;
@@ -26,9 +25,11 @@ export default function VolunteerDeleteConfirm({
     setIsDeleting(true);
     setError(null);
 
-    const result = await deleteBenevole(volunteer.documentId);
-    if (result?.error) {
-      setError(result.error);
+    const res = await fetch(`/api/volunteers/${volunteer.documentId}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) {
+      setError("Erreur lors de la suppression");
       setIsDeleting(false);
       return;
     }

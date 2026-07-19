@@ -4,8 +4,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    // Auteur = bénévole connecté (cookie volunteer_id = documentId côté Strapi).
-    // Lu côté serveur pour ne pas dépendre du client.
+
     const volunteerId = req.cookies.get("volunteer_id")?.value;
 
     const payload = {

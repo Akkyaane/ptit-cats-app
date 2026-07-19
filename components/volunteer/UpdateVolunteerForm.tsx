@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { updateBenevole } from "@/app/volunteers/update/action";
 
 type Benevole = {
   id: number;
@@ -29,12 +28,26 @@ export default function UpdateVolunteerForm({
 
   async function handleSubmit(formData: FormData) {
     setError(null);
+    const lastName = formData.get("lastName") as string;
+    const firstName = formData.get("firstName") as string;
+    const email = formData.get("email") as string;
+    const role = formData.get("role") as string;
+
+    if (!lastName || !firstName || !email || !role) {
+      setError("Tous les champs sont requis");
+      return;
+    }
+
     setLoading(true);
-    const result = await updateBenevole(benevole.documentId, formData);
+    const res = await fetch(`/api/volunteers/${benevole.documentId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ lastName, firstName, email, role }),
+    });
     setLoading(false);
 
-    if (result.error) {
-      setError(result.error);
+    if (!res.ok) {
+      setError("Erreur lors de la mise à jour");
     } else {
       setSuccess(true);
       setTimeout(

@@ -5,6 +5,7 @@ import GalleryWithLightbox from "@/components/adoptionListing/GalleryWithLightbo
 import calculateAge from "@/helpers/dateHelper";
 import IAdoptionListing from "@/interfaces/IAdoptionListing";
 import Heading from "@/components/ui/Heading";
+import { serverApiData } from "@/helpers/api";
 
 async function getOne(documentId: string): Promise<IAdoptionListing> {
   try {
@@ -26,39 +27,19 @@ async function getOne(documentId: string): Promise<IAdoptionListing> {
   }
 }
 
-// Résumé des demandes reçues pour l'annonce : le nombre par défaut, remplacé
-// par un statut dès qu'une demande est validée (En attente d'adoption) ou
-// terminée (Adopté). Visible par tous.
 async function getRequestSummary(
   listingDocumentId: string,
 ): Promise<{ total: number; badge: string | null }> {
-  try {
-    const p = new URLSearchParams();
-    p.set("filters[adoption_listing][documentId][$eq]", listingDocumentId);
-    p.set("fields[0]", "entityStatus");
-    p.set("pagination[pageSize]", "100");
-
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/adoption-requests?${p}`,
-      {
-        cache: "no-store",
-        headers: { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` },
-      },
-    );
-    if (!res.ok) return { total: 0, badge: null };
-
-    const json = await res.json();
-    const statuses: string[] = (json.data ?? []).map(
-      (r: { entityStatus: string }) => r.entityStatus,
-    );
-    if (statuses.includes("done"))
-      return { total: statuses.length, badge: "Adopté" };
-    if (statuses.includes("pending"))
-      return { total: statuses.length, badge: "En attente d'adoption" };
-    return { total: statuses.length, badge: null };
-  } catch {
-    return { total: 0, badge: null };
-  }
+  const requests = await serverApiData<{ entityStatus: string }[]>(
+    `/api/adoption-requests?listing=${listingDocumentId}`,
+    [],
+  );
+  const statuses = requests.map((r) => r.entityStatus);
+  if (statuses.includes("done"))
+    return { total: statuses.length, badge: "Adopté" };
+  if (statuses.includes("pending"))
+    return { total: statuses.length, badge: "En attente d'adoption" };
+  return { total: statuses.length, badge: null };
 }
 
 export default async function displayOne(params: { params: { slug: string } }) {
@@ -67,18 +48,16 @@ export default async function displayOne(params: { params: { slug: string } }) {
   const adoptionListing = await getOne(documentId);
   const requestSummary = await getRequestSummary(documentId);
 
-  // Détermine le comportement des boutons d'action
   const cookieStore = await cookies();
   const adopterId = cookieStore.get("adopter_id")?.value;
   const volunteerId = cookieStore.get("volunteer_id")?.value;
   const userRole = cookieStore.get("user_role")?.value;
-  // Modifier / Supprimer : réservés à l'admin et au responsable d'adoption
-  // (manager). Le référent et l'adoptant n'y ont pas accès.
+
   const isVolunteer =
     Boolean(volunteerId) && (userRole === "admin" || userRole === "manager");
   const isAdopter = Boolean(adopterId && userRole === "adopter");
   const isVolunteerOrAdmin = Boolean(userRole && userRole !== "adopter");
-  // "Je suis intéressé·e" : renvoie vers la connexion si non connecté.
+
   const interestHref = isAdopter
     ? `/adoption-requests/${documentId}`
     : `/auth/signin?redirect=/adoption-requests/${documentId}`;
@@ -169,7 +148,6 @@ export default async function displayOne(params: { params: { slug: string } }) {
               )}
             </div>
 
-            {/* Top action buttons – right side */}
             <div className="flex flex-row flex-wrap gap-2 shrink-0">
               <Button href="/adoption-listings" variant="secondary" size="sm">
                 ← Retour

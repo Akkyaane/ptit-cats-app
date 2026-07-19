@@ -5,10 +5,6 @@ import { useRouter } from "next/navigation";
 import Pagination from "@/components/ui/Pagination";
 import IAdoptionRequest from "@/interfaces/IAdoptionRequest";
 import { volunteerStatusBadge } from "@/components/account/adoptionRequestStatus";
-import {
-  setAdoptionRequestStatus,
-  transferRequest,
-} from "@/app/adoption-requests/action";
 
 const PER_PAGE = 8;
 
@@ -131,12 +127,29 @@ export default function AdoptionRequestsManager({
                               type="button"
                               disabled={busy}
                               onClick={() =>
-                                runAction(r.documentId, () =>
-                                  transferRequest(
-                                    r.documentId,
-                                    viewerDocumentId,
-                                  ),
-                                )
+                                runAction(r.documentId, async () => {
+                                  const res = await fetch(
+                                    `/api/adoption-requests/${r.documentId}/transfer`,
+                                    {
+                                      method: "PUT",
+                                      headers: {
+                                        "Content-Type": "application/json",
+                                      },
+                                      body: JSON.stringify({
+                                        managerDocumentId: viewerDocumentId,
+                                      }),
+                                    },
+                                  );
+                                  if (!res.ok) {
+                                    const data = await res
+                                      .json()
+                                      .catch(() => null);
+                                    return {
+                                      error: data?.error ?? "Échec du transfert.",
+                                    };
+                                  }
+                                  return {};
+                                })
                               }
                               className="text-xs font-bold px-3 py-1.5 rounded-lg border-2 border-blue-500 text-blue-600 hover:bg-blue-50 disabled:opacity-50 whitespace-nowrap"
                             >
@@ -148,12 +161,29 @@ export default function AdoptionRequestsManager({
                               type="button"
                               disabled={busy}
                               onClick={() =>
-                                runAction(r.documentId, () =>
-                                  setAdoptionRequestStatus(
-                                    r.documentId,
-                                    "done",
-                                  ),
-                                )
+                                runAction(r.documentId, async () => {
+                                  const res = await fetch(
+                                    `/api/adoption-requests/${r.documentId}`,
+                                    {
+                                      method: "PUT",
+                                      headers: {
+                                        "Content-Type": "application/json",
+                                      },
+                                      body: JSON.stringify({ status: "done" }),
+                                    },
+                                  );
+                                  if (!res.ok) {
+                                    const data = await res
+                                      .json()
+                                      .catch(() => null);
+                                    return {
+                                      error:
+                                        data?.error ??
+                                        "Échec de la mise à jour.",
+                                    };
+                                  }
+                                  return {};
+                                })
                               }
                               className="text-xs font-bold px-3 py-1.5 rounded-lg border-2 border-green-600 text-green-700 hover:bg-green-50 disabled:opacity-50 whitespace-nowrap"
                             >

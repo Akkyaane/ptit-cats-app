@@ -36,15 +36,11 @@ export default function AdoptionRequestCard({
 
   const catNames = listing?.animals?.map((a) => a.name).join(" & ") ?? listing?.title ?? "Chat";
 
-  // const date = new Date(request.createdAt).toLocaleDateString("fr-FR", {
-  //   day: "numeric",
-  //   month: "long",
-  //   year: "numeric",
-  // });
+
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col sm:flex-row gap-0">
-      {/* Photo */}
+
       <div className="sm:w-40 h-40 sm:h-auto flex-shrink-0 bg-tertiary/20 relative overflow-hidden">
         {imageUrl ? (
           <Image
@@ -61,7 +57,7 @@ export default function AdoptionRequestCard({
         )}
       </div>
 
-      {/* Infos */}
+
       <div className="flex flex-col justify-between gap-3 px-5 py-4 flex-1">
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <div>
@@ -74,7 +70,7 @@ export default function AdoptionRequestCard({
             {status.label}
           </span>
         </div>
-        {/* <p className="text-xs text-quaternary/50">Demande soumise le {date}</p> */}
+
       </div>
     </div>
   );

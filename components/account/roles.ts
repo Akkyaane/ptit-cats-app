@@ -1,4 +1,4 @@
-// Libellés et pastilles de couleur partagés pour les rôles (adoptant + bénévoles).
+
 export const ROLE_LABELS: Record<string, string> = {
   adopter: "Adoptant",
   admin: "Administrateur",

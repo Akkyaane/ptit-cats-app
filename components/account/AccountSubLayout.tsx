@@ -15,7 +15,7 @@ export default function AccountSubLayout({
       <main className="container">
         <Breadcrumb />
         <div className="w-full max-w-6xl mx-auto flex flex-col gap-8">
-          {/* Toolbar : titre à gauche, actions (retour + ajout) à droite */}
+
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <h1 className="text-2xl md:text-3xl font-bold text-quaternary">
               {title}

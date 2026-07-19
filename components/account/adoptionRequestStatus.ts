@@ -4,9 +4,6 @@ import IAdoptionRequest, {
 
 export type StatusBadge = { label: string; className: string };
 
-// Palette : primary (#dc0072), tertiary (#f1a5b1), quaternary (#240046),
-// secondary (#fffffd). Les états en cours sont en tons clairs, les états
-// terminaux (Refusée/Terminée) en aplats pleins pour ressortir.
 const BADGE = {
   toProcess: "bg-tertiary/30 text-quaternary",
   transferred: "bg-quaternary/10 text-quaternary",
@@ -16,8 +13,6 @@ const BADGE = {
   fallback: "bg-quaternary/10 text-quaternary",
 } as const;
 
-// Vue bénévole (responsable / référent). Le responsable qui a transféré la
-// demande la voit « Transférée » ; le référent assigné la voit « À traiter ».
 export function volunteerStatusBadge(
   request: IAdoptionRequest,
   viewerDocumentId?: string,
@@ -45,7 +40,6 @@ export function volunteerStatusBadge(
   }
 }
 
-// Vue adoptant. Une demande à traiter apparaît « En attente ».
 export function adopterStatusBadge(
   status: AdoptionRequestStatus,
 ): StatusBadge {

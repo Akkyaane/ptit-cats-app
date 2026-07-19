@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
-import { getBenevoleById } from "@/app/volunteers/update/action";
+import { serverApiData } from "@/helpers/api";
+import IVolunteer from "@/interfaces/IVolunteer";
 import Breadcrumb from "@/components/Breadcrumb";
 import Heading from "@/components/ui/Heading";
 import Button from "@/components/ui/Button";
@@ -23,7 +24,10 @@ export default async function VolunteerProfilePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const volunteer = await getBenevoleById(slug);
+  const volunteer = await serverApiData<IVolunteer | null>(
+    `/api/volunteers/${slug}`,
+    null,
+  );
 
   if (!volunteer) notFound();
 
@@ -40,7 +44,7 @@ export default async function VolunteerProfilePage({
       <main className="container">
         <Breadcrumb />
         <div className="w-full max-w-4xl mx-auto flex flex-col gap-6">
-          {/* Toolbar */}
+
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <h1 className="text-2xl md:text-3xl font-bold text-quaternary">
               Profil du bénévole
@@ -61,7 +65,6 @@ export default async function VolunteerProfilePage({
             </div>
           </div>
 
-          {/* En-tête profil */}
           <div className="bg-white rounded-2xl shadow-md border border-gray-100 px-8 py-6 flex items-center gap-6">
             <div className="size-16 rounded-full bg-tertiary flex items-center justify-center text-white font-bold text-2xl flex-shrink-0">
               {volunteer.firstName.charAt(0).toUpperCase()}
@@ -79,7 +82,6 @@ export default async function VolunteerProfilePage({
             </div>
           </div>
 
-          {/* Informations (lecture seule) */}
           <div className="bg-white rounded-2xl shadow-md border border-gray-100 px-8 py-6 flex flex-col gap-4">
             <Heading
               type="h3"
@@ -118,7 +120,6 @@ export default async function VolunteerProfilePage({
             </div>
           </div>
 
-          {/* Suppression du compte (admin, hors compte personnel) */}
           {isAdmin && !isOwnAccount && (
             <div className="bg-white rounded-2xl shadow-md border border-gray-100 px-8 py-6 flex flex-col gap-3">
               <Heading

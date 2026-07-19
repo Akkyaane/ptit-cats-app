@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import Pagination from "@/components/ui/Pagination";
 import IAbsence from "@/interfaces/IAbsence";
-import { deleteAbsence } from "@/app/absences/action";
 
 const PER_PAGE = 8;
 
@@ -29,11 +28,15 @@ export default function AbsencesManager({
   async function handleDelete(documentId: string) {
     setDeletingId(documentId);
     setError(null);
-    const result = await deleteAbsence(documentId);
+    const res = await fetch("/api/absences/delete", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ documentId }),
+    });
     setDeletingId(null);
 
-    if (result?.error) {
-      setError(result.error);
+    if (!res.ok) {
+      setError("Erreur lors de la suppression");
       return;
     }
 

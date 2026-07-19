@@ -4,9 +4,9 @@ type PaginationProps = {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
-  /** Nombre total d'éléments de la liste (toutes pages confondues). */
+
   totalItems?: number;
-  /** Libellé au singulier (par défaut « résultat »). */
+
   itemLabel?: string;
 };
 
@@ -17,7 +17,7 @@ export default function Pagination({
   totalItems,
   itemLabel = "résultat",
 }: PaginationProps) {
-  // Rien à afficher : ni compteur, ni pagination multi-pages.
+
   if (totalItems === undefined && totalPages <= 1) return null;
 
   const count =

@@ -1,26 +1,21 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { strapiFetch } from "@/helpers/strapi";
+import { parseContent } from "@/helpers/articleHelper";
 
-function parseContent(raw: unknown): unknown {
-  if (!raw) return [];
-  if (typeof raw === "string") {
-    try {
-      return JSON.parse(raw);
-    } catch {
-      return [];
-    }
-  }
-  return raw;
-}
-
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/articles?sort=publicationDate:desc`,
-      {
-        headers: { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` },
-        cache: "no-store",
-      },
-    );
+    const volunteer = req.nextUrl.searchParams.get("volunteer");
+
+    const params = new URLSearchParams();
+    params.set("sort", "publicationDate:desc");
+    if (volunteer) {
+      params.set("filters[volunteer][documentId][$eq]", volunteer);
+      params.set("populate", "volunteer");
+    }
+
+    const res = await strapiFetch(`/api/articles?${params}`, {
+      cache: "no-store",
+    });
 
     if (!res.ok) {
       return NextResponse.json(

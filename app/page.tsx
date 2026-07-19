@@ -66,8 +66,7 @@ export default async function Index() {
   const adoptionListings = await getLastAdoptionListings();
   const lastArticles = await getLastArticles();
 
-  // Le matching est réservé aux (futurs) adoptants : le bouton est désactivé
-  // pour les bénévoles connectés.
+
   const cookieStore = await cookies();
   const isVolunteer = Boolean(cookieStore.get("volunteer_id")?.value);
 

@@ -1,10 +1,7 @@
 import { PartialBlock } from "@blocknote/core";
 import IVolunteer from "@/interfaces/IVolunteer";
 
-/**
- * Formate l'auteur d'un article : prénom complet + initiale du nom suivie
- * d'un point (ex. "Lucas C."). Renvoie null si l'auteur n'est pas renseigné.
- */
+
 export function formatAuthor(
   volunteer: IVolunteer | null | undefined,
 ): string | null {
