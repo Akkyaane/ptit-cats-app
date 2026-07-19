@@ -18,7 +18,6 @@ Association de recueil de chats errants en vue d'adoption. Le projet est compos�
 - **Accès aux données unifié** : `page.tsx` / composant → route `/app/api/*` → Strapi. Aucun `fetch` Strapi hors des route handlers (seule exception tolérée : construire une **URL d'image** `${STRAPI}${media.url}`).
 - **Plus aucun `action.ts`** (server actions supprimés). Les lectures serveur passent par `serverApiData()`, les mutations client par `fetch("/api/…")` + `router.push`/`router.refresh`.
 - **Point d'appel Strapi unique** : `helpers/strapiHelper.ts` → `strapiFetch(path, init)`.
-- **Zéro commentaire** dans le code applicatif (commentaires conservés uniquement dans les fichiers de config).
 - **Convention helpers** : tout fichier de `helpers/` porte le suffixe `Helper`.
 - **Middleware Next 16** = `proxy.ts` (⚠️ créer un `middleware.ts` casserait tout). Il garde la section `/blog`.
 - **Toute la logique métier vit dans le front** : le back Strapi est du **factory par défaut** (aucun controller/route/service custom).
@@ -370,5 +369,3 @@ createCoreService('api::<entity>.<entity>')      // service
 7. **Matchmaker** — `/animal-matchmaker` → `MatchmakerWizard` charge les annonces « adoption pending » (populate profond) + les traits, score localement (`scoringHelper`), affiche `MatchResult`.
 
 ---
-
-*Documentation générée à partir des schémas Strapi et de l'analyse statique des imports/endpoints de `ptit-cats-app`. Convention d'accès aux données : voir §1.*
