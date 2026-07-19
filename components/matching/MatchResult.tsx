@@ -3,7 +3,7 @@
 import ALCard from "@/components/adoptionListing/ALCard";
 import Button from "@/components/ui/Button";
 import Heading from "@/components/ui/Heading";
-import { ScoredMatch } from "./scoring";
+import { ScoredMatch } from "@/helpers/scoringHelper";
 
 const RANK_LABELS = ["Votre meilleur match", "2ᵉ choix", "3ᵉ choix"];
 
@@ -59,7 +59,7 @@ export default function MatchResult({
     <div className="flex flex-col gap-8">
       <div className="flex flex-col items-center gap-3 text-center">
         <Heading
-          type="h3"
+          type="h2"
           headingVariant="quaternary"
           underlineVariant="tertiary"
         >

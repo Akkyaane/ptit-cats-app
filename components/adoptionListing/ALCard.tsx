@@ -24,9 +24,6 @@ export default function ALCard({
   if (!media?.[0]) {
     return (
       <div className="flex flex-col rounded-xl overflow-hidden shadow-sm border border-gray-100 h-fit">
-        <div className="w-full aspect-[4/3] bg-tertiary/20 flex items-center justify-center text-5xl">
-          🐱
-        </div>
         <div className="flex flex-col gap-2 p-4 md:p-5">
           <h3 className="text-lg md:text-xl font-bold">{title}</h3>
           <p className="text-sm md:text-base">{shortDescription}</p>

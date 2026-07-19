@@ -1,17 +1,16 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumb";
-import Heading from "@/components/ui/Heading";
 import MatchmakerWizard from "@/components/matching/MatchmakerWizard";
 import {
   deriveHouseholdFromAdopter,
   HouseholdValues,
-} from "@/components/matching/matchmakerConfig";
-import { serverApiData } from "@/helpers/api";
+} from "@/helpers/matchmakerHelper";
+import { serverApiData } from "@/helpers/apiHelper";
 import IAdopter from "@/interfaces/IAdopter";
 import IAdoptionListing from "@/interfaces/IAdoptionListing";
 
-export default async function PetMatchmakerPage() {
+export default async function AnimalMatchmakerPage() {
   const cookieStore = await cookies();
   const userRole = cookieStore.get("user_role")?.value;
   const adopterId = cookieStore.get("adopter_id")?.value;
@@ -45,26 +44,6 @@ export default async function PetMatchmakerPage() {
       <main className="container">
         <Breadcrumb />
         <section className="flex flex-col gap-8 w-full max-w-3xl mx-auto">
-          <div className="flex flex-col gap-3">
-            <Heading
-              type="h2"
-              headingVariant="quaternary"
-              underlineVariant="tertiary"
-            >
-              Trouver mon compagnon idéal
-            </Heading>
-            <p className="text-quaternary/70">
-              Veuillez remplir le formulaire ci-dessous en nous indiquant votre
-              situation et vos préférences. Nous comparerons vos réponses aux
-              profils de nos compagnons afin de vous proposer les chats qui vous
-              correspondent le mieux.
-            </p>
-            <p className="text-quaternary/70">
-              Ces informations ne sont pas conservées : elles servent uniquement
-              à calculer votre correspondance pendant ce test.
-            </p>
-          </div>
-
           <div className="w-full">
             <MatchmakerWizard
               isAuthenticated={isAuthenticated && Boolean(prefill)}

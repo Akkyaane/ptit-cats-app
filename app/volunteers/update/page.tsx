@@ -1,6 +1,6 @@
 ﻿import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { serverApiData } from "@/helpers/api";
+import { serverApiData } from "@/helpers/apiHelper";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 

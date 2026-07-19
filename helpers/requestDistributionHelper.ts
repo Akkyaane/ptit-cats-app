@@ -1,4 +1,4 @@
-import { strapiFetch } from "@/helpers/strapi";
+import { strapiFetch } from "@/helpers/strapiHelper";
 
 type VolunteerLoad = {
   documentId: string;

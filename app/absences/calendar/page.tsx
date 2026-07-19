@@ -3,7 +3,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 import Button from "@/components/ui/Button";
 import IAbsence from "@/interfaces/IAbsence";
 import IVolunteer from "@/interfaces/IVolunteer";
-import { serverApiData } from "@/helpers/api";
+import { serverApiData } from "@/helpers/apiHelper";
 
 export default async function CalendarPage() {
   const [absences, benevoles] = await Promise.all([

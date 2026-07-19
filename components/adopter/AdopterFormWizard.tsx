@@ -20,7 +20,7 @@ import {
   employmentArrangementOptions,
   housingTypeOptions,
   livingEnvironmentOptions,
-} from "@/helpers/adopterPayload";
+} from "@/helpers/adopterPayloadHelper";
 
 type StepDefinition = {
   title: string;

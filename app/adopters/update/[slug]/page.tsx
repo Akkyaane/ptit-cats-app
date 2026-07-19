@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
-import { serverApiData } from "@/helpers/api";
+import { serverApiData } from "@/helpers/apiHelper";
 import Breadcrumb from "@/components/Breadcrumb";
 import Button from "@/components/ui/Button";
-import AdopterProfileForm from "@/components/adopter/AdopterProfileForm";
+import AdopterEditForm from "@/components/adopter/AdopterEditForm";
 import IAdopter from "@/interfaces/IAdopter";
 
 export default async function AdopterUpdatePage({
@@ -52,7 +52,7 @@ export default async function AdopterUpdatePage({
           </div>
 
           <div className="bg-white rounded-2xl shadow-md border border-gray-100 px-8 py-6">
-            <AdopterProfileForm adopter={adopter} />
+            <AdopterEditForm adopter={adopter} />
           </div>
         </div>
       </main>

@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { serverApiData } from "@/helpers/api";
+import { serverApiData } from "@/helpers/apiHelper";
 import IVolunteer from "@/interfaces/IVolunteer";
 import VolunteersManager from "@/components/account/VolunteersManager";
 import AccountSubLayout from "@/components/account/AccountSubLayout";

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { strapiFetch } from "@/helpers/strapi";
+import { strapiFetch } from "@/helpers/strapiHelper";
 
 export async function GET() {
   try {

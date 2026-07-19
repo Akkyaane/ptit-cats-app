@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import Image from "next/image";
-import { serverApiData } from "@/helpers/api";
+import { serverApiData } from "@/helpers/apiHelper";
 import SubmitAdoptionRequestButton from "@/components/adopter/SubmitAdoptionRequestButton";
 import IAdopter from "@/interfaces/IAdopter";
 import IAdoptionListing from "@/interfaces/IAdoptionListing";

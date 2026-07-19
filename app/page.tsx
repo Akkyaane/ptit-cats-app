@@ -92,7 +92,7 @@ export default async function Index() {
                   Trouver mon compagnon idéal
                 </Button>
               ) : (
-                <Button href="/pet-matchmaker" variant="primary" size="lg">
+                <Button href="/animal-matchmaker" variant="primary" size="lg">
                   Trouver mon compagnon idéal
                 </Button>
               )}

@@ -3,7 +3,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 import Heading from "@/components/ui/Heading";
 import Button from "@/components/ui/Button";
 import IAbsence from "@/interfaces/IAbsence";
-import { serverApiData } from "@/helpers/api";
+import { serverApiData } from "@/helpers/apiHelper";
 
 export default async function UpdateAbsencePage({
   params,

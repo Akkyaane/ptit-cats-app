@@ -28,7 +28,7 @@ const SEGMENT_LABELS: Record<string, string> = {
   account: "Mon compte",
   requests: "Demandes",
   "legal-notice": "Mentions légales",
-  "pet-matchmaker": "Trouver mon compagnon idéal",
+  "animal-matchmaker": "Trouver mon compagnon idéal",
 };
 
 

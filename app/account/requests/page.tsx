@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { serverApiData } from "@/helpers/api";
+import { serverApiData } from "@/helpers/apiHelper";
 import IAdoptionRequest from "@/interfaces/IAdoptionRequest";
 import MyRequestsManager from "@/components/account/MyRequestsManager";
 import AdoptionRequestsManager from "@/components/account/AdoptionRequestsManager";

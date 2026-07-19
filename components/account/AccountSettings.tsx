@@ -2,7 +2,7 @@
 
 import { AccountUser } from "./types";
 import Heading from "@/components/ui/Heading";
-import AdopterProfileForm from "@/components/adopter/AdopterProfileForm";
+import AdopterEditForm from "@/components/adopter/AdopterEditForm";
 import UpdateVolunteerForm from "@/components/volunteer/UpdateVolunteerForm";
 import VolunteerPasswordChangeForm from "@/components/volunteer/VolunteerPasswordChangeForm";
 import PasswordChangeForm from "@/components/account/PasswordChangeForm";
@@ -16,7 +16,7 @@ export default function AccountSettings({ user }: { user: AccountUser }) {
           Mes informations
         </Heading>
         {user.kind === "adopter" ? (
-          <AdopterProfileForm adopter={user.adopter} />
+          <AdopterEditForm adopter={user.adopter} />
         ) : (
           <UpdateVolunteerForm
             benevole={user.volunteer}

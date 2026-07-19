@@ -5,7 +5,7 @@ import GalleryWithLightbox from "@/components/adoptionListing/GalleryWithLightbo
 import calculateAge from "@/helpers/dateHelper";
 import IAdoptionListing from "@/interfaces/IAdoptionListing";
 import Heading from "@/components/ui/Heading";
-import { serverApiData } from "@/helpers/api";
+import { serverApiData } from "@/helpers/apiHelper";
 
 async function getOne(documentId: string): Promise<IAdoptionListing> {
   try {

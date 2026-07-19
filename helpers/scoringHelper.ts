@@ -8,7 +8,7 @@ import {
   PLAYFUL_TRAITS,
   MAX_IDEAL_TRAITS,
   ageGroupOf,
-} from "./matchmakerConfig";
+} from "@/helpers/matchmakerHelper";
 
 export const WEIGHTS = {
   age: 3,

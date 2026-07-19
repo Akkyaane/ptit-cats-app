@@ -1,10 +1,10 @@
-﻿"use client";
+"use client";
 
 import IAdopter from "@/interfaces/IAdopter";
 import AdopterFormWizard from "@/components/adopter/AdopterFormWizard";
-import { mapAdopterToFormValues } from "@/helpers/adopterPayload";
+import { mapAdopterToFormValues } from "@/helpers/adopterPayloadHelper";
 
-export default function AdopterProfileForm({
+export default function AdopterEditForm({
   adopter,
 }: {
   adopter: IAdopter;

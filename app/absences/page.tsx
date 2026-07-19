@@ -1,4 +1,4 @@
-import { serverApiData } from "@/helpers/api";
+import { serverApiData } from "@/helpers/apiHelper";
 import IAbsence from "@/interfaces/IAbsence";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";

@@ -141,7 +141,7 @@ export default function UpdateVolunteerForm({
       <button
         type="submit"
         disabled={loading}
-        className="w-full px-6 py-3 font-bold rounded-xl bg-primary border-2 border-primary text-white hover:bg-primary/10 hover:text-primary transition-colors duration-200 disabled:opacity-60"
+        className="w-fit px-6 py-3 font-bold rounded-xl bg-primary border-2 border-primary text-white hover:bg-primary/10 hover:text-primary transition-colors duration-200 disabled:opacity-60"
       >
         {loading ? "Mise à jour..." : "Mettre à jour"}
       </button>

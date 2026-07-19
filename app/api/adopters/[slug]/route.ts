@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { strapiFetch } from "@/helpers/strapi";
-import { buildAdopterPayload } from "@/helpers/adopterPayload";
+import { strapiFetch } from "@/helpers/strapiHelper";
+import { buildAdopterPayload } from "@/helpers/adopterPayloadHelper";
 
 export async function GET(
   _req: NextRequest,

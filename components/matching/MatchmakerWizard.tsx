@@ -16,8 +16,8 @@ import {
   calmOrPlayfulOptions,
   householdSummary,
   MAX_IDEAL_TRAITS,
-} from "./matchmakerConfig";
-import { scoreListings, ScoredMatch } from "./scoring";
+} from "@/helpers/matchmakerHelper";
+import { scoreListings, ScoredMatch } from "@/helpers/scoringHelper";
 import MatchResult from "./MatchResult";
 
 type Trait = { documentId: string; label: string };
@@ -152,6 +152,26 @@ export default function MatchmakerWizard({
   }
 
   return (
+    <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-3">
+        <Heading
+          type="h2"
+          headingVariant="quaternary"
+          underlineVariant="tertiary"
+        >
+          Trouver mon compagnon idéal
+        </Heading>
+        <p className="text-quaternary/70">
+          Veuillez remplir le formulaire ci-dessous en nous indiquant votre
+          situation et vos préférences. Nous comparerons vos réponses aux
+          profils de nos compagnons afin de vous proposer les chats qui vous
+          correspondent le mieux.
+        </p>
+        <p className="text-quaternary/70">
+          Ces informations ne sont pas conservées : elles servent uniquement à
+          calculer votre correspondance pendant ce test.
+        </p>
+      </div>
     <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-6">
 
       <div className="flex flex-col gap-3">
@@ -443,5 +463,6 @@ export default function MatchmakerWizard({
         )}
       </div>
     </form>
+    </div>
   );
 }

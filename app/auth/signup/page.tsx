@@ -1,4 +1,4 @@
-import RegisterAdopterForm from "@/components/adopter/RegisterAdopterForm";
+import AdopterCreateForm from "@/components/adopter/AdopterCreateForm";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import Heading from "@/components/ui/Heading";
@@ -26,7 +26,7 @@ export default function RegisterAdopterPage() {
             </div>
 
             <div className="p-6 md:p-8">
-              <RegisterAdopterForm />
+              <AdopterCreateForm />
             </div>
 
             <p className="text-center text-sm text-quaternary/70">

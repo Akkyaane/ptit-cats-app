@@ -2,6 +2,6 @@
 
 import AdopterFormWizard from "./AdopterFormWizard";
 
-export default function RegisterAdopterForm() {
+export default function AdopterCreateForm() {
   return <AdopterFormWizard mode="create" />;
 }

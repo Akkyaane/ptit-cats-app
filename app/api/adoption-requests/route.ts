@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { strapiFetch } from "@/helpers/strapi";
+import { strapiFetch } from "@/helpers/strapiHelper";
 import {
   getVolunteersWithLoad,
   pickAssignee,
-} from "@/helpers/requestDistribution";
+} from "@/helpers/requestDistributionHelper";
 import IAdoptionRequest from "@/interfaces/IAdoptionRequest";
 
 async function fetchList(query: string): Promise<IAdoptionRequest[]> {

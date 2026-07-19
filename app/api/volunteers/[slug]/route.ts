@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { strapiFetch } from "@/helpers/strapi";
+import { strapiFetch } from "@/helpers/strapiHelper";
 
 export async function GET(
   _req: NextRequest,

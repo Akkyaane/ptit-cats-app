@@ -71,7 +71,7 @@ export default function AccountView({
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`flex-1 lg:flex-none w-full text-center lg:text-left px-4 py-3.5 rounded-xl font-bold text-sm transition-colors duration-200 ${
+                className={`flex-1 lg:flex-none w-full text-center px-4 py-3.5 rounded-xl font-bold text-sm transition-colors duration-200 ${
                   activeTab === tab
                     ? "bg-primary text-white shadow-sm"
                     : "text-quaternary/70 hover:text-quaternary hover:bg-gray-50"

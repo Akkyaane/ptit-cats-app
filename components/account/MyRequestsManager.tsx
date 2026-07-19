@@ -28,13 +28,11 @@ export default function MyRequestsManager({
     return (
       <section className="flex flex-col gap-4">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 px-8 py-12 text-center flex flex-col gap-3 items-center">
-          <span className="text-4xl">🐱</span>
           <p className="font-bold text-quaternary/70">
-            Aucune demande d&apos;adoption pour l&apos;instant.
+            Aucune demande d'adoption pour l'instant.
           </p>
           <p className="text-sm text-quaternary/50">
-            Parcourez les chats disponibles et cliquez sur « Je suis
-            intéressé·e ».
+            Veuillez parcourir les annonces disponibles sur le site et soumettre une demande si vous souhaitez adopter.
           </p>
           <a
             href="/adoption-listings"

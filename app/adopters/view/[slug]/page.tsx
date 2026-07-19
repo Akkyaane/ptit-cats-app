@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
-import { serverApiData } from "@/helpers/api";
+import { serverApiData } from "@/helpers/apiHelper";
 import Breadcrumb from "@/components/Breadcrumb";
 import Heading from "@/components/ui/Heading";
 import Button from "@/components/ui/Button";
@@ -13,7 +13,7 @@ import {
   employmentArrangementOptions,
   housingTypeOptions,
   livingEnvironmentOptions,
-} from "@/helpers/adopterPayload";
+} from "@/helpers/adopterPayloadHelper";
 
 type Option = { value: string; label: string };
 

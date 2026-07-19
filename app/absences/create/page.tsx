@@ -3,7 +3,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 import Heading from "@/components/ui/Heading";
 import Button from "@/components/ui/Button";
 import IVolunteer from "@/interfaces/IVolunteer";
-import { serverApiData } from "@/helpers/api";
+import { serverApiData } from "@/helpers/apiHelper";
 
 export default async function AddAbsencePage() {
   const benevoles = await serverApiData<IVolunteer[]>("/api/volunteers", []);
