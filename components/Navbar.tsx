@@ -9,9 +9,8 @@ import Link from "next/link";
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [adoptantId, setAdoptantId] = useState<string | null>(null);
+  const [adopterId, setAdopterId] = useState<string | null>(null);
   const [volunteerId, setVolunteerId] = useState<string | null>(null);
-  const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {
     const getCookie = (name: string): string | null => {
@@ -20,19 +19,19 @@ export default function Navbar() {
       );
       return match ? decodeURIComponent(match[1]) : null;
     };
-    setAdoptantId(getCookie("adoptant_id"));
+    setAdopterId(getCookie("adopter_id"));
     setVolunteerId(getCookie("volunteer_id"));
-    setUserRole(getCookie("user_role"));
   }, []);
 
-  const userType = volunteerId ? "volunteer" : adoptantId ? "adoptant" : null;
-  const userHref = volunteerId
-    ? `/volunteer/view/${volunteerId}`
-    : adoptantId
-      ? "/adoptant/profile"
-      : null;
+  const userType = volunteerId ? "volunteer" : adopterId ? "adopter" : null;
   const pathname = usePathname();
-  type NavLink = { href: string; label: string; variant?: "primary" | "secondary" };
+
+  type NavLink = {
+    href: string;
+    label: string;
+    variant?: "primary" | "secondary";
+    onClick?: () => void;
+  };
   const links: NavLink[] = [
     { href: "/", label: "Accueil" },
     { href: "/adoption-listings", label: "À l'adoption" },
@@ -41,11 +40,17 @@ export default function Navbar() {
     { href: "/blog", label: "Blog" },
     { href: "/contact", label: "Contact" },
     { href: "/donation", label: "Faire un don", variant: "secondary" },
-    ...(!userType ? [{ href: "/login", label: "Se connecter / S'inscrire", variant: "primary" as const }] : []),
-    ...(userRole === "Admin" ? [{ href: "/admin", label: "Admin", variant: "primary" as const }] : []),
-    ...(userType && userHref
-      ? [{ href: userHref, label: "Mon profil", variant: "primary" as const }]
-
+    ...(!userType
+      ? [
+          {
+            href: "/auth/signin",
+            label: "Se connecter / S'inscrire",
+            variant: "primary" as const,
+          },
+        ]
+      : []),
+    ...(userType
+      ? [{ href: "/account", label: "Mon compte", variant: "primary" as const }]
       : []),
   ];
 
@@ -100,11 +105,19 @@ export default function Navbar() {
               Sans Croquettes Fixes
             </span>
           </Link>
-          <ul className="hidden xl:flex flex-row gap-3">
+          <ul className="hidden xl:flex flex-row items-center gap-3">
             {links.map((link) =>
               pathname === link.href ? null : (
                 <li key={link.href}>
-                  {link.variant === "secondary" ? (
+                  {link.onClick ? (
+                    <Button
+                      variant={link.variant ?? "primary"}
+                      size="sm"
+                      onClick={link.onClick}
+                    >
+                      {link.label}
+                    </Button>
+                  ) : link.variant === "secondary" ? (
                     <Button href={link.href} variant="secondary" size="sm">
                       {link.label}
                     </Button>
@@ -191,7 +204,18 @@ export default function Navbar() {
             {links.map((link) =>
               pathname === link.href ? null : (
                 <li className="flex flex-col gap-2" key={link.href}>
-                  {link.variant === "secondary" ? (
+                  {link.onClick ? (
+                    <Button
+                      variant={link.variant ?? "primary"}
+                      size="sm"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        link.onClick!();
+                      }}
+                    >
+                      {link.label}
+                    </Button>
+                  ) : link.variant === "secondary" ? (
                     <Button
                       href={link.href}
                       variant="secondary"

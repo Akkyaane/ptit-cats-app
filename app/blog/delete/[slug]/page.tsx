@@ -82,7 +82,7 @@ export default function DeleteArticlePage({
     <div className="layout-header-spacing">
       <div className="container">
         <div className="max-w-lg mx-auto flex flex-col gap-6 p-6">
-          {/* Icône d'avertissement */}
+
           <div className="flex justify-center">
             <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center">
               <svg
@@ -102,7 +102,7 @@ export default function DeleteArticlePage({
             </div>
           </div>
 
-          {/* Texte de confirmation */}
+
           <div className="flex flex-col gap-4 text-center">
             <div className="flex flex-col gap-1">
               <Heading type="h2" headingVariant="quaternary">
@@ -122,14 +122,14 @@ export default function DeleteArticlePage({
             </p>
           </div>
 
-          {/* Message d'erreur */}
+
           {error && (
             <div className="px-4 py-3 rounded-xl bg-primary/10 border-2 border-primary text-primary font-bold text-sm">
               {error}
             </div>
           )}
 
-          {/* Boutons */}
+
           <div className="flex flex-col md:flex-row justify-between gap-2">
             <Button
               type="button"

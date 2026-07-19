@@ -2,23 +2,24 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { updateBenevole } from "@/app/volunteer/update/action";
 
 type Benevole = {
   id: number;
   documentId: string;
-  name: string;
+  lastName: string;
   firstName: string;
   email: string;
-  role: "Admin" | "Référent" | "Responsable-adoption";
+  role: "admin" | "manager" | "referent";
 };
 
 export default function UpdateVolunteerForm({
   benevole,
   canChangeRole = true,
+  redirectTo,
 }: {
   benevole: Benevole;
   canChangeRole?: boolean;
+  redirectTo?: string;
 }) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -27,16 +28,30 @@ export default function UpdateVolunteerForm({
 
   async function handleSubmit(formData: FormData) {
     setError(null);
+    const lastName = formData.get("lastName") as string;
+    const firstName = formData.get("firstName") as string;
+    const email = formData.get("email") as string;
+    const role = formData.get("role") as string;
+
+    if (!lastName || !firstName || !email || !role) {
+      setError("Tous les champs sont requis");
+      return;
+    }
+
     setLoading(true);
-    const result = await updateBenevole(benevole.documentId, formData);
+    const res = await fetch(`/api/volunteers/${benevole.documentId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ lastName, firstName, email, role }),
+    });
     setLoading(false);
 
-    if (result.error) {
-      setError(result.error);
+    if (!res.ok) {
+      setError("Erreur lors de la mise à jour");
     } else {
       setSuccess(true);
       setTimeout(
-        () => router.push(`/volunteer/view/${benevole.documentId}`),
+        () => router.push(redirectTo ?? `/volunteers/view/${benevole.documentId}`),
         1500,
       );
     }
@@ -53,14 +68,14 @@ export default function UpdateVolunteerForm({
   return (
     <form action={handleSubmit} className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <label htmlFor="name" className="text-sm font-bold ">
+        <label htmlFor="lastName" className="text-sm font-bold ">
           Nom
         </label>
         <input
-          id="name"
-          name="name"
+          id="lastName"
+          name="lastName"
           type="text"
-          defaultValue={benevole.name}
+          defaultValue={benevole.lastName}
           required
           className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200"
         />
@@ -106,10 +121,10 @@ export default function UpdateVolunteerForm({
             required
             className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200 bg-white"
           >
-            <option value="">-- Choisir un rôle --</option>
-            <option value="Admin">Admin</option>
-            <option value="Référent">Référent</option>
-            <option value="Responsable-adoption">Responsable-adoption</option>
+            <option value="">-- Sélectionner un rôle --</option>
+            <option value="admin">Administrateur</option>
+            <option value="manager">Responsable</option>
+            <option value="referent">Référent</option>
           </select>
         </div>
       )}

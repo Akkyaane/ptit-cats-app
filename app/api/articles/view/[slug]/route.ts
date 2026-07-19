@@ -20,7 +20,7 @@ export async function GET(
 
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/articles/${slug}`,
+      `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/articles/${slug}?populate=volunteer`,
       {
         headers: { Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}` },
         cache: "no-store",

@@ -34,7 +34,7 @@ function animalToEntry(
     dogAffinity: animal.dogAffinity ?? "unknown",
     catAffinity: animal.catAffinity ?? "unknown",
     childAffinity: animal.childAffinity ?? "unknown",
-    livingEnvironmentType: animal.livingEnvironmentType ?? "apartment",
+    housingType: animal.housingType ?? "apartment",
     entityStatus: animal.entityStatus ?? "in shelter",
     animal_requirements: animal.animal_requirements ?? [],
     animal_personality_traits: animal.animal_personality_traits ?? [],
@@ -93,10 +93,12 @@ async function createAnimal(draft: AnimalDraft): Promise<string> {
     dogAffinity: draft.dogAffinity,
     catAffinity: draft.catAffinity,
     childAffinity: draft.childAffinity,
-    livingEnvironmentType: draft.livingEnvironmentType,
+    housingType: draft.housingType,
     entityStatus: draft.entityStatus,
-    animal_requirements: draft.animal_requirements.map((r) => r.documentId),
-    animal_personality_traits: draft.animal_personality_traits.map(
+    animal_requirements: (draft.animal_requirements ?? []).map(
+      (r) => r.documentId,
+    ),
+    animal_personality_traits: (draft.animal_personality_traits ?? []).map(
       (t) => t.documentId,
     ),
   };
@@ -131,10 +133,12 @@ async function updateAnimal(
     dogAffinity: draft.dogAffinity,
     catAffinity: draft.catAffinity,
     childAffinity: draft.childAffinity,
-    livingEnvironmentType: draft.livingEnvironmentType,
+    housingType: draft.housingType,
     entityStatus: draft.entityStatus,
-    animal_requirements: draft.animal_requirements.map((r) => r.documentId),
-    animal_personality_traits: draft.animal_personality_traits.map(
+    animal_requirements: (draft.animal_requirements ?? []).map(
+      (r) => r.documentId,
+    ),
+    animal_personality_traits: (draft.animal_personality_traits ?? []).map(
       (t) => t.documentId,
     ),
   };
@@ -390,7 +394,6 @@ export default function UpdateAdoptionListing({
 
         <main>
           <ALForm
-            mode="update"
             step={step}
             setStep={setStep}
             isDuo={isDuo}

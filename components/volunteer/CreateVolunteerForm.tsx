@@ -1,8 +1,7 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createBenevole } from "@/app/volunteer/create/action";
 
 export default function CreateVolunteerForm() {
   const [error, setError] = useState<string | null>(null);
@@ -13,20 +12,63 @@ export default function CreateVolunteerForm() {
   async function handleSubmit(formData: FormData) {
     setError(null);
     setLoading(true);
-    const result = await createBenevole(formData);
-    setLoading(false);
 
-    if (result.error) {
-      setError(result.error);
-    } else {
+    const payload = {
+      lastName: formData.get("lastName") as string,
+      firstName: formData.get("firstName") as string,
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+      role: formData.get("role") as string,
+    };
+
+    try {
+      const entityRes = await fetch("/api/volunteers/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const entityData = await entityRes.json();
+
+      if (!entityRes.ok || !entityData.data?.documentId) {
+        setError(
+          typeof entityData.error === "string" && entityData.error.includes("email")
+            ? "Un bénévole existe déjà avec cet email."
+            : "Erreur lors de la création du bénévole.",
+        );
+        return;
+      }
+
+      const userRes = await fetch("/api/users/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          collection: "volunteers",
+          documentId: entityData.data.documentId,
+          lastName: payload.lastName,
+          firstName: payload.firstName,
+          email: payload.email,
+          password: payload.password,
+          volunteerRole: payload.role,
+        }),
+      });
+
+      if (!userRes.ok) {
+        setError("Bénévole créé, mais l'association du compte a échoué.");
+        return;
+      }
+
       setSuccess(true);
-      setTimeout(() => router.push("/volunteer/update"), 1500);
+      setTimeout(() => router.push("/account/volunteers"), 1500);
+    } catch {
+      setError("Erreur serveur, veuillez réessayer.");
+    } finally {
+      setLoading(false);
     }
   }
 
   if (success) {
     return (
-      <p className="text-sm font-bold text-green-600 bg-green-50 px-4 py-3 rounded-xl text-center">
+      <p className="text-sm font-bold text-primary bg-primary/10 px-4 py-3 rounded-xl text-center">
         Bénévole créé avec succès ! Redirection...
       </p>
     );
@@ -35,12 +77,12 @@ export default function CreateVolunteerForm() {
   return (
     <form action={handleSubmit} className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <label htmlFor="name" className="text-sm font-bold ">
+        <label htmlFor="lastName" className="text-sm font-bold ">
           Nom
         </label>
         <input
-          id="name"
-          name="name"
+          id="lastName"
+          name="lastName"
           type="text"
           required
           className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200"
@@ -75,13 +117,14 @@ export default function CreateVolunteerForm() {
 
       <div className="flex flex-col gap-1">
         <label htmlFor="password" className="text-sm font-bold ">
-          Mot de passe provisoire
+          Mot de passe provisoire (14 caractères min.)
         </label>
         <input
           id="password"
           name="password"
           type="password"
           autoComplete="new-password"
+          minLength={14}
           required
           className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200"
         />
@@ -97,10 +140,10 @@ export default function CreateVolunteerForm() {
           required
           className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200 bg-white"
         >
-          <option value="">-- Choisir un rôle --</option>
-          <option value="Admin">Admin</option>
-          <option value="Référent">Référent</option>
-          <option value="Responsable-adoption">Responsable-adoption</option>
+          <option value="">-- Sélectionner un rôle --</option>
+          <option value="admin">Admin</option>
+          <option value="manager">Responsable</option>
+          <option value="referent">Référent</option>
         </select>
       </div>
 

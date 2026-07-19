@@ -3,7 +3,9 @@
 import { useState } from "react";
 import ALCard from "@/components/adoptionListing/ALCard";
 import IAdoptionListing from "@/interfaces/IAdoptionListing";
-import Button from "@/components/ui/Button";
+import Pagination from "@/components/ui/Pagination";
+
+const LISTINGS_PER_PAGE = 9;
 
 type AgeFilter = "kitten" | "adult" | "senior";
 type SexFilter = "male" | "female";
@@ -39,22 +41,27 @@ export default function ALFilteredList({
   const [sexFilters, setSexFilters] = useState<SexFilter[]>([]);
   const [duoFilter, setDuoFilter] = useState(false);
   const [atypicalFilter, setAtypicalFilter] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const toggleAge = (age: AgeFilter) =>
+  const toggleAge = (age: AgeFilter) => {
+    setCurrentPage(1);
     setAgeFilters((prev) =>
       prev.includes(age) ? prev.filter((a) => a !== age) : [...prev, age],
     );
+  };
 
-  const toggleSex = (sex: SexFilter) =>
+  const toggleSex = (sex: SexFilter) => {
+    setCurrentPage(1);
     setSexFilters((prev) =>
       prev.includes(sex) ? prev.filter((s) => s !== sex) : [...prev, sex],
     );
+  };
 
   const filtered = listings.filter((listing) => {
     if (ageFilters.length > 0) {
       const hasMatchingAge = listing.animals.some(
         (animal) =>
-          animal.birthDate && ageFilters.includes(getAgeCategory(animal.birthDate)),
+          animal.birthDate && ageFilters.includes(getAgeCategory(animal.birthDate.toString())),
       );
       if (!hasMatchingAge) return false;
     }
@@ -77,12 +84,29 @@ export default function ALFilteredList({
   const hasActiveFilters =
     ageFilters.length > 0 || sexFilters.length > 0 || duoFilter || atypicalFilter;
 
+  const toggleDuo = () => {
+    setCurrentPage(1);
+    setDuoFilter((v) => !v);
+  };
+
+  const toggleAtypical = () => {
+    setCurrentPage(1);
+    setAtypicalFilter((v) => !v);
+  };
+
   const resetFilters = () => {
+    setCurrentPage(1);
     setAgeFilters([]);
     setSexFilters([]);
     setDuoFilter(false);
     setAtypicalFilter(false);
   };
+
+  const totalPages = Math.ceil(filtered.length / LISTINGS_PER_PAGE);
+  const paginated = filtered.slice(
+    (currentPage - 1) * LISTINGS_PER_PAGE,
+    currentPage * LISTINGS_PER_PAGE,
+  );
 
   function ToggleBtn({
     active,
@@ -110,87 +134,88 @@ export default function ALFilteredList({
 
   return (
     <div className="flex flex-col gap-8 w-full">
-      {/* Filter bar */}
-      <div className="flex items-center gap-2 flex-wrap p-3">
-        {/* Age */}
-        <div className="flex items-center gap-1.5">
-          <span className="text-xs text-quaternary/40 font-medium shrink-0">Âge</span>
-          <div className="flex gap-1">
-            {(["kitten", "adult", "senior"] as AgeFilter[]).map((age) => (
-              <ToggleBtn
-                key={age}
-                active={ageFilters.includes(age)}
-                onClick={() => toggleAge(age)}
-              >
-                {AGE_LABELS[age]}
-              </ToggleBtn>
-            ))}
+
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap p-3">
+
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs text-quaternary/40 font-medium shrink-0">Âge</span>
+            <div className="flex gap-1">
+              {(["kitten", "adult", "senior"] as AgeFilter[]).map((age) => (
+                <ToggleBtn
+                  key={age}
+                  active={ageFilters.includes(age)}
+                  onClick={() => toggleAge(age)}
+                >
+                  {AGE_LABELS[age]}
+                </ToggleBtn>
+              ))}
+            </div>
           </div>
-        </div>
 
-        <span className="hidden sm:block w-px h-4 bg-quaternary/20 mx-1" />
+          <span className="hidden sm:block w-px h-4 bg-quaternary/20 mx-1" />
 
-        {/* Sex */}
-        <div className="flex items-center gap-1.5">
-          <span className="text-xs text-quaternary/40 font-medium shrink-0">Sexe</span>
-          <div className="flex gap-1">
-            {(["male", "female"] as SexFilter[]).map((sex) => (
-              <ToggleBtn
-                key={sex}
-                active={sexFilters.includes(sex)}
-                onClick={() => toggleSex(sex)}
-              >
-                {SEX_LABELS[sex]}
-              </ToggleBtn>
-            ))}
+
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs text-quaternary/40 font-medium shrink-0">Sexe</span>
+            <div className="flex gap-1">
+              {(["male", "female"] as SexFilter[]).map((sex) => (
+                <ToggleBtn
+                  key={sex}
+                  active={sexFilters.includes(sex)}
+                  onClick={() => toggleSex(sex)}
+                >
+                  {SEX_LABELS[sex]}
+                </ToggleBtn>
+              ))}
+            </div>
           </div>
+
+          <span className="hidden sm:block w-px h-4 bg-quaternary/20 mx-1" />
+
+
+          <div className="flex gap-1">
+            <ToggleBtn active={duoFilter} onClick={toggleDuo}>
+              Duo
+            </ToggleBtn>
+            <ToggleBtn active={atypicalFilter} onClick={toggleAtypical}>
+              Atypique
+            </ToggleBtn>
+          </div>
+
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={resetFilters}
+              className="text-xs text-quaternary/40 hover:text-primary transition-colors duration-200 cursor-pointer whitespace-nowrap self-center"
+            >
+              × Réinitialiser
+            </button>
+          )}
         </div>
-
-        <span className="hidden sm:block w-px h-4 bg-quaternary/20 mx-1" />
-
-        {/* Special */}
-        <div className="flex gap-1">
-          <ToggleBtn active={duoFilter} onClick={() => setDuoFilter((v) => !v)}>
-            Duo
-          </ToggleBtn>
-          <ToggleBtn
-            active={atypicalFilter}
-            onClick={() => setAtypicalFilter((v) => !v)}
-          >
-            Atypique
-          </ToggleBtn>
-        </div>
-
-        {hasActiveFilters && (
-          <button
-            type="button"
-            onClick={resetFilters}
-            className="ml-auto text-xs text-quaternary/40 hover:text-primary transition-colors duration-200 cursor-pointer whitespace-nowrap"
-          >
-            × Réinitialiser
-          </button>
-        )}
       </div>
 
-      {/* Results */}
       {filtered.length === 0 ? (
         <p className="text-center text-lg text-quaternary/60 py-12">
           Aucune annonce ne correspond aux filtres sélectionnés.
         </p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((listing) => (
-            <ALCard key={listing.documentId} {...listing} />
-          ))}
-        </div>
-      )}
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {paginated.map((listing) => (
+              <ALCard key={listing.documentId} {...listing} />
+            ))}
+          </div>
 
-      {/* Add listing button – bottom left */}
-      <div className="flex justify-start">
-        <Button href="/adoption-listings/create" size="sm" variant="secondary">
-          Ajouter
-        </Button>
-      </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            totalItems={filtered.length}
+            itemLabel="annonce"
+          />
+        </>
+      )}
     </div>
   );
 }

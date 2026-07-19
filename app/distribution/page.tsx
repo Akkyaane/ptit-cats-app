@@ -5,7 +5,7 @@ import Image from "next/image";
 export default function Distribution() {
   return (
     <div className="bg-secondary">
-      <header className="bg-[url('/assets/img/backgrounds/background-6.avif')] bg-cover bg-right">
+      <header className="bg-[url('/assets/img/backgrounds/background-6.avif')] bg-cover bg-center">
         <div className="container">
           <div className="flex flex-col items-center justify-center gap-6 py-16 md:py-24 lg:py-40">
             <Heading type="h1" headingVariant="secondary">

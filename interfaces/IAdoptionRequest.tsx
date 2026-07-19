@@ -1,8 +1,28 @@
+import IAdopter from "./IAdopter";
 import IAdoptionListing from "./IAdoptionListing";
 
-export interface IAdoptionRequest {
+export type AdoptionRequestStatus =
+  | "to be processed"
+  | "pending"
+  | "refused"
+  | "done";
+
+export interface IAdoptionRequestVolunteer {
   documentId: string;
-  status: "en_attente" | "acceptée" | "refusée";
+  firstName: string;
+  lastName: string;
+  role: "admin" | "manager" | "referent";
+}
+
+export default interface IAdoptionRequest {
+  documentId: string;
+  entityStatus: AdoptionRequestStatus;
+  remarks?: string | null;
+
+  transferredBy?: string | null;
+  adopter?: IAdopter | null;
+  adoption_listing?: IAdoptionListing | null;
+  volunteer?: IAdoptionRequestVolunteer | null;
   createdAt: string;
-  adoptionListing: IAdoptionListing;
+  updatedAt?: string;
 }

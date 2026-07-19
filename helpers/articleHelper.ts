@@ -1,4 +1,14 @@
 import { PartialBlock } from "@blocknote/core";
+import IVolunteer from "@/interfaces/IVolunteer";
+
+
+export function formatAuthor(
+  volunteer: IVolunteer | null | undefined,
+): string | null {
+  if (!volunteer?.firstName) return null;
+  const initial = volunteer.lastName?.trim().charAt(0).toUpperCase();
+  return initial ? `${volunteer.firstName} ${initial}.` : volunteer.firstName;
+}
 
 export const CATEGORY_OPTIONS = [
   { key: "news", value: "news" },

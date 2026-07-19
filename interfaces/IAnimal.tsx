@@ -6,7 +6,7 @@ export default interface IAnimal {
   documentId: string;
   name: string;
   sex: "male" | "female";
-  birthDate: string;
+  birthDate: Date;
   isDewormed: boolean;
   isVaccinated: boolean;
   isSterilizedOrCastrated: boolean;
@@ -14,10 +14,10 @@ export default interface IAnimal {
   dogAffinity: "yes" | "no" | "unknown";
   catAffinity: "yes" | "no" | "unknown";
   childAffinity: "yes" | "no" | "unknown";
-  livingEnvironmentType: "apartment" | "house" | "other";
+  housingType: "apartment" | "house" | "other";
   isAtypical: boolean;
-  animal_personality_traits: IAnimalPersonalityTrait[];
-  animal_requirements: IAnimalRequirement[];
-  adoption_listing: IAdoptionListing;
   entityStatus: "in shelter" | "in foster care" | "under medical care" | "adopted";
+  animal_personality_traits?: IAnimalPersonalityTrait[] | null;
+  animal_requirements?: IAnimalRequirement[] | null;
+  adoption_listing: IAdoptionListing;
 }

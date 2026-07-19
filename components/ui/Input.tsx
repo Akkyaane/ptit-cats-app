@@ -6,7 +6,13 @@ type BaseInputProps = {
 };
 
 type InputProps =
-  | (BaseInputProps & { type: "text"; value: string; checked?: never })
+  | (BaseInputProps & {
+      type: "text" | "password" | "email" | "tel";
+      value: string;
+      minLength?: number;
+      autoComplete?: string;
+      checked?: never;
+    })
   | (BaseInputProps & {
       type: "number" | "date";
       value: string | number;
@@ -51,6 +57,8 @@ export default function Input(props: InputProps) {
         type={type}
         value={type === "checkbox" || type === "file" ? undefined : props.value}
         min={type === "number" ? props.min : undefined}
+        minLength={"minLength" in props ? props.minLength : undefined}
+        autoComplete={"autoComplete" in props ? props.autoComplete : undefined}
         multiple={type === "file" ? props.multiple : undefined}
         checked={type === "checkbox" ? props.checked : undefined}
         required={required}
