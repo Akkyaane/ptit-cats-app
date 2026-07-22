@@ -1,15 +1,21 @@
+import { redirect } from "next/navigation";
 import UpdateAbsenceForm from "@/components/absence/UpdateAbsenceForm";
 import Breadcrumb from "@/components/Breadcrumb";
 import Heading from "@/components/ui/Heading";
 import Button from "@/components/ui/Button";
 import IAbsence from "@/interfaces/IAbsence";
 import { serverApiData } from "@/helpers/apiHelper";
+import { getVolunteerSession } from "@/helpers/sessionHelper";
+import { canManageAbsence } from "@/components/absence/absencePermissions";
 
 export default async function UpdateAbsencePage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  const session = await getVolunteerSession();
+  if (!session) redirect("/account");
+
   const { slug } = await params;
   const absence = await serverApiData<IAbsence | null>(
     `/api/absences/${slug}`,
@@ -26,6 +32,10 @@ export default async function UpdateAbsencePage({
         </main>
       </div>
     );
+  }
+
+  if (!canManageAbsence(absence, session.role, session.documentId)) {
+    redirect("/absences/calendar");
   }
 
   return (

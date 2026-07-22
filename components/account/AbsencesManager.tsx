@@ -4,6 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import Pagination from "@/components/ui/Pagination";
 import IAbsence from "@/interfaces/IAbsence";
+import {
+  canManageAbsence,
+  isOwnAbsence,
+} from "@/components/absence/absencePermissions";
 
 const PER_PAGE = 8;
 
@@ -13,8 +17,12 @@ function formatDate(value: Date | string | null | undefined) {
 
 export default function AbsencesManager({
   absences: initial,
+  role,
+  currentVolunteerId,
 }: {
   absences: IAbsence[];
+  role: string;
+  currentVolunteerId: string;
 }) {
   const [absences, setAbsences] = useState(initial);
   const [page, setPage] = useState(1);
@@ -76,6 +84,11 @@ export default function AbsencesManager({
                 {paginated.map((a) => {
                   const isConfirming = confirmingId === a.documentId;
                   const isDeleting = deletingId === a.documentId;
+                  const canManage = canManageAbsence(
+                    a,
+                    role,
+                    currentVolunteerId,
+                  );
                   return (
                     <tr
                       key={a.documentId}
@@ -85,11 +98,16 @@ export default function AbsencesManager({
                         {a.volunteer
                           ? `${a.volunteer.firstName} ${a.volunteer.lastName}`
                           : "—"}
+                        {isOwnAbsence(a, currentVolunteerId) && (
+                          <span className="ml-1.5 font-normal text-xs text-quaternary/50">
+                            (vous)
+                          </span>
+                        )}
                       </td>
                       <td className="px-6 py-4">{formatDate(a.startDate)}</td>
                       <td className="px-6 py-4">{formatDate(a.endDate)}</td>
                       <td className="px-6 py-4">
-                        {isConfirming ? (
+                        {!canManage ? null : isConfirming ? (
                           <div className="flex items-center justify-end gap-3">
                             <span className="text-xs text-quaternary/60 hidden sm:inline">
                               Confirmer ?

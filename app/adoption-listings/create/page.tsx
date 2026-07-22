@@ -102,6 +102,15 @@ async function uploadMedia(files: File[]): Promise<number[]> {
   return (data.data as { id: number }[]).map((f) => f.id);
 }
 
+async function deleteMediaFiles(fileIds: number[]): Promise<void> {
+  if (fileIds.length === 0) return;
+  await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/upload/delete`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ fileIds }),
+  });
+}
+
 async function createAdoptionListing(
   listing: ListingDraft,
   animalDocumentIds: string[],
@@ -217,6 +226,8 @@ export default function CreateAdoptionListing() {
     setIsLoading(true);
     setError(null);
 
+    let mediaIds: number[] = [];
+
     try {
       const animalDocumentIds: string[] = [];
       for (const { _key: _, ...draft } of animals) {
@@ -224,12 +235,13 @@ export default function CreateAdoptionListing() {
         animalDocumentIds.push(documentId);
       }
 
-      const mediaIds = await uploadMedia(listing.newMediaFiles);
+      mediaIds = await uploadMedia(listing.newMediaFiles);
 
       await createAdoptionListing(listing, animalDocumentIds, isDuo, mediaIds);
 
       router.push("/adoption-listings");
     } catch (err) {
+      await deleteMediaFiles(mediaIds);
       setError(err instanceof Error ? err.message : "Une erreur est survenue.");
     } finally {
       setIsLoading(false);

@@ -10,9 +10,13 @@ type Benevoles = React.ComponentProps<typeof AbsenceCalendar>["benevoles"];
 export default function AbsencesTabs({
   absences,
   benevoles,
+  role,
+  currentVolunteerId,
 }: {
   absences: IAbsence[];
   benevoles: Benevoles;
+  role: string;
+  currentVolunteerId: string;
 }) {
   const [tab, setTab] = useState<"calendrier" | "tableau">("calendrier");
 
@@ -36,9 +40,18 @@ export default function AbsencesTabs({
       </div>
 
       {tab === "calendrier" ? (
-        <AbsenceCalendar absences={absences} benevoles={benevoles} />
+        <AbsenceCalendar
+          absences={absences}
+          benevoles={benevoles}
+          role={role}
+          currentVolunteerId={currentVolunteerId}
+        />
       ) : (
-        <AbsencesManager absences={absences} />
+        <AbsencesManager
+          absences={absences}
+          role={role}
+          currentVolunteerId={currentVolunteerId}
+        />
       )}
     </div>
   );

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import IAbsence from "@/interfaces/IAbsence";
+import { canManageAbsence } from "@/components/absence/absencePermissions";
 
 const JOURS = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
 const MOIS = [
@@ -40,9 +41,13 @@ function toDateKey(date: Date) {
 export default function AbsenceCalendar({
   absences: initialAbsences,
   benevoles,
+  role,
+  currentVolunteerId,
 }: {
   absences: IAbsence[];
   benevoles: Benevole[];
+  role: string;
+  currentVolunteerId: string;
 }) {
   const today = new Date();
   const [absences, setAbsences] = useState(initialAbsences);
@@ -255,10 +260,16 @@ export default function AbsenceCalendar({
                         </div>
                         <p className="font-bold text-sm">
                           {b.firstName} {b.lastName}
+                          {b.documentId === currentVolunteerId && (
+                            <span className="ml-1.5 font-normal text-xs text-quaternary/50">
+                              (vous)
+                            </span>
+                          )}
                         </p>
                       </div>
 
                       {absence &&
+                        canManageAbsence(absence, role, currentVolunteerId) &&
                         (isConfirming ? (
                           <div className="flex items-center gap-3">
                             <button
@@ -322,6 +333,11 @@ export default function AbsenceCalendar({
                       </div>
                       <p className="font-bold text-sm">
                         {b.firstName} {b.lastName}
+                        {b.documentId === currentVolunteerId && (
+                          <span className="ml-1.5 font-normal text-xs text-quaternary/50">
+                            (vous)
+                          </span>
+                        )}
                       </p>
                     </div>
                     <em className={`not-italic text-xs font-bold px-2 py-1 rounded-full ${roleColors[b.role] ?? "bg-gray-100"}`}>

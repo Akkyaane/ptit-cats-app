@@ -1,13 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getVolunteerSessionFromRequest } from "@/helpers/sessionHelper";
+import { checkAbsenceAccess } from "@/helpers/absenceHelper";
 
 export async function PUT(req: NextRequest) {
   try {
+    const session = getVolunteerSessionFromRequest(req);
+
+    if (!session) {
+      return NextResponse.json(
+        { error: "[absence] PUT: non autorisé" },
+        { status: 401 }
+      );
+    }
+
     const body = await req.json();
-    const { documentId, ...rest } = body;
+    const { documentId, volunteer, ...rest } = body;
 
     if (!documentId) {
       return NextResponse.json({ error: "documentId requis" }, { status: 400 });
     }
+
+    const access = await checkAbsenceAccess(session, documentId);
+    if (!access.ok) {
+      return NextResponse.json(
+        { error: `[absence] PUT: ${access.error}` },
+        { status: access.status }
+      );
+    }
+
+    const payload =
+      session.role === "admin" && volunteer ? { ...rest, volunteer } : rest;
 
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}/api/absences/${documentId}`,
@@ -17,7 +39,7 @@ export async function PUT(req: NextRequest) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
         },
-        body: JSON.stringify({ data: rest }),
+        body: JSON.stringify({ data: payload }),
       }
     );
 

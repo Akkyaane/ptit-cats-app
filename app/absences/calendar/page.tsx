@@ -1,11 +1,16 @@
+import { redirect } from "next/navigation";
 import AbsencesTabs from "@/components/absence/AbsencesTabs";
 import Breadcrumb from "@/components/Breadcrumb";
 import Button from "@/components/ui/Button";
 import IAbsence from "@/interfaces/IAbsence";
 import IVolunteer from "@/interfaces/IVolunteer";
 import { serverApiData } from "@/helpers/apiHelper";
+import { getVolunteerSession } from "@/helpers/sessionHelper";
 
 export default async function CalendarPage() {
+  const session = await getVolunteerSession();
+  if (!session) redirect("/account");
+
   const [absences, benevoles] = await Promise.all([
     serverApiData<IAbsence[]>("/api/absences", []),
     serverApiData<IVolunteer[]>("/api/volunteers", []),
@@ -31,7 +36,12 @@ export default async function CalendarPage() {
             </div>
           </div>
 
-          <AbsencesTabs absences={absences} benevoles={benevoles} />
+          <AbsencesTabs
+            absences={absences}
+            benevoles={benevoles}
+            role={session.role}
+            currentVolunteerId={session.documentId}
+          />
         </div>
       </main>
     </div>

@@ -10,17 +10,29 @@ type Benevole = {
   firstName: string;
 };
 
-export default function AddAbsenceForm({ benevoles }: { benevoles: Benevole[] }) {
+export default function AddAbsenceForm({
+  benevoles,
+  canChooseVolunteer,
+  currentVolunteerId,
+}: {
+  benevoles: Benevole[];
+  canChooseVolunteer: boolean;
+  currentVolunteerId: string;
+}) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const router = useRouter();
 
+  const self = benevoles.find((b) => b.documentId === currentVolunteerId);
+
   async function handleSubmit(formData: FormData) {
     setError(null);
     const startDate = formData.get("startDate") as string;
     const endDate = (formData.get("endDate") as string) || startDate;
-    const volunteerId = formData.get("volunteerId") as string;
+    const volunteerId = canChooseVolunteer
+      ? (formData.get("volunteerId") as string)
+      : currentVolunteerId;
 
     if (!startDate || !volunteerId) {
       setError("Le bénévole et la date de début sont requis");
@@ -65,19 +77,25 @@ export default function AddAbsenceForm({ benevoles }: { benevoles: Benevole[] })
         <label htmlFor="volunteerId" className="text-sm font-bold">
           Bénévole
         </label>
-        <select
-          id="volunteerId"
-          name="volunteerId"
-          required
-          className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200 bg-white"
-        >
-          <option value="">-- Sélectionner un bénévole --</option>
-          {benevoles.map((b) => (
-            <option key={b.documentId} value={b.documentId}>
-              {b.firstName} {b.lastName}
-            </option>
-          ))}
-        </select>
+        {canChooseVolunteer ? (
+          <select
+            id="volunteerId"
+            name="volunteerId"
+            required
+            className="w-full px-4 py-3 rounded-xl border-2 border-tertiary focus:outline-none focus:border-primary transition-colors duration-200 bg-white"
+          >
+            <option value="">-- Sélectionner un bénévole --</option>
+            {benevoles.map((b) => (
+              <option key={b.documentId} value={b.documentId}>
+                {b.firstName} {b.lastName}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <p className="px-4 py-3 rounded-xl border-2 border-gray-200 bg-gray-50 text-quaternary/70">
+            {self ? `${self.firstName} ${self.lastName}` : "Moi"}
+          </p>
+        )}
       </div>
 
       <div className="flex flex-col gap-1">

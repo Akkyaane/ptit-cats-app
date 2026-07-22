@@ -1,12 +1,22 @@
+import { redirect } from "next/navigation";
 import AddAbsenceForm from "@/components/absence/AddAbsenceForm";
 import Breadcrumb from "@/components/Breadcrumb";
 import Heading from "@/components/ui/Heading";
 import Button from "@/components/ui/Button";
 import IVolunteer from "@/interfaces/IVolunteer";
 import { serverApiData } from "@/helpers/apiHelper";
+import { getVolunteerSession } from "@/helpers/sessionHelper";
 
 export default async function AddAbsencePage() {
+  const session = await getVolunteerSession();
+  if (!session) redirect("/account");
+
   const benevoles = await serverApiData<IVolunteer[]>("/api/volunteers", []);
+
+  const selectableBenevoles =
+    session.role === "admin"
+      ? benevoles
+      : benevoles.filter((b) => b.documentId === session.documentId);
 
   return (
     <div className="layout-header-spacing">
@@ -26,7 +36,11 @@ export default async function AddAbsencePage() {
             >
               Ajouter +
             </Heading>
-            <AddAbsenceForm benevoles={benevoles} />
+            <AddAbsenceForm
+              benevoles={selectableBenevoles}
+              canChooseVolunteer={session.role === "admin"}
+              currentVolunteerId={session.documentId}
+            />
           </div>
         </div>
       </main>

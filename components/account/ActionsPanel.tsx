@@ -27,7 +27,13 @@ const ACTIONS: Record<string, ActionLink> = {
   },
   absences: {
     label: "Absences",
-    description: "Gérer les absences",
+    description: "Gérer les absences des bénévoles",
+    href: "/absences/calendar",
+    icon: "A",
+  },
+  myAbsences: {
+    label: "Absences",
+    description: "Gérer mes absences",
     href: "/absences/calendar",
     icon: "A",
   },
@@ -65,9 +71,18 @@ function linksForUser(user: AccountUser): ActionLink[] {
         ACTIONS.articles,
       ];
     case "manager":
-      return [ACTIONS.requestsVolunteer, ACTIONS.listings, ACTIONS.articles];
+      return [
+        ACTIONS.requestsVolunteer,
+        ACTIONS.myAbsences,
+        ACTIONS.listings,
+        ACTIONS.articles,
+      ];
     case "referent":
-      return [ACTIONS.requestsVolunteer, ACTIONS.articles];
+      return [
+        ACTIONS.requestsVolunteer,
+        ACTIONS.myAbsences,
+        ACTIONS.articles,
+      ];
     default:
       return [];
   }

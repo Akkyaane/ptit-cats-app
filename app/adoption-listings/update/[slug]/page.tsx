@@ -80,6 +80,15 @@ async function uploadMedia(files: File[]): Promise<number[]> {
   return (data.data as { id: number }[]).map((f) => f.id);
 }
 
+async function deleteMediaFiles(fileIds: number[]): Promise<void> {
+  if (fileIds.length === 0) return;
+  await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/upload/delete`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ fileIds }),
+  });
+}
+
 async function createAnimal(draft: AnimalDraft): Promise<string> {
   const payload = {
     name: draft.name,
@@ -187,7 +196,7 @@ async function updateListing(
     price: listing.price,
     isDuo,
     animals: animalDocumentIds,
-    ...(allMediaIds.length > 0 ? { media: allMediaIds } : {}),
+    media: allMediaIds,
   };
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/adoption-listings/update`,
@@ -230,6 +239,7 @@ export default function UpdateAdoptionListing({
   const [error, setError] = useState<string | null>(null);
 
   const [originalAnimalIds, setOriginalAnimalIds] = useState<string[]>([]);
+  const [originalMediaIds, setOriginalMediaIds] = useState<number[]>([]);
 
   useEffect(() => {
     async function load() {
@@ -254,6 +264,16 @@ export default function UpdateAdoptionListing({
             .filter(Boolean) as string[],
         );
 
+        const existingMedia =
+          fetchedListing.media
+            ?.map((m) => (m.id ? { id: Number(m.id), url: m.url } : null))
+            .filter(
+              (m): m is { id: number; url: string } =>
+                m !== null && !isNaN(m.id),
+            ) ?? [];
+
+        setOriginalMediaIds(existingMedia.map((m) => m.id));
+
         setListing({
           title: fetchedListing.title ?? "",
           slogan: fetchedListing.slogan ?? "",
@@ -261,13 +281,7 @@ export default function UpdateAdoptionListing({
           longDescription: fetchedListing.longDescription ?? "",
           price: fetchedListing.price ?? 0,
           newMediaFiles: [],
-          existingMedia:
-            fetchedListing.media
-              ?.map((m) => (m.id ? { id: Number(m.id), url: m.url } : null))
-              .filter(
-                (m): m is { id: number; url: string } =>
-                  m !== null && !isNaN(m.id),
-              ) ?? [],
+          existingMedia,
         });
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
@@ -331,6 +345,15 @@ export default function UpdateAdoptionListing({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    if (
+      listing.existingMedia.length === 0 &&
+      listing.newMediaFiles.length === 0
+    ) {
+      setError("L'annonce doit contenir au moins un média.");
+      return;
+    }
+
     setIsSaving(true);
     setError(null);
 
@@ -364,6 +387,11 @@ export default function UpdateAdoptionListing({
         animalDocumentIds,
         isDuo,
         newMediaIds,
+      );
+
+      const keptMediaIds = new Set(listing.existingMedia.map((m) => m.id));
+      await deleteMediaFiles(
+        originalMediaIds.filter((id) => !keptMediaIds.has(id)),
       );
 
       router.push(`/adoption-listings/view/${documentId}`);
