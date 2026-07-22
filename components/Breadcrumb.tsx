@@ -53,9 +53,6 @@ export default function Breadcrumb() {
       return { href, label };
     })
     .filter((crumb) => crumb.label !== null)
-    // Un segment réécrit par SEGMENT_HREFS peut viser la même page que le
-    // segment suivant (ex. absences -> /absences/calendar) : on ne garde
-    // qu'un crumb par href.
     .filter((crumb, index, all) => index === 0 || crumb.href !== all[index - 1].href) as {
     href: string;
     label: string;

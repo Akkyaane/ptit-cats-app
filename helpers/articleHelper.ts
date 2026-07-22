@@ -38,8 +38,6 @@ export const CATEGORY_LABELS: Record<string, string> = {
 
 type InlineContent = { type: string; text?: string };
 
-// Le `content` d'un PartialBlock peut être une chaîne, un tableau d'inline
-// content, un objet (table) ou undefined : on ramène tout à du texte brut.
 function extractText(content: unknown): string {
   if (typeof content === "string") return content;
   if (!Array.isArray(content)) return "";
