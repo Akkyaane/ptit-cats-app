@@ -90,7 +90,7 @@ export default function Contact() {
             </div>
 
             {status === "success" ? (
-              <div className="p-6 rounded-xl border-2 border-green-300 bg-green-50 text-green-800 text-center max-w-2xl mx-auto w-full">
+              <div className="p-6 rounded-xl border-2 border-tertiary text-tertiary hover:bg-tertiary/10 text-center max-w-2xl mx-auto w-full">
                 <p className="font-bold text-lg mb-1">Message envoyé !</p>
                 <p className="text-sm">
                   Merci pour votre message. Nous vous répondrons sous 48h.
@@ -182,7 +182,7 @@ export default function Contact() {
                 {status === "error" && (
                   <div
                     role="alert"
-                    className="px-4 py-3 rounded-xl border-2 border-red-300 bg-red-50 text-red-700 text-sm"
+                    className="px-4 py-3 rounded-xl border-2 border-primary text-primary bg-primary/10 text-sm"
                   >
                     Une erreur est survenue lors de l&apos;envoi. Veuillez
                     réessayer ou nous contacter directement par email.

@@ -59,7 +59,7 @@ export default function UpdateVolunteerForm({
 
   if (success) {
     return (
-      <p className="text-sm font-bold text-green-600 bg-green-50 px-4 py-3 rounded-xl text-center">
+      <p className="text-sm font-bold text-tertiary bg-tertiary/10 px-4 py-3 rounded-xl text-center">
         Bénévole mis à jour avec succès ! Redirection...
       </p>
     );

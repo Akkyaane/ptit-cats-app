@@ -52,7 +52,11 @@ export default function Breadcrumb() {
         SEGMENT_HREFS[segment] ?? "/" + segments.slice(0, index + 1).join("/");
       return { href, label };
     })
-    .filter((crumb) => crumb.label !== null) as {
+    .filter((crumb) => crumb.label !== null)
+    // Un segment réécrit par SEGMENT_HREFS peut viser la même page que le
+    // segment suivant (ex. absences -> /absences/calendar) : on ne garde
+    // qu'un crumb par href.
+    .filter((crumb, index, all) => index === 0 || crumb.href !== all[index - 1].href) as {
     href: string;
     label: string;
   }[];
@@ -72,7 +76,7 @@ export default function Breadcrumb() {
             </Link>
           </li>
           {crumbs.map((crumb, i) => (
-            <li key={crumb.href} className="flex items-center gap-1.5">
+            <li key={`${crumb.href}-${i}`} className="flex items-center gap-1.5">
               <span className="text-quaternary/30" aria-hidden="true">
                 ›
               </span>

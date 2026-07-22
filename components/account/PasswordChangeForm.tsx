@@ -46,7 +46,7 @@ export default function PasswordChangeForm({
         </p>
       )}
       {success && (
-        <p className="text-sm font-bold text-green-700 bg-green-100 px-4 py-3 rounded-xl text-center">
+        <p className="text-sm font-bold text-tertiary bg-tertiary/10 px-4 py-3 rounded-xl text-center">
           Mot de passe mis à jour !
         </p>
       )}

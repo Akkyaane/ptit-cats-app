@@ -185,7 +185,7 @@ export default function AdoptionRequestsManager({
                                   return {};
                                 })
                               }
-                              className="text-xs font-bold px-3 py-1.5 rounded-lg border-2 border-green-600 text-green-700 hover:bg-green-50 disabled:opacity-50 whitespace-nowrap"
+                              className="text-xs font-bold px-3 py-1.5 rounded-lg border-2 border-primary text-primary hover:bg-primary/10 disabled:opacity-50 whitespace-nowrap"
                             >
                               {busy ? "…" : "Terminer"}
                             </button>

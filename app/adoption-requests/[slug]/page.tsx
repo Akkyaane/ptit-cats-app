@@ -180,8 +180,8 @@ export default async function AdoptionRequestPage({
                           <span
                             className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-xs font-bold flex-shrink-0 ${
                               filled
-                                ? "bg-green-100 text-green-700"
-                                : "bg-red-100 text-red-600"
+                                ? "text-primary bg-primary/10"
+                                : "text-quaternary bg-quaternary/10"
                             }`}
                           >
                             {filled ? "✓" : "✗"}
@@ -198,8 +198,8 @@ export default async function AdoptionRequestPage({
                       <span
                         className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-xs font-bold flex-shrink-0 ${
                           adopter.hasAcceptedResponsibility
-                            ? "bg-green-100 text-green-700"
-                            : "bg-red-100 text-red-600"
+                            ? "text-primary bg-primary/10"
+                            : "text-quaternary bg-quaternary/10"
                         }`}
                       >
                         {adopter.hasAcceptedResponsibility ? "✓" : "✗"}

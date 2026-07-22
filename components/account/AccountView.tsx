@@ -93,7 +93,7 @@ export default function AccountView({
       <div className="flex-1 min-w-0 flex flex-col gap-6">
 
         {bannerMessage && (
-          <div className="rounded-2xl bg-green-50 border border-green-200 px-6 py-4 text-sm text-green-800 font-medium">
+          <div className="rounded-2xl border-tertiary border text-tertiary px-6 py-4 text-sm font-medium">
             {bannerMessage}
           </div>
         )}

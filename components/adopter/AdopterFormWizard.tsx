@@ -661,7 +661,7 @@ export default function AdopterFormWizard({
       )}
 
       {success && (
-        <p className="px-4 py-3 rounded-xl bg-green-50 border-2 border-green-600 text-green-700 font-bold text-sm">
+        <p className="px-4 py-3 rounded-xl bg-tertiary/10 border-2 border-tertiary text-tertiary font-bold text-sm">
           {success}
         </p>
       )}
